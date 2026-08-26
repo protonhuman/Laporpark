@@ -17,6 +17,7 @@ import {
 const STATUS_ICONS: Record<StatusBA, typeof FileText> = {
   draft: FileText,
   menunggu_review: Clock,
+  diperiksa: Clock,
   revisi: AlertTriangle,
   disetujui: CheckCircle2,
   selesai: FileCheck,
@@ -25,6 +26,7 @@ const STATUS_ICONS: Record<StatusBA, typeof FileText> = {
 const STATUS_CARD_STYLES: Record<StatusBA, string> = {
   draft: "from-slate-500/20 to-slate-600/5",
   menunggu_review: "from-amber-500/20 to-amber-600/5",
+  diperiksa: "from-blue-500/20 to-blue-600/5",
   revisi: "from-orange-500/20 to-orange-600/5",
   disetujui: "from-emerald-500/20 to-emerald-600/5",
   selesai: "from-sky-500/20 to-sky-600/5",
@@ -33,6 +35,7 @@ const STATUS_CARD_STYLES: Record<StatusBA, string> = {
 const STATUS_ICON_STYLES: Record<StatusBA, string> = {
   draft: "text-slate-400",
   menunggu_review: "text-amber-400",
+  diperiksa: "text-blue-400",
   revisi: "text-orange-400",
   disetujui: "text-emerald-400",
   selesai: "text-sky-400",
@@ -45,6 +48,7 @@ export default async function DashboardPage() {
   const statuses: StatusBA[] = [
     "draft",
     "menunggu_review",
+    "diperiksa",
     "revisi",
     "disetujui",
     "selesai",
@@ -52,6 +56,7 @@ export default async function DashboardPage() {
   const counts: Record<StatusBA, number> = {
     draft: 0,
     menunggu_review: 0,
+    diperiksa: 0,
     revisi: 0,
     disetujui: 0,
     selesai: 0,

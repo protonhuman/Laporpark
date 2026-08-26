@@ -20,8 +20,9 @@ interface EditFormProps {
 // Possible status transitions based on current status
 const STATUS_TRANSITIONS: Record<StatusBA, StatusBA[]> = {
   draft: ["menunggu_review"],
-  menunggu_review: ["disetujui", "revisi"],
-  revisi: ["menunggu_review", "disetujui"],
+  menunggu_review: ["diperiksa", "revisi"],
+  diperiksa: ["disetujui", "revisi"],
+  revisi: ["menunggu_review"],
   disetujui: ["selesai"],
   selesai: [],
 };

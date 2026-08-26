@@ -3,8 +3,8 @@ import { STATUS_LABELS } from "@/lib/types";
 
 const STATUS_STYLES: Record<StatusBA, string> = {
   draft: "bg-slate-500/10 text-slate-400 border-slate-500/20",
-  menunggu_review:
-    "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  menunggu_review: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  diperiksa: "bg-blue-500/10 text-blue-400 border-blue-500/20",
   revisi: "bg-orange-500/10 text-orange-400 border-orange-500/20",
   disetujui: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   selesai: "bg-sky-500/10 text-sky-400 border-sky-500/20",
