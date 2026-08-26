@@ -1,0 +1,17 @@
+Gû¦ Next.js 16.3.3 (Turbopack)
+- Environments: .env.local
+G£ô Running next.config.ts took 119ms
+node.exe : G¿» Another next build process is already running.
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (G¿» Another nex...lready running.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+  This could be:
+  - A next build still in progress
+  - A previous build that didn't exit cleanly
+
+  Suggestion: Wait for the build to complete.
+

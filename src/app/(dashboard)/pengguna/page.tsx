@@ -1,0 +1,126 @@
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { ROLE_LABELS } from "@/lib/types";
+import { CreateUserModal, DeleteUserButton, UpdatePasswordButton, UpdateUserButton } from "./client-components";
+import { ShieldAlert, Mail, User as UserIcon } from "lucide-react";
+
+export default async function PenggunaPage() {
+  const supabase = await createClient();
+
+  // 1. Authenticate & Authorize
+  const {
+    data: { user: currentUser },
+  } = await supabase.auth.getUser();
+
+  if (!currentUser) redirect("/login");
+
+  const { data: profile } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", currentUser.id)
+    .single();
+
+  if (!profile || profile.role !== "supervisor") {
+    // Only supervisors can access this page
+    redirect("/dashboard");
+  }
+
+  // 2. Fetch users
+  const { data: users, error } = await supabase
+    .from("users")
+    .select("*")
+    .order("nama", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching users:", error);
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Manajemen Pengguna</h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Kelola akses dan akun anggota tim Lapor Park
+          </p>
+        </div>
+        <CreateUserModal />
+      </div>
+
+      <div className="glass-card overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/[0.06] text-left">
+                <th className="px-6 py-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  Pengguna
+                </th>
+                <th className="px-6 py-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  Hak Akses (Role)
+                </th>
+                <th className="px-6 py-4 text-xs font-medium text-slate-500 uppercase tracking-wider text-right">
+                  Aksi
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/[0.04]">
+              {users && users.length > 0 ? (
+                users.map((u) => (
+                  <tr key={u.id} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center">
+                          <UserIcon className="w-4 h-4 text-slate-400" />
+                        </div>
+                        <span className="font-medium text-white">{u.nama}</span>
+                        {u.id === currentUser.id && (
+                          <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 text-[10px] font-medium border border-indigo-500/20">
+                            Anda
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <Mail className="w-3.5 h-3.5" />
+                        {u.email}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border
+                        ${u.role === 'supervisor' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
+                        ${u.role === 'carpark_manager' ? 'bg-sky-500/10 text-sky-400 border-sky-500/20' : ''}
+                        ${u.role === 'team_leader' ? 'bg-slate-500/10 text-slate-300 border-slate-500/20' : ''}
+                      `}>
+                        {u.role === 'supervisor' && <ShieldAlert className="w-3 h-3" />}
+                        {ROLE_LABELS[u.role as keyof typeof ROLE_LABELS]}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      {u.id !== currentUser.id && (
+                        <div className="flex items-center justify-end gap-1">
+                          <UpdateUserButton userId={u.id} currentName={u.nama} currentEmail={u.email} />
+                          <UpdatePasswordButton userId={u.id} userName={u.nama} />
+                          <DeleteUserButton userId={u.id} userName={u.nama} />
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
+                    Tidak ada pengguna ditemukan.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
