@@ -56,7 +56,7 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e1a]">
+    <div className="min-h-screen bg-background text-foreground">
       <Sidebar user={user} />
 
       {/* Main content area */}

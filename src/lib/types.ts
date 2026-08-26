@@ -3,7 +3,7 @@
 // Mirrors the Supabase/Postgres schema from migrations
 // ============================================================
 
-export type UserRole = "team_leader" | "carpark_manager" | "supervisor";
+export type UserRole = "team_leader" | "carpark_manager" | "supervisor" | "teknisi";
 
 export type JenisInsiden =
   | "kerusakan_kendaraan"
@@ -25,6 +25,7 @@ export interface User {
   nama: string;
   email: string;
   role: UserRole;
+  signature_url?: string | null;
 }
 
 export interface BeritaAcara {
@@ -102,7 +103,7 @@ export const STATUS_LABELS: Record<StatusBA, string> = {
   menunggu_review: "Menunggu Review",
   diperiksa: "Diperiksa",
   revisi: "Revisi",
-  disetujui: "Disetujui",
+  disetujui: "Diketahui",
   selesai: "Selesai",
 } as const;
 
@@ -118,4 +119,5 @@ export const ROLE_LABELS: Record<UserRole, string> = {
   team_leader: "Team Leader",
   carpark_manager: "Carpark Manager",
   supervisor: "Supervisor",
+  teknisi: "Teknisi",
 };

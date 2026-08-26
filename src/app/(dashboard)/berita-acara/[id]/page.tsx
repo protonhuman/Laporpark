@@ -9,7 +9,9 @@ import PrintLayout from "./print-layout";
 import {
   JENIS_INSIDEN_LABELS,
   ROLE_LABELS,
+  STATUS_LABELS,
   type AuditLogWithUser,
+  type StatusBA,
 } from "@/lib/types";
 import {
   ArrowLeft,
@@ -36,8 +38,8 @@ export default async function BeritaAcaraDetailPage({
     .from("berita_acara")
     .select(
       `*, 
-       pembuat:users!berita_acara_dibuat_oleh_fkey(id, nama, role),
-       reviewer:users!berita_acara_direview_oleh_fkey(id, nama, role)`
+       pembuat:users!berita_acara_dibuat_oleh_fkey(id, nama, role, signature_url),
+       reviewer:users!berita_acara_direview_oleh_fkey(id, nama, role, signature_url)`
     )
     .eq("id", id)
     .single();
@@ -47,7 +49,7 @@ export default async function BeritaAcaraDetailPage({
   // Get audit log
   const { data: auditLogs } = await supabase
     .from("ba_audit_log")
-    .select("*, user:users(nama, role)")
+    .select("*, user:users(nama, role, signature_url)")
     .eq("ba_id", id)
     .order("changed_at", { ascending: false });
 
@@ -68,13 +70,13 @@ export default async function BeritaAcaraDetailPage({
   const canDelete = currentProfile?.role === "supervisor";
 
   // Determine Checker and Approver from logs and creator role
-  let checker: { nama: string; date: string } | null = null;
-  let approver: { nama: string; date: string } | null = null;
+  let checker: { nama: string; date: string; signature_url?: string | null } | null = null;
+  let approver: { nama: string; date: string; signature_url?: string | null } | null = null;
 
   if (ba.pembuat?.role === "carpark_manager") {
-    checker = { nama: ba.pembuat.nama, date: ba.created_at };
+    checker = { nama: ba.pembuat.nama, date: ba.created_at, signature_url: ba.pembuat.signature_url };
   } else if (ba.pembuat?.role === "supervisor") {
-    approver = { nama: ba.pembuat.nama, date: ba.created_at };
+    approver = { nama: ba.pembuat.nama, date: ba.created_at, signature_url: ba.pembuat.signature_url };
   }
 
   // Scan logs from oldest to newest to find who checked/approved
@@ -82,10 +84,10 @@ export default async function BeritaAcaraDetailPage({
   chronologicalLogs.forEach((log) => {
     if (log.field_changed === "status") {
       if (log.new_value === "diperiksa") {
-        checker = { nama: log.user?.nama ?? "Manager", date: log.changed_at };
+        checker = { nama: log.user?.nama ?? "Manager", date: log.changed_at, signature_url: log.user?.signature_url };
       }
       if (log.new_value === "disetujui") {
-        approver = { nama: log.user?.nama ?? "Supervisor", date: log.changed_at };
+        approver = { nama: log.user?.nama ?? "Supervisor", date: log.changed_at, signature_url: log.user?.signature_url };
       }
     }
   });
@@ -248,7 +250,7 @@ export default async function BeritaAcaraDetailPage({
         <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">
           Informasi Pelapor
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
           <div>
             <p className="text-slate-500 text-xs mb-0.5">Dibuat oleh</p>
             <p className="text-white font-medium">
@@ -263,24 +265,38 @@ export default async function BeritaAcaraDetailPage({
               {new Date(ba.created_at).toLocaleString("id-ID")}
             </p>
           </div>
-          {ba.reviewer && (
-            <div>
-              <p className="text-slate-500 text-xs mb-0.5">
-                Terakhir direview oleh
-              </p>
-              <p className="text-white font-medium">
-                {ba.reviewer.nama}
-                {ba.reviewer.role && (
-                  <span className="text-slate-500 font-normal ml-1">
-                    ({ROLE_LABELS[ba.reviewer.role as keyof typeof ROLE_LABELS]})
-                  </span>
-                )}
-              </p>
+          <div>
+            <p className="text-slate-500 text-xs mb-0.5">Diperiksa oleh</p>
+            <p className="text-white font-medium">
+              {checker ? checker.nama : <span className="text-slate-500 italic">Belum diperiksa</span>}
+              {checker && (
+                <span className="text-slate-500 font-normal ml-1">
+                  (Carpark Manager)
+                </span>
+              )}
+            </p>
+            {checker && (
               <p className="text-slate-600 text-xs mt-0.5">
-                {new Date(ba.updated_at).toLocaleString("id-ID")}
+                {new Date(checker.date).toLocaleString("id-ID")}
               </p>
-            </div>
-          )}
+            )}
+          </div>
+          <div>
+            <p className="text-slate-500 text-xs mb-0.5">Mengetahui</p>
+            <p className="text-white font-medium">
+              {approver ? approver.nama : <span className="text-slate-500 italic">Belum disetujui</span>}
+              {approver && (
+                <span className="text-slate-500 font-normal ml-1">
+                  (Supervisor)
+                </span>
+              )}
+            </p>
+            {approver && (
+              <p className="text-slate-600 text-xs mt-0.5">
+                {new Date(approver.date).toLocaleString("id-ID")}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -293,7 +309,7 @@ export default async function BeritaAcaraDetailPage({
 
         {auditLogs && auditLogs.length > 0 ? (
           <div className="divide-y divide-white/[0.04]">
-            {auditLogs.map((log: AuditLogWithUser & { user?: { nama: string; role: string } }) => (
+            {auditLogs.map((log: AuditLogWithUser & { user?: { nama: string; role: string; signature_url?: string } }) => (
               <div key={log.id} className="px-5 py-3">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs font-medium text-white">
@@ -307,11 +323,11 @@ export default async function BeritaAcaraDetailPage({
                 <div className="flex flex-col sm:flex-row gap-2 text-xs">
                   {log.old_value && (
                     <div className="flex-1 px-3 py-2 rounded-lg bg-red-500/5 border border-red-500/10 text-red-300/80 line-through truncate">
-                      {log.old_value}
+                      {log.field_changed === "status" ? STATUS_LABELS[log.old_value as StatusBA] ?? log.old_value : log.old_value}
                     </div>
                   )}
                   <div className="flex-1 px-3 py-2 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-emerald-300/80 truncate">
-                    {log.new_value}
+                    {log.field_changed === "status" ? STATUS_LABELS[log.new_value as StatusBA] ?? log.new_value : log.new_value}
                   </div>
                 </div>
                 <p className="text-[10px] text-slate-600 mt-1">

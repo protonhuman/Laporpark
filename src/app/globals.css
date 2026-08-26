@@ -6,15 +6,15 @@
    ================================================================ */
 
 :root {
-  --background: #0a0e1a;
-  --foreground: #e2e8f0;
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-hover: rgba(255, 255, 255, 0.08);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.15);
-  --accent: #0ea5e9;
-  --accent-hover: #38bdf8;
-  --accent-muted: rgba(14, 165, 233, 0.15);
+  --background: #050505;
+  --foreground: #fafafa;
+  --surface: rgba(20, 20, 20, 0.6);
+  --surface-hover: rgba(30, 30, 30, 0.8);
+  --border: rgba(0, 255, 204, 0.2);
+  --border-hover: rgba(0, 255, 204, 0.5);
+  --accent: #00ffcc;
+  --accent-hover: #39ff14;
+  --accent-muted: rgba(0, 255, 204, 0.15);
 }
 
 @theme inline {
@@ -74,7 +74,7 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+  background: linear-gradient(135deg, #00ffcc 0%, #39ff14 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

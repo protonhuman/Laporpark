@@ -3,8 +3,8 @@ import Image from "next/image";
 
 interface PrintLayoutProps {
   ba: BeritaAcaraWithUsers;
-  checker: { nama: string; date: string } | null;
-  approver: { nama: string; date: string } | null;
+  checker: { nama: string; date: string; signature_url?: string | null } | null;
+  approver: { nama: string; date: string; signature_url?: string | null } | null;
 }
 
 export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps) {
@@ -21,31 +21,40 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
   const createdDate = formatDate(ba.created_at);
 
   return (
-    <div className="hidden print:block print:bg-white print:text-black font-sans max-w-4xl mx-auto text-sm leading-relaxed">
+    <>
+      {/* PRELOAD IMAGES: Browser will not load images inside 'display: none'.
+          We render them here as 1x1 invisible pixels so they are downloaded and cached before the user prints! */}
+      <div className="absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none print:hidden">
+        {ba.pembuat?.signature_url && <img src={ba.pembuat.signature_url} alt="preload" />}
+        {checker?.signature_url && <img src={checker.signature_url} alt="preload" />}
+        {approver?.signature_url && <img src={approver.signature_url} alt="preload" />}
+      </div>
+
+      <div className="hidden print:block print:bg-white print:text-black font-sans max-w-4xl mx-auto text-sm leading-relaxed">
       {/* 1. KOP SURAT (Header) */}
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-2">
         {/* Placeholder for Angkasa Pura Logo */}
-        <div className="w-48 h-16 flex items-center justify-start text-xs text-gray-400">
+        <div className="w-32 h-10 flex items-center justify-start text-xs text-gray-400">
           <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="max-h-full object-contain" />
           {/* Text fallback just in case logo isn't uploaded yet */}
           <span className="sr-only">Angkasa Pura | SUPPORTS</span>
         </div>
         
         {/* Placeholder for Centre Park Logo */}
-        <div className="w-48 h-16 flex items-center justify-end text-xs text-gray-400">
+        <div className="w-32 h-10 flex items-center justify-end text-xs text-gray-400">
           <img src="/logo-cp.png" alt="Centre Park" className="max-h-full object-contain" />
           <span className="sr-only">Centre Park</span>
         </div>
       </div>
 
       {/* 2. JUDUL BA */}
-      <div className="text-center mb-6 mt-2">
+      <div className="text-center mb-4 mt-0">
         <h1 className="text-lg font-bold underline mb-1 uppercase">BERITA ACARA KRONOLOGIS</h1>
         <p className="text-sm">No: {ba.nomor_ba}</p>
       </div>
 
       {/* 3. META INFO */}
-      <div className="mb-8 grid grid-cols-[160px_20px_1fr] gap-y-2">
+      <div className="mb-4 grid grid-cols-[160px_20px_1fr] gap-y-2">
         <div>Tanggal Kejadian</div>
         <div>:</div>
         <div>{formattedDate}</div>
@@ -68,43 +77,47 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
           </div>
         </div>
 
-        {/* II. Uraian Kejadian */}
+        {/* II. Kronologis Kejadian */}
         <div>
           <div className="flex font-bold mb-2">
             <span className="w-8">II.</span>
-            <span>Uraian Kejadian</span>
+            <span>Kronologis Kejadian</span>
           </div>
           <div className="ml-8 text-justify whitespace-pre-wrap">
             {ba.kronologi}
           </div>
         </div>
 
-        {/* III. Dampak Yang Ditimbulkan */}
+        {/* III. Tindakan yang dilakukan */}
         <div>
           <div className="flex font-bold mb-2">
             <span className="w-8">III.</span>
-            <span>Dampak Yang Ditimbulkan</span>
-          </div>
-          <div className="ml-8 text-justify whitespace-pre-wrap">
-            {ba.mitigasi || "-"}
-          </div>
-        </div>
-
-        {/* IV. Tindakan yang dilakukan */}
-        <div>
-          <div className="flex font-bold mb-2">
-            <span className="w-8">IV.</span>
             <span>Tindakan yang dilakukan</span>
           </div>
           <div className="ml-8 text-justify whitespace-pre-wrap">
             {ba.tindakan_dilakukan}
-            {ba.penyelesaian && (
-              <>
-                <br /><br />
-                <strong>Penyelesaian:</strong><br />
-                {ba.penyelesaian}
-              </>
-            )}
+          </div>
+        </div>
+
+        {/* IV. Penyelesaian */}
+        <div>
+          <div className="flex font-bold mb-2">
+            <span className="w-8">IV.</span>
+            <span>Penyelesaian</span>
+          </div>
+          <div className="ml-8 text-justify whitespace-pre-wrap">
+            {ba.penyelesaian || "-"}
+          </div>
+        </div>
+
+        {/* V. Mitigasi */}
+        <div>
+          <div className="flex font-bold mb-2">
+            <span className="w-8">V.</span>
+            <span>Mitigasi</span>
+          </div>
+          <div className="ml-8 text-justify whitespace-pre-wrap">
+            {ba.mitigasi || "-"}
           </div>
         </div>
       </div>
@@ -136,43 +149,52 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
         <p className="mb-8">Banjarbaru, {createdDate}</p>
 
         {/* TABEL TANDA TANGAN */}
-        <table className="w-full border-collapse border border-black text-center text-sm">
+        <table className="w-full border-collapse border border-black text-center text-sm table-fixed">
           <thead>
             <tr>
-              <th className="border border-black p-2 font-normal">Dibuat Oleh</th>
-              <th className="border border-black p-2 font-normal">Diperiksa Oleh</th>
-              <th className="border border-black p-2 font-normal">Mengetahui</th>
+              <th className="border border-black p-2 font-normal w-1/3">Dibuat Oleh</th>
+              <th className="border border-black p-2 font-normal w-1/3">Diperiksa Oleh</th>
+              <th className="border border-black p-2 font-normal w-1/3">Mengetahui</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td className="border border-black h-32 align-bottom p-2">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center justify-end h-full">
+                  {ba.pembuat?.signature_url && (
+                    <img src={ba.pembuat.signature_url} className="h-32 w-auto object-contain -mb-2" alt="Tanda Tangan Pembuat" />
+                  )}
                   <span className="font-bold underline mb-1">{ba.pembuat?.nama ?? "—"}</span>
                   <span>{ROLE_LABELS[ba.pembuat?.role as keyof typeof ROLE_LABELS] ?? "Staff"}</span>
                 </div>
               </td>
               <td className="border border-black h-32 align-bottom p-2">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center justify-end h-full">
                   {checker ? (
                     <>
+                      {checker.signature_url && (
+                        <img src={checker.signature_url} className="h-32 w-auto object-contain -mb-2" alt="Tanda Tangan Pemeriksa" />
+                      )}
                       <span className="font-bold underline mb-1">{checker.nama}</span>
                       <span>Carpark Manager CP</span>
                     </>
                   ) : (
-                    <span className="text-gray-400 italic">Belum Diperiksa</span>
+                    <span className="text-gray-400 italic mb-4">Belum Diperiksa</span>
                   )}
                 </div>
               </td>
               <td className="border border-black h-32 align-bottom p-2">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center justify-end h-full">
                   {approver ? (
                     <>
+                      {approver.signature_url && (
+                        <img src={approver.signature_url} className="h-32 w-auto object-contain -mb-2" alt="Tanda Tangan Penyetuju" />
+                      )}
                       <span className="font-bold underline mb-1">{approver.nama}</span>
                       <span>Supervisor Parkir</span>
                     </>
                   ) : (
-                    <span className="text-gray-400 italic">Belum Disetujui</span>
+                    <span className="text-gray-400 italic mb-4">Belum Disetujui</span>
                   )}
                 </div>
               </td>
@@ -181,5 +203,6 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
         </table>
       </div>
     </div>
+    </>
   );
 }

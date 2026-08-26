@@ -100,13 +100,13 @@ export default async function PenggunaPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {u.id !== currentUser.id && (
-                        <div className="flex items-center justify-end gap-1">
-                          <UpdateUserButton userId={u.id} currentName={u.nama} currentEmail={u.email} />
-                          <UpdatePasswordButton userId={u.id} userName={u.nama} />
+                      <div className="flex items-center justify-end gap-1">
+                        <UpdateUserButton userId={u.id} currentName={u.nama} currentEmail={u.email} currentSignatureUrl={u.signature_url} />
+                        <UpdatePasswordButton userId={u.id} userName={u.nama} />
+                        {u.id !== currentUser.id && (
                           <DeleteUserButton userId={u.id} userName={u.nama} />
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))

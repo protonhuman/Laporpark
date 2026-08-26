@@ -82,7 +82,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Page header */}
-      <div>
+      <div className="text-center">
         <h1 className="text-2xl font-bold text-white">Dashboard</h1>
         <p className="text-slate-400 text-sm mt-1">
           Ringkasan Berita Acara Parkir
@@ -115,9 +115,9 @@ export default async function DashboardPage() {
       {/* Quick actions + total */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Total card */}
-        <div className="glass-card p-6 flex items-center gap-5">
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500/20 to-indigo-500/20">
-            <TrendingUp className="w-7 h-7 text-sky-400" />
+        <div className="glass-card p-6 flex items-center gap-5 border border-[#00ffcc]/20">
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00ffcc]/20 to-[#39ff14]/20">
+            <TrendingUp className="w-7 h-7 text-[#00ffcc]" />
           </div>
           <div>
             <p className="text-3xl font-bold text-white">{totalBA}</p>
@@ -130,8 +130,8 @@ export default async function DashboardPage() {
           href="/berita-acara/baru"
           className="glass-card glass-card-hover p-6 flex items-center gap-5 group"
         >
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 group-hover:from-emerald-500/30 group-hover:to-teal-500/30 transition-all">
-            <FilePlus className="w-7 h-7 text-emerald-400" />
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#39ff14]/20 to-[#00ffcc]/20 group-hover:from-[#39ff14]/30 group-hover:to-[#00ffcc]/30 transition-all shadow-[0_0_15px_rgba(57,255,20,0.1)] group-hover:shadow-[0_0_20px_rgba(57,255,20,0.3)]">
+            <FilePlus className="w-7 h-7 text-[#39ff14]" />
           </div>
           <div className="flex-1">
             <p className="text-sm font-semibold text-white">
@@ -147,8 +147,8 @@ export default async function DashboardPage() {
           href="/berita-acara"
           className="glass-card glass-card-hover p-6 flex items-center gap-5 group"
         >
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 group-hover:from-violet-500/30 group-hover:to-purple-500/30 transition-all">
-            <FileText className="w-7 h-7 text-violet-400" />
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ff00ff]/20 to-[#00ffcc]/20 group-hover:from-[#ff00ff]/30 group-hover:to-[#00ffcc]/30 transition-all shadow-[0_0_15px_rgba(255,0,255,0.1)] group-hover:shadow-[0_0_20px_rgba(255,0,255,0.3)]">
+            <FileText className="w-7 h-7 text-[#ff00ff]" />
           </div>
           <div className="flex-1">
             <p className="text-sm font-semibold text-white">

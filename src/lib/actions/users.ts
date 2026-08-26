@@ -9,7 +9,8 @@ export interface CreateUserPayload {
   email: string;
   nama: string;
   password?: string;
-  role: "team_leader" | "carpark_manager" | "supervisor";
+  role: "team_leader" | "carpark_manager" | "supervisor" | "teknisi";
+  signature_url?: string;
 }
 
 /**
@@ -67,6 +68,7 @@ export async function createUserAction(payload: CreateUserPayload) {
       user_metadata: {
         nama: payload.nama,
         role: payload.role,
+        signature_url: payload.signature_url || null,
       },
     });
 
@@ -187,7 +189,7 @@ export async function updateUserPasswordAction(userId: string, newPassword: stri
  * Updates a user's name and/or email
  * Restricted to supervisor role
  */
-export async function updateUserAction(userId: string, newName: string, newEmail: string) {
+export async function updateUserAction(userId: string, newName: string, newEmail: string, newSignatureUrl?: string) {
   try {
     // 1. Verify current user is a supervisor
     const supabase = await createServerClient();
@@ -219,7 +221,8 @@ export async function updateUserAction(userId: string, newName: string, newEmail
       .from("users")
       .update({ 
         nama: newName.trim(),
-        email: newEmail.trim()
+        email: newEmail.trim(),
+        ...(newSignatureUrl !== undefined && { signature_url: newSignatureUrl }),
       })
       .eq("id", userId);
 
@@ -232,7 +235,10 @@ export async function updateUserAction(userId: string, newName: string, newEmail
     const { error: authError } = await adminClient.auth.admin.updateUserById(userId, {
       email: newEmail.trim(),
       email_confirm: true, // Auto confirm so user doesn't get locked out if email confirmation is required
-      user_metadata: { nama: newName.trim() }
+      user_metadata: { 
+        nama: newName.trim(),
+        ...(newSignatureUrl !== undefined && { signature_url: newSignatureUrl })
+      }
     });
 
     if (authError) {
@@ -241,7 +247,7 @@ export async function updateUserAction(userId: string, newName: string, newEmail
       return { error: `Gagal mengubah email autentikasi: ${authError.message}` };
     }
 
-    revalidatePath("/pengguna");
+    revalidatePath("/", "layout"); // Memastikan semua cache BA ikut terhapus
     return { success: true };
   } catch (err: unknown) {
     console.error("Update Profile Exception:", err);

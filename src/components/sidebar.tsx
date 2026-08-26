@@ -65,8 +65,8 @@ export default function Sidebar({ user }: SidebarProps) {
       {/* Brand */}
       <div className="px-6 py-6 border-b border-white/[0.06]">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 shadow-lg shadow-sky-500/20">
-            <ShieldCheck className="w-5 h-5 text-white" />
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#00ffcc] to-[#39ff14] shadow-lg shadow-[#00ffcc]/30">
+            <ShieldCheck className="w-5 h-5 text-black" />
           </div>
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">
@@ -90,14 +90,14 @@ export default function Sidebar({ user }: SidebarProps) {
               onClick={() => setMobileOpen(false)}
               className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 active
-                  ? "bg-sky-500/10 text-sky-400 shadow-sm"
+                  ? "bg-[#00ffcc]/10 text-[#00ffcc] shadow-sm shadow-[#00ffcc]/10"
                   : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
               <item.icon
                 className={`w-[18px] h-[18px] ${
                   active
-                    ? "text-sky-400"
+                    ? "text-[#00ffcc]"
                     : "text-slate-500 group-hover:text-slate-300"
                 }`}
               />
@@ -112,7 +112,7 @@ export default function Sidebar({ user }: SidebarProps) {
 
       {/* User info + Logout */}
       <div className="px-3 py-4 border-t border-white/[0.06]">
-        <div className="px-3 py-3 rounded-xl bg-white/[0.03] mb-2">
+        <div className="px-3 py-3 rounded-xl bg-white/[0.03] mb-2 text-center">
           <p className="text-sm font-medium text-white truncate">
             {user.nama}
           </p>
@@ -157,13 +157,13 @@ export default function Sidebar({ user }: SidebarProps) {
       )}
 
       {/* Sidebar - Desktop */}
-      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 border-r border-white/[0.06] bg-[#0c1020]/80 backdrop-blur-xl z-40">
+      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 border-r border-white/[0.06] bg-black/80 backdrop-blur-xl z-40">
         {sidebarContent}
       </aside>
 
       {/* Sidebar - Mobile */}
       <aside
-        className={`lg:hidden fixed inset-y-0 left-0 z-40 w-72 border-r border-white/[0.06] bg-[#0c1020]/95 backdrop-blur-xl transform transition-transform duration-300 ease-out ${
+        className={`lg:hidden fixed inset-y-0 left-0 z-40 w-72 border-r border-white/[0.06] bg-black/95 backdrop-blur-xl transform transition-transform duration-300 ease-out ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

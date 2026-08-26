@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
+import { createClient } from "@/lib/supabase/client";
 import { createUserAction, deleteUserAction, updateUserPasswordAction, updateUserAction, type CreateUserPayload } from "@/lib/actions/users";
 import ConfirmDialog from "@/components/confirm-dialog";
-import { UserPlus, Loader2, X, AlertCircle, Trash2, KeyRound, CheckCircle2, Pencil } from "lucide-react";
+import { UserPlus, Loader2, X, AlertCircle, Trash2, KeyRound, CheckCircle2, Pencil, Upload } from "lucide-react";
 
 export function CreateUserModal() {
   const [open, setOpen] = useState(false);
@@ -14,17 +16,39 @@ export function CreateUserModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<CreateUserPayload["role"]>("team_leader");
+  const [signatureUrl, setSignatureUrl] = useState("");
+  const [signatureFile, setSignatureFile] = useState<File | null>(null);
+  const [signaturePreview, setSignaturePreview] = useState<string>("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
+    let finalSignatureUrl = signatureUrl;
+    
+    if (signatureFile) {
+      const supabase = createClient();
+      const ext = signatureFile.name.split(".").pop();
+      const fileName = `signatures/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from("ba_lampiran").upload(fileName, signatureFile);
+      
+      if (uploadError) {
+        setError("Gagal mengunggah tanda tangan. Silakan coba lagi.");
+        setLoading(false);
+        return;
+      }
+      
+      const { data: { publicUrl } } = supabase.storage.from("ba_lampiran").getPublicUrl(fileName);
+      finalSignatureUrl = publicUrl;
+    }
+
     const result = await createUserAction({
       nama,
       email,
       password: password || undefined,
       role,
+      signature_url: finalSignatureUrl || undefined,
     });
 
     if (result.error) {
@@ -38,6 +62,9 @@ export function CreateUserModal() {
       setEmail("");
       setPassword("");
       setRole("team_leader");
+      setSignatureUrl("");
+      setSignatureFile(null);
+      setSignaturePreview("");
     }
   }
 
@@ -55,7 +82,7 @@ export function CreateUserModal() {
         Tambah Pengguna
       </button>
 
-      {open && (
+      {open && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
           <div className="relative w-full max-w-md glass-card p-6 shadow-2xl">
@@ -112,6 +139,57 @@ export function CreateUserModal() {
               </div>
 
               <div>
+                <label className={labelClass}>Tanda Tangan (opsional)</label>
+                {signaturePreview ? (
+                  <div className="relative w-full aspect-[3/1] rounded-xl border border-white/[0.08] bg-white/[0.02] overflow-hidden group">
+                    <img src={signaturePreview} alt="Preview" className="w-full h-full object-contain p-2" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSignatureFile(null);
+                        setSignaturePreview("");
+                        setSignatureUrl("");
+                      }}
+                      className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <label
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const file = e.dataTransfer.files?.[0];
+                      if (file && file.type.startsWith('image/')) {
+                        setSignatureFile(file);
+                        setSignaturePreview(URL.createObjectURL(file));
+                      }
+                    }}
+                    className="flex flex-col items-center justify-center w-full aspect-[4/1] rounded-xl border-2 border-dashed border-white/[0.08] hover:border-white/[0.15] bg-white/[0.02] hover:bg-white/[0.04] cursor-pointer transition-all"
+                  >
+                    <span className="text-xs text-slate-500 flex items-center gap-2">
+                      <Upload className="w-4 h-4" />
+                      Klik atau drag gambar ke sini
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setSignatureFile(file);
+                          setSignaturePreview(URL.createObjectURL(file));
+                        }
+                      }}
+                    />
+                  </label>
+                )}
+              </div>
+
+              <div>
                 <label className={labelClass}>Hak Akses (Role) *</label>
                 <select
                   required
@@ -119,6 +197,7 @@ export function CreateUserModal() {
                   onChange={(e) => setRole(e.target.value as CreateUserPayload["role"])}
                   className={inputClass}
                 >
+                  <option value="teknisi" className="bg-[#0a0e1a]">Teknisi</option>
                   <option value="team_leader" className="bg-[#0a0e1a]">Team Leader</option>
                   <option value="carpark_manager" className="bg-[#0a0e1a]">Carpark Manager</option>
                   <option value="supervisor" className="bg-[#0a0e1a]">Supervisor</option>
@@ -143,7 +222,8 @@ export function CreateUserModal() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
@@ -217,7 +297,7 @@ export function UpdatePasswordButton({ userId, userName }: { userId: string, use
         <KeyRound className="w-4 h-4" />
       </button>
 
-      {open && (
+      {open && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
           <div className="relative w-full max-w-sm glass-card p-6 shadow-2xl">
@@ -277,19 +357,23 @@ export function UpdatePasswordButton({ userId, userName }: { userId: string, use
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
 }
 
-export function UpdateUserButton({ userId, currentName, currentEmail }: { userId: string, currentName: string, currentEmail: string }) {
+export function UpdateUserButton({ userId, currentName, currentEmail, currentSignatureUrl }: { userId: string, currentName: string, currentEmail: string, currentSignatureUrl?: string | null }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [newName, setNewName] = useState(currentName);
   const [newEmail, setNewEmail] = useState(currentEmail);
+  const [newSignatureUrl, setNewSignatureUrl] = useState(currentSignatureUrl || "");
+  const [signatureFile, setSignatureFile] = useState<File | null>(null);
+  const [signaturePreview, setSignaturePreview] = useState<string>(currentSignatureUrl || "");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -297,7 +381,25 @@ export function UpdateUserButton({ userId, currentName, currentEmail }: { userId
     setError(null);
     setSuccess(false);
 
-    const result = await updateUserAction(userId, newName, newEmail);
+    let finalSignatureUrl = newSignatureUrl;
+    
+    if (signatureFile) {
+      const supabase = createClient();
+      const ext = signatureFile.name.split(".").pop();
+      const fileName = `signatures/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from("ba_lampiran").upload(fileName, signatureFile);
+      
+      if (uploadError) {
+        setError("Gagal mengunggah tanda tangan. Silakan coba lagi.");
+        setLoading(false);
+        return;
+      }
+      
+      const { data: { publicUrl } } = supabase.storage.from("ba_lampiran").getPublicUrl(fileName);
+      finalSignatureUrl = publicUrl;
+    }
+
+    const result = await updateUserAction(userId, newName, newEmail, finalSignatureUrl || undefined);
 
     if (result.error) {
       setError(result.error);
@@ -318,6 +420,9 @@ export function UpdateUserButton({ userId, currentName, currentEmail }: { userId
         onClick={() => {
           setNewName(currentName);
           setNewEmail(currentEmail);
+          setNewSignatureUrl(currentSignatureUrl || "");
+          setSignatureFile(null);
+          setSignaturePreview(currentSignatureUrl || "");
           setOpen(true);
           setSuccess(false);
         }}
@@ -327,7 +432,7 @@ export function UpdateUserButton({ userId, currentName, currentEmail }: { userId
         <Pencil className="w-4 h-4" />
       </button>
 
-      {open && (
+      {open && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
           <div className="relative w-full max-w-sm glass-card p-6 shadow-2xl">
@@ -379,6 +484,57 @@ export function UpdateUserButton({ userId, currentName, currentEmail }: { userId
                 />
               </div>
 
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">Tanda Tangan</label>
+                {signaturePreview ? (
+                  <div className="relative w-full aspect-[3/1] rounded-xl border border-white/[0.08] bg-white/[0.02] overflow-hidden group">
+                    <img src={signaturePreview} alt="Preview" className="w-full h-full object-contain p-2" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSignatureFile(null);
+                        setSignaturePreview("");
+                        setNewSignatureUrl("");
+                      }}
+                      className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <label
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const file = e.dataTransfer.files?.[0];
+                      if (file && file.type.startsWith('image/')) {
+                        setSignatureFile(file);
+                        setSignaturePreview(URL.createObjectURL(file));
+                      }
+                    }}
+                    className="flex flex-col items-center justify-center w-full aspect-[4/1] rounded-xl border-2 border-dashed border-white/[0.08] hover:border-white/[0.15] bg-white/[0.02] hover:bg-white/[0.04] cursor-pointer transition-all"
+                  >
+                    <span className="text-xs text-slate-500 flex items-center gap-2">
+                      <Upload className="w-4 h-4" />
+                      Klik atau drag gambar ke sini
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setSignatureFile(file);
+                          setSignaturePreview(URL.createObjectURL(file));
+                        }
+                      }}
+                    />
+                  </label>
+                )}
+              </div>
+
               <div className="pt-2 flex justify-end gap-3">
                 <button
                   type="button"
@@ -389,7 +545,7 @@ export function UpdateUserButton({ userId, currentName, currentEmail }: { userId
                 </button>
                 <button
                   type="submit"
-                  disabled={loading || success || (!newName.trim() && !newEmail.trim()) || (newName.trim() === currentName && newEmail.trim() === currentEmail)}
+                  disabled={loading || success || (!newName.trim() && !newEmail.trim()) || (newName.trim() === currentName && newEmail.trim() === currentEmail && newSignatureUrl === (currentSignatureUrl || "") && !signatureFile)}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 disabled:opacity-50 text-white text-sm font-medium transition-colors"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Simpan"}
@@ -397,7 +553,8 @@ export function UpdateUserButton({ userId, currentName, currentEmail }: { userId
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
