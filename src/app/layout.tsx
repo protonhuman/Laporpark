@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     "Sistem pelaporan insiden parkir digital Bandara Internasional Syamsudin Noor. Berita Acara terstruktur dengan alur approval dan audit trail.",
 };
 
+export const viewport: import("next").Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="id" className={`${inter.variable} h-full antialiased`}>
