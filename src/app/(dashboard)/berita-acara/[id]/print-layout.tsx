@@ -189,8 +189,8 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
         <div className="print:break-before-page pt-12">
           <h2 className="text-lg font-bold mb-6">Dokumentasi Kejadian</h2>
           <div className="grid grid-cols-12 gap-4 place-items-center">
-            {ba.lampiran_foto.map((url, idx) => {
-              const total = ba.lampiran_foto.length;
+            {ba.lampiran_foto.map((url, idx, arr) => {
+              const total = arr.length;
               let spanClass = "col-span-4";
               let heightClass = "h-[300px]";
 
