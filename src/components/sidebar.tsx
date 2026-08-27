@@ -68,28 +68,35 @@ export default function Sidebar({ user }: SidebarProps) {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Brand */}
-      <div className="px-6 py-6 border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] flex items-center justify-between">
-        <Link href={user.role === "carpark_manager" || user.role === "supervisor" ? "/dashboard" : "/berita-acara"} className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#00ffcc] to-[#39ff14] shadow-lg shadow-[#00ffcc]/30">
-            <ShieldCheck className="w-5 h-5 text-black" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-slate-800 tracking-tight">
-              Lapor Park
-            </h1>
-            <p className="text-[11px] text-slate-500 leading-none">
-              Berita Acara Digital
-            </p>
-          </div>
-        </Link>
-        
-        {/* Close Button for Mobile inside Sidebar */}
-        <button
-          onClick={() => setMobileOpen(false)}
-          className="lg:hidden p-2 -mr-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/[0.04] transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
+      <div className="px-6 py-5 border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)]">
+        <div className="flex items-center justify-between">
+          <Link href={user.role === "carpark_manager" || user.role === "supervisor" ? "/dashboard" : "/berita-acara"} className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#00ffcc] to-[#39ff14] shadow-lg shadow-[#00ffcc]/30">
+              <ShieldCheck className="w-5 h-5 text-black" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-slate-800 tracking-tight">
+                Lapor Park
+              </h1>
+              <p className="text-[11px] text-slate-500 leading-none">
+                Berita Acara Digital
+              </p>
+            </div>
+          </Link>
+          
+          {/* Close Button for Mobile inside Sidebar */}
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="lg:hidden p-2 -mr-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/[0.04] transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        {/* Corporate Identity Logos */}
+        <div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-slate-200/40">
+          <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="h-7 w-auto object-contain drop-shadow-sm" />
+          <img src="/logo-cp.png" alt="Centre Park" className="h-5 w-auto object-contain drop-shadow-sm" />
+        </div>
       </div>
 
       {/* Navigation */}
@@ -143,11 +150,7 @@ export default function Sidebar({ user }: SidebarProps) {
           </button>
         </form>
 
-        {/* Corporate Identity Logos */}
-        <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-white/[0.04]">
-          <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="h-5 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
-          <img src="/logo-cp.png" alt="Centre Park" className="h-4 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
-        </div>
+
       </div>
     </div>
   );
