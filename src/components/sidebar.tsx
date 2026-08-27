@@ -68,7 +68,7 @@ export default function Sidebar({ user }: SidebarProps) {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Brand */}
-      <div className="px-6 py-6 border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)]">
+      <div className="px-6 py-6 border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] flex items-center justify-between">
         <Link href={user.role === "carpark_manager" || user.role === "supervisor" ? "/dashboard" : "/berita-acara"} className="flex items-center gap-3">
           <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#00ffcc] to-[#39ff14] shadow-lg shadow-[#00ffcc]/30">
             <ShieldCheck className="w-5 h-5 text-black" />
@@ -82,6 +82,14 @@ export default function Sidebar({ user }: SidebarProps) {
             </p>
           </div>
         </Link>
+        
+        {/* Close Button for Mobile inside Sidebar */}
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="lg:hidden p-2 -mr-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/[0.04] transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation */}
@@ -141,17 +149,15 @@ export default function Sidebar({ user }: SidebarProps) {
   return (
     <>
       {/* Mobile toggle button */}
-      <button
-        type="button"
-        onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-xl bg-white/[0.05] border border-white/[0.08] text-slate-800 backdrop-blur-xl cursor-pointer print:hidden"
-      >
-        {mobileOpen ? (
-          <X className="w-5 h-5" />
-        ) : (
+      {!mobileOpen && (
+        <button
+          type="button"
+          onClick={() => setMobileOpen(true)}
+          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-xl bg-white/[0.05] border border-white/[0.08] text-slate-800 backdrop-blur-xl cursor-pointer print:hidden"
+        >
           <Menu className="w-5 h-5" />
-        )}
-      </button>
+        </button>
+      )}
 
       {/* Mobile overlay */}
       {mobileOpen && (
