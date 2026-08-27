@@ -188,17 +188,44 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
       {ba.lampiran_foto && ba.lampiran_foto.length > 0 && (
         <div className="print:break-before-page pt-12">
           <h2 className="text-lg font-bold mb-6">Dokumentasi Kejadian</h2>
-          <div className="grid grid-cols-2 gap-6">
-            {ba.lampiran_foto.map((url, idx) => (
-              <div key={idx} className="mb-4">
-                {/* We use standard img for printing reliability instead of Next Image */}
-                <img 
-                  src={url} 
-                  alt={`Dokumentasi ${idx + 1}`} 
-                  className="w-full h-auto max-h-[400px] object-contain border border-gray-200 p-1"
-                />
-              </div>
-            ))}
+          <div className="grid grid-cols-12 gap-4 place-items-center">
+            {ba.lampiran_foto.map((url, idx) => {
+              const total = ba.lampiran_foto.length;
+              let spanClass = "col-span-4";
+              let heightClass = "h-[300px]";
+
+              if (total === 1) {
+                spanClass = "col-span-12";
+                heightClass = "h-[700px]";
+              } else if (total === 2) {
+                spanClass = "col-span-6";
+                heightClass = "h-[500px]";
+              } else if (total === 3) {
+                spanClass = "col-span-4";
+                heightClass = "h-[400px]";
+              } else if (total === 4) {
+                spanClass = "col-span-6";
+                heightClass = "h-[450px]";
+              } else if (total === 5) {
+                // Baris pertama 2 foto, baris kedua 3 foto
+                spanClass = idx < 2 ? "col-span-6" : "col-span-4";
+                heightClass = "h-[400px]";
+              } else {
+                spanClass = "col-span-4";
+                heightClass = "h-[300px]";
+              }
+
+              return (
+                <div key={idx} className={`${spanClass} w-full flex justify-center`}>
+                  {/* We use standard img for printing reliability instead of Next Image */}
+                  <img 
+                    src={url} 
+                    alt={`Dokumentasi ${idx + 1}`} 
+                    className={`w-full ${heightClass} object-contain border border-gray-200 p-1`}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
