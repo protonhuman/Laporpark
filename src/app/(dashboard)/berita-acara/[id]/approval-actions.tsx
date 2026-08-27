@@ -25,15 +25,15 @@ export default function ApprovalActions({ baId, currentStatus, userRole }: Appro
     setLoading(null);
   }
 
-  // Hide action bar entirely if it's already finished or approved
-  if (currentStatus === "disetujui" || currentStatus === "selesai") return null;
+  // Hide action bar entirely if it's already finished
+  if (currentStatus === "selesai") return null;
 
   const isManager = userRole === "carpark_manager";
   const isSupervisor = userRole === "supervisor";
 
   return (
     <div className="flex flex-wrap gap-2 items-center bg-white/[0.02] border border-white/[0.08] p-3 rounded-xl print:hidden">
-      <span className="text-sm font-medium text-slate-400 mr-2">Tindakan:</span>
+      <span className="text-sm font-medium text-slate-500 mr-2">Tindakan:</span>
       
       {/* MANAGER ACTIONS */}
       {isManager && (currentStatus === "menunggu_review" || currentStatus === "revisi") && (
@@ -59,6 +59,17 @@ export default function ApprovalActions({ baId, currentStatus, userRole }: Appro
             Setujui Berita Acara
           </button>
         </>
+      )}
+      
+      {isSupervisor && currentStatus === "disetujui" && (
+        <button
+          onClick={() => handleUpdate("selesai")}
+          disabled={loading !== null}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+        >
+          {loading === "selesai" ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+          Tandai Selesai
+        </button>
       )}
 
       {/* REJECT/REVISION ACTION - available to both Manager and Supervisor if it's not already in revision */}

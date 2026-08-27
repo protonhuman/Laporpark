@@ -20,47 +20,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background text-foreground">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-[radial-gradient(circle,rgba(0,255,204,0.15)_0%,transparent_50%)] animate-pulse" />
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-[radial-gradient(circle,rgba(57,255,20,0.15)_0%,transparent_50%)] animate-pulse [animation-delay:1s]" />
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle,rgba(255,0,255,0.08)_0%,transparent_60%)] animate-[pulse_4s_ease-in-out_infinite]" />
-      </div>
-
-      {/* Grid pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: "60px 60px",
-        }}
-      />
-
+    <div className="min-h-screen flex items-center justify-center relative bg-background text-foreground">
       {/* Login Card */}
       <div className="relative z-10 w-full max-w-md mx-4">
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00ffcc] to-[#39ff14] mb-4 shadow-lg shadow-[#00ffcc]/30">
-            <ShieldCheck className="w-8 h-8 text-black" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl neo-card mb-4 text-accent">
+            <ShieldCheck className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">
             Lapor Park
           </h1>
-          <p className="text-slate-400 mt-1 text-sm">
+          <p className="text-slate-500 mt-1 text-sm">
             Sistem Berita Acara Parkir Digital
           </p>
         </div>
 
-        {/* Glass card */}
-        <div className="backdrop-blur-xl bg-white/[0.05] border border-white/[0.08] rounded-2xl p-8 shadow-2xl shadow-black/40">
-          <h2 className="text-xl font-semibold text-white mb-6">Masuk</h2>
+        {/* Neumorphic card */}
+        <div className="neo-card p-8">
+          <h2 className="text-xl font-semibold text-foreground mb-6 text-center">Masuk</h2>
 
           <form action={handleSubmit} className="space-y-5">
             {/* Error banner */}
             {error && (
-              <div className="flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-red-300 text-sm">
+              <div className="flex items-center gap-2 rounded-xl bg-red-100 border border-red-200 px-4 py-3 text-red-600 text-sm">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 {error}
               </div>
@@ -70,7 +53,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-slate-300"
+                className="block text-sm font-medium text-slate-600 ml-1"
               >
                 Email
               </label>
@@ -81,7 +64,7 @@ export default function LoginPage() {
                 autoComplete="email"
                 required
                 placeholder="nama@bandara.co.id"
-                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#00ffcc]/50 focus:border-[#00ffcc]/50 transition-all duration-200"
+                className="neo-inset w-full px-4 py-3 text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-200"
               />
             </div>
 
@@ -89,7 +72,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-slate-300"
+                className="block text-sm font-medium text-slate-600 ml-1"
               >
                 Password
               </label>
@@ -100,7 +83,7 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 required
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#00ffcc]/50 focus:border-[#00ffcc]/50 transition-all duration-200"
+                className="neo-inset w-full px-4 py-3 text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-200"
               />
             </div>
 
@@ -108,11 +91,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00ffcc] to-[#39ff14] px-4 py-3 text-black font-semibold hover:from-[#00e6b8] hover:to-[#32e612] focus:outline-none focus:ring-2 focus:ring-[#00ffcc]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-[0_0_20px_rgba(0,255,204,0.2)] hover:shadow-[0_0_25px_rgba(0,255,204,0.4)] cursor-pointer"
+              className="neo-button w-full px-4 py-3 text-accent font-semibold disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
                   Memproses...
                 </>
               ) : (
@@ -123,7 +106,7 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-600 mt-6">
+        <p className="text-center text-xs text-slate-500 mt-8">
           Bandara Internasional Syamsudin Noor — Unit Parkir
         </p>
       </div>

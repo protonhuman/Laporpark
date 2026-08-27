@@ -39,19 +39,19 @@ export default async function PenggunaPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Manajemen Pengguna</h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <h1 className="text-2xl font-bold text-slate-800">Manajemen Pengguna</h1>
+          <p className="text-sm text-slate-500 mt-1">
             Kelola akses dan akun anggota tim Lapor Park
           </p>
         </div>
         <CreateUserModal />
       </div>
 
-      <div className="glass-card overflow-hidden">
+      <div className="neo-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] text-left">
+              <tr className="border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] text-left">
                 <th className="px-6 py-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
                   Pengguna
                 </th>
@@ -73,9 +73,9 @@ export default async function PenggunaPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center">
-                          <UserIcon className="w-4 h-4 text-slate-400" />
+                          <UserIcon className="w-4 h-4 text-slate-500" />
                         </div>
-                        <span className="font-medium text-white">{u.nama}</span>
+                        <span className="font-medium text-slate-800">{u.nama}</span>
                         {u.id === currentUser.id && (
                           <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 text-[10px] font-medium border border-indigo-500/20">
                             Anda
@@ -84,7 +84,7 @@ export default async function PenggunaPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-slate-400">
+                      <div className="flex items-center gap-2 text-slate-500">
                         <Mail className="w-3.5 h-3.5" />
                         {u.email}
                       </div>
@@ -93,7 +93,7 @@ export default async function PenggunaPage() {
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border
                         ${u.role === 'supervisor' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
                         ${u.role === 'carpark_manager' ? 'bg-sky-500/10 text-sky-400 border-sky-500/20' : ''}
-                        ${u.role === 'team_leader' ? 'bg-slate-500/10 text-slate-300 border-slate-500/20' : ''}
+                        ${u.role === 'team_leader' ? 'bg-slate-500/10 text-slate-600 border-slate-500/20' : ''}
                       `}>
                         {u.role === 'supervisor' && <ShieldAlert className="w-3 h-3" />}
                         {ROLE_LABELS[u.role as keyof typeof ROLE_LABELS]}

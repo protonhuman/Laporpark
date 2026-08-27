@@ -10,6 +10,8 @@ export type JenisInsiden =
   | "sengketa"
   | "komplain"
   | "kehilangan"
+  | "gangguan_sistem"
+  | "gangguan_perangkat"
   | "lainnya";
 
 export type StatusBA =
@@ -112,6 +114,8 @@ export const JENIS_INSIDEN_LABELS: Record<JenisInsiden, string> = {
   sengketa: "Sengketa",
   komplain: "Komplain",
   kehilangan: "Kehilangan",
+  gangguan_sistem: "Gangguan Sistem",
+  gangguan_perangkat: "Gangguan Perangkat",
   lainnya: "Lainnya",
 };
 

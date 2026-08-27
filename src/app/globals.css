@@ -2,19 +2,21 @@
 
 /* ================================================================
    Lapor Park — Global Styles & Design System
-   Dark glassmorphism theme with sky/indigo accent palette
+   Neumorphism (Soft UI) Light Theme
    ================================================================ */
 
 :root {
-  --background: #050505;
-  --foreground: #fafafa;
-  --surface: rgba(20, 20, 20, 0.6);
-  --surface-hover: rgba(30, 30, 30, 0.8);
-  --border: rgba(0, 255, 204, 0.2);
-  --border-hover: rgba(0, 255, 204, 0.5);
-  --accent: #00ffcc;
-  --accent-hover: #39ff14;
-  --accent-muted: rgba(0, 255, 204, 0.15);
+  --background: #e0e5ec;
+  --foreground: #4b5563; /* Slate 600 */
+  --surface: #e0e5ec;
+  --surface-hover: #e0e5ec;
+  --border: transparent;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-muted: rgba(79, 70, 229, 0.15);
+  
+  --shadow-light: #ffffff;
+  --shadow-dark: #a3b1c6;
 }
 
 @theme inline {
@@ -23,7 +25,6 @@
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);
   --color-border: var(--border);
-  --color-border-hover: var(--border-hover);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-muted: var(--accent-muted);
@@ -41,40 +42,67 @@ body {
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--background);
+  box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--background);
+  box-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
+  border-radius: 4px;
 }
 
-/* Glass card utility */
-.glass-card {
-  backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Neumorphism card utility */
+.neo-card {
+  background: var(--background);
   border-radius: 1rem;
+  box-shadow: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+  border: none;
 }
 
-.glass-card-hover {
+.neo-card-hover {
   transition: all 0.2s ease;
 }
-.glass-card-hover:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+.neo-card-hover:hover {
+  box-shadow: 12px 12px 20px var(--shadow-dark), -12px -12px 20px var(--shadow-light);
+}
+
+/* Neumorphism inset utility (for inputs, pressed states) */
+.neo-inset {
+  background: var(--background);
+  border-radius: 0.75rem;
+  box-shadow: inset 6px 6px 10px var(--shadow-dark), inset -6px -6px 10px var(--shadow-light);
+  border: none;
+}
+
+/* Neumorphism button */
+.neo-button {
+  background: var(--background);
+  border-radius: 0.75rem;
+  box-shadow: 6px 6px 10px var(--shadow-dark), -6px -6px 10px var(--shadow-light);
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.neo-button:hover {
+  box-shadow: 8px 8px 12px var(--shadow-dark), -8px -8px 12px var(--shadow-light);
+}
+
+.neo-button:active {
+  box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #00ffcc 0%, #39ff14 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #818cf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -95,9 +123,7 @@ body {
   outline: none;
 }
 .focus-ring:focus-visible {
-}
-.focus-ring:focus-visible {
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
+  box-shadow: inset 6px 6px 10px var(--shadow-dark), inset -6px -6px 10px var(--shadow-light), 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
 }
 
 /* ================================================================
@@ -118,15 +144,13 @@ body {
     display: none !important;
   }
 
-  /* Reset glass card styles for print */
-  .glass-card {
+  /* Reset neo card styles for print */
+  .neo-card, .neo-inset, .neo-button {
     background: none !important;
-    backdrop-filter: none !important;
-    border: none !important;
+    box-shadow: none !important;
     border-radius: 0 !important;
     padding: 0 !important;
     margin-bottom: 1.5rem !important;
-    box-shadow: none !important;
   }
 
   /* Reset text colors for print readability */

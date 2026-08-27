@@ -69,14 +69,14 @@ export function CreateUserModal() {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all";
-  const labelClass = "block text-xs font-medium text-slate-300 mb-1.5";
+    "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all";
+  const labelClass = "block text-xs font-medium text-slate-600 mb-1.5";
 
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-sm font-medium hover:from-sky-400 hover:to-indigo-500 transition-all shadow-lg shadow-sky-500/20 cursor-pointer"
+        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-slate-800 text-sm font-medium hover:from-sky-400 hover:to-indigo-500 transition-all shadow-lg shadow-sky-500/20 cursor-pointer"
       >
         <UserPlus className="w-4 h-4" />
         Tambah Pengguna
@@ -85,15 +85,15 @@ export function CreateUserModal() {
       {open && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <div className="relative w-full max-w-md glass-card p-6 shadow-2xl">
+          <div className="relative w-full max-w-md neo-card p-6 shadow-2xl">
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
             
-            <h2 className="text-xl font-bold text-white mb-6">Tambah Pengguna Baru</h2>
+            <h2 className="text-xl font-bold text-slate-800 mb-6">Tambah Pengguna Baru</h2>
             
             {error && (
               <div className="flex items-start gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-red-300 text-sm mb-4">
@@ -150,7 +150,7 @@ export function CreateUserModal() {
                         setSignaturePreview("");
                         setSignatureUrl("");
                       }}
-                      className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-slate-800 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -208,14 +208,14 @@ export function CreateUserModal() {
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-300 text-sm font-medium transition-colors"
+                  className="px-4 py-2.5 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-600 text-sm font-medium transition-colors"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 disabled:opacity-50 text-white text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 disabled:opacity-50 text-slate-800 text-sm font-medium transition-colors"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Buat Akun"}
                 </button>
@@ -240,7 +240,7 @@ export function DeleteUserButton({ userId, userName }: { userId: string, userNam
     <>
       <button
         onClick={() => setShowDialog(true)}
-        className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+        className="p-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
         title="Hapus Pengguna"
       >
         <Trash2 className="w-4 h-4" />
@@ -285,13 +285,13 @@ export function UpdatePasswordButton({ userId, userName }: { userId: string, use
   }
 
   const inputClass =
-    "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all";
+    "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all";
 
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-2 rounded-lg text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"
+        className="p-2 rounded-lg text-slate-500 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"
         title="Ubah Password"
       >
         <KeyRound className="w-4 h-4" />
@@ -300,16 +300,16 @@ export function UpdatePasswordButton({ userId, userName }: { userId: string, use
       {open && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <div className="relative w-full max-w-sm glass-card p-6 shadow-2xl">
+          <div className="relative w-full max-w-sm neo-card p-6 shadow-2xl">
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
             
-            <h2 className="text-xl font-bold text-white mb-2">Ubah Password</h2>
-            <p className="text-sm text-slate-400 mb-6">Ubah kata sandi untuk <strong>{userName}</strong></p>
+            <h2 className="text-xl font-bold text-slate-800 mb-2">Ubah Password</h2>
+            <p className="text-sm text-slate-500 mb-6">Ubah kata sandi untuk <strong>{userName}</strong></p>
             
             {error && (
               <div className="flex items-start gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-red-300 text-sm mb-4">
@@ -327,7 +327,7 @@ export function UpdatePasswordButton({ userId, userName }: { userId: string, use
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Password Baru (min. 6 karakter)</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1.5">Password Baru (min. 6 karakter)</label>
                 <input
                   type="password"
                   required
@@ -343,14 +343,14 @@ export function UpdatePasswordButton({ userId, userName }: { userId: string, use
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-300 text-sm font-medium transition-colors"
+                  className="px-4 py-2.5 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-600 text-sm font-medium transition-colors"
                 >
                   Tutup
                 </button>
                 <button
                   type="submit"
                   disabled={loading || success || newPassword.length < 6}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-white text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-800 text-sm font-medium transition-colors"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Simpan Sandi"}
                 </button>
@@ -412,7 +412,7 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
   }
 
   const inputClass =
-    "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all";
+    "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all";
 
   return (
     <>
@@ -426,7 +426,7 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
           setOpen(true);
           setSuccess(false);
         }}
-        className="p-2 rounded-lg text-slate-400 hover:text-sky-400 hover:bg-sky-500/10 transition-colors"
+        className="p-2 rounded-lg text-slate-500 hover:text-sky-400 hover:bg-sky-500/10 transition-colors"
         title="Ubah Profil"
       >
         <Pencil className="w-4 h-4" />
@@ -435,15 +435,15 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
       {open && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <div className="relative w-full max-w-sm glass-card p-6 shadow-2xl">
+          <div className="relative w-full max-w-sm neo-card p-6 shadow-2xl">
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
             
-            <h2 className="text-xl font-bold text-white mb-6">Ubah Profil Pengguna</h2>
+            <h2 className="text-xl font-bold text-slate-800 mb-6">Ubah Profil Pengguna</h2>
             
             {error && (
               <div className="flex items-start gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-red-300 text-sm mb-4">
@@ -461,7 +461,7 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Nama Lengkap</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1.5">Nama Lengkap</label>
                 <input
                   type="text"
                   required
@@ -473,7 +473,7 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Alamat Email</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1.5">Alamat Email</label>
                 <input
                   type="email"
                   required
@@ -485,7 +485,7 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Tanda Tangan</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1.5">Tanda Tangan</label>
                 {signaturePreview ? (
                   <div className="relative w-full aspect-[3/1] rounded-xl border border-white/[0.08] bg-white/[0.02] overflow-hidden group">
                     <img src={signaturePreview} alt="Preview" className="w-full h-full object-contain p-2" />
@@ -496,7 +496,7 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
                         setSignaturePreview("");
                         setNewSignatureUrl("");
                       }}
-                      className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-slate-800 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -539,14 +539,14 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-300 text-sm font-medium transition-colors"
+                  className="px-4 py-2.5 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-600 text-sm font-medium transition-colors"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={loading || success || (!newName.trim() && !newEmail.trim()) || (newName.trim() === currentName && newEmail.trim() === currentEmail && newSignatureUrl === (currentSignatureUrl || "") && !signatureFile)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 disabled:opacity-50 text-white text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 disabled:opacity-50 text-slate-800 text-sm font-medium transition-colors"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Simpan"}
                 </button>

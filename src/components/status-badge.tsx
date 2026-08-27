@@ -2,7 +2,7 @@ import type { StatusBA } from "@/lib/types";
 import { STATUS_LABELS } from "@/lib/types";
 
 const STATUS_STYLES: Record<StatusBA, string> = {
-  draft: "bg-slate-500/10 text-slate-400 border-slate-500/20 shadow-[0_0_8px_rgba(148,163,184,0.15)]",
+  draft: "bg-slate-500/10 text-slate-500 border-slate-500/20 shadow-[0_0_8px_rgba(148,163,184,0.15)]",
   menunggu_review: "bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_8px_rgba(245,158,11,0.15)]",
   diperiksa: "bg-blue-500/10 text-blue-400 border-blue-500/20 shadow-[0_0_8px_rgba(59,130,246,0.15)]",
   revisi: "bg-orange-500/10 text-orange-400 border-orange-500/20 shadow-[0_0_8px_rgba(249,115,22,0.15)]",

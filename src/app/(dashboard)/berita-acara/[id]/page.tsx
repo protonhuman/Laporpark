@@ -114,7 +114,7 @@ export default async function BeritaAcaraDetailPage({
       <div className="flex flex-col sm:flex-row sm:items-start gap-4">
         <Link
           href="/berita-acara"
-          className="p-2 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-400 hover:text-white transition-all self-start print:hidden"
+          className="p-2 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-500 hover:text-slate-800 transition-all self-start print:hidden"
         >
           <ArrowLeft className="w-4 h-4" />
         </Link>
@@ -125,7 +125,7 @@ export default async function BeritaAcaraDetailPage({
             </span>
             <StatusBadge status={ba.status} />
           </div>
-          <h1 className="text-2xl font-bold text-white">{ba.judul_masalah}</h1>
+          <h1 className="text-2xl font-bold text-slate-800">{ba.judul_masalah}</h1>
         </div>
         <div className="flex gap-2 print:hidden">
           {(ba.status === "disetujui" || ba.status === "selesai") && (
@@ -134,7 +134,7 @@ export default async function BeritaAcaraDetailPage({
           {canEdit && (
             <Link
               href={`/berita-acara/${id}/edit`}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.05] border border-white/[0.08] text-sm font-medium text-white hover:bg-white/[0.08] transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.05] border border-white/[0.08] text-sm font-medium text-slate-800 hover:bg-white/[0.08] transition-all"
             >
               <Pencil className="w-3.5 h-3.5" />
               Edit
@@ -146,12 +146,12 @@ export default async function BeritaAcaraDetailPage({
 
       {/* Meta info cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="glass-card p-4">
+        <div className="neo-card p-4">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <Calendar className="w-3.5 h-3.5" />
             <span className="text-xs">Tanggal</span>
           </div>
-          <p className="text-sm text-white font-medium">
+          <p className="text-sm text-slate-800 font-medium">
             {new Date(ba.tanggal_kejadian).toLocaleDateString("id-ID", {
               day: "numeric",
               month: "long",
@@ -159,26 +159,26 @@ export default async function BeritaAcaraDetailPage({
             })}
           </p>
         </div>
-        <div className="glass-card p-4">
+        <div className="neo-card p-4">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <Clock className="w-3.5 h-3.5" />
             <span className="text-xs">Waktu</span>
           </div>
-          <p className="text-sm text-white font-medium">{ba.waktu_kejadian}</p>
+          <p className="text-sm text-slate-800 font-medium">{ba.waktu_kejadian}</p>
         </div>
-        <div className="glass-card p-4">
+        <div className="neo-card p-4">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <MapPin className="w-3.5 h-3.5" />
             <span className="text-xs">Lokasi</span>
           </div>
-          <p className="text-sm text-white font-medium">{ba.lokasi_zona}</p>
+          <p className="text-sm text-slate-800 font-medium">{ba.lokasi_zona}</p>
         </div>
-        <div className="glass-card p-4">
+        <div className="neo-card p-4">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <Tag className="w-3.5 h-3.5" />
             <span className="text-xs">Jenis</span>
           </div>
-          <p className="text-sm text-white font-medium">
+          <p className="text-sm text-slate-800 font-medium">
             {JENIS_INSIDEN_LABELS[ba.jenis_insiden as keyof typeof JENIS_INSIDEN_LABELS]}
           </p>
         </div>
@@ -186,14 +186,14 @@ export default async function BeritaAcaraDetailPage({
 
       {/* Pihak terlibat */}
       {ba.pihak_terlibat && (
-        <div className="glass-card p-5">
+        <div className="neo-card p-5">
           <div className="flex items-center gap-2 text-slate-500 mb-2">
             <Users className="w-4 h-4" />
             <span className="text-xs font-medium uppercase tracking-wider">
               Pihak Terlibat
             </span>
           </div>
-          <p className="text-sm text-slate-300">{ba.pihak_terlibat}</p>
+          <p className="text-sm text-slate-600">{ba.pihak_terlibat}</p>
         </div>
       )}
 
@@ -205,11 +205,11 @@ export default async function BeritaAcaraDetailPage({
           { label: "Penyelesaian", content: ba.penyelesaian },
           { label: "Mitigasi", content: ba.mitigasi },
         ].map((section) => (
-          <div key={section.label} className="glass-card p-5">
+          <div key={section.label} className="neo-card p-5">
             <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">
               {section.label}
             </h3>
-            <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">
               {section.content}
             </p>
           </div>
@@ -218,7 +218,7 @@ export default async function BeritaAcaraDetailPage({
 
       {/* Foto lampiran */}
       {ba.lampiran_foto && ba.lampiran_foto.length > 0 && (
-        <div className="glass-card p-5">
+        <div className="neo-card p-5">
           <div className="flex items-center gap-2 text-slate-500 mb-3">
             <ImageIcon className="w-4 h-4" />
             <span className="text-xs font-medium uppercase tracking-wider">
@@ -246,14 +246,14 @@ export default async function BeritaAcaraDetailPage({
       )}
 
       {/* Personnel info */}
-      <div className="glass-card p-5 print:hidden">
+      <div className="neo-card p-5 print:hidden">
         <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">
           Informasi Pelapor
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
           <div>
             <p className="text-slate-500 text-xs mb-0.5">Dibuat oleh</p>
-            <p className="text-white font-medium">
+            <p className="text-slate-800 font-medium">
               {ba.pembuat?.nama ?? "—"}
               {ba.pembuat?.role && (
                 <span className="text-slate-500 font-normal ml-1">
@@ -267,7 +267,7 @@ export default async function BeritaAcaraDetailPage({
           </div>
           <div>
             <p className="text-slate-500 text-xs mb-0.5">Diperiksa oleh</p>
-            <p className="text-white font-medium">
+            <p className="text-slate-800 font-medium">
               {checker ? checker.nama : <span className="text-slate-500 italic">Belum diperiksa</span>}
               {checker && (
                 <span className="text-slate-500 font-normal ml-1">
@@ -283,7 +283,7 @@ export default async function BeritaAcaraDetailPage({
           </div>
           <div>
             <p className="text-slate-500 text-xs mb-0.5">Mengetahui</p>
-            <p className="text-white font-medium">
+            <p className="text-slate-800 font-medium">
               {approver ? approver.nama : <span className="text-slate-500 italic">Belum disetujui</span>}
               {approver && (
                 <span className="text-slate-500 font-normal ml-1">
@@ -301,10 +301,10 @@ export default async function BeritaAcaraDetailPage({
       </div>
 
       {/* Audit log (Hidden in print) */}
-      <div className="glass-card overflow-hidden print:hidden">
-        <div className="px-5 py-4 border-b border-white/[0.06] flex items-center gap-2">
+      <div className="neo-card overflow-hidden print:hidden">
+        <div className="px-5 py-4 border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] flex items-center gap-2">
           <History className="w-4 h-4 text-slate-500" />
-          <h3 className="text-sm font-semibold text-white">Riwayat Perubahan</h3>
+          <h3 className="text-sm font-semibold text-slate-800">Riwayat Perubahan</h3>
         </div>
 
         {auditLogs && auditLogs.length > 0 ? (
@@ -312,7 +312,7 @@ export default async function BeritaAcaraDetailPage({
             {auditLogs.map((log: AuditLogWithUser & { user?: { nama: string; role: string; signature_url?: string } }) => (
               <div key={log.id} className="px-5 py-3">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium text-white">
+                  <span className="text-xs font-medium text-slate-800">
                     {log.user?.nama ?? "—"}
                   </span>
                   <span className="text-xs text-slate-600">mengubah</span>

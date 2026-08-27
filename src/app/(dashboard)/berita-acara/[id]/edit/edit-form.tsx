@@ -69,11 +69,11 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50 transition-all duration-200";
+    "w-full neo-inset px-5 py-3.5 text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus-ring transition-all duration-200";
 
   const textareaClass = `${inputClass} min-h-[120px] resize-y`;
 
-  const labelClass = "block text-sm font-medium text-slate-300 mb-1.5";
+  const labelClass = "block text-sm font-medium text-slate-600 mb-1.5";
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -81,13 +81,13 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
       <div className="flex items-center gap-4">
         <Link
           href={`/berita-acara/${ba.id}`}
-          className="p-2 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-400 hover:text-white transition-all"
+          className="p-2 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-500 hover:text-slate-800 transition-all"
         >
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-white">Edit Berita Acara</h1>
-          <p className="text-slate-400 text-sm mt-0.5 font-mono">
+          <h1 className="text-2xl font-bold text-slate-800">Edit Berita Acara</h1>
+          <p className="text-slate-500 text-sm mt-0.5 font-mono">
             {ba.nomor_ba}
           </p>
         </div>
@@ -104,8 +104,8 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Status change */}
         {availableStatuses.length > 0 && (
-          <div className="glass-card p-6">
-            <h2 className="text-sm font-semibold text-white border-b border-white/[0.06] pb-3 mb-4">
+          <div className="neo-card p-6">
+            <h2 className="text-sm font-semibold text-slate-800 border-b border-slate-300 pb-4 mb-4">
               Ubah Status
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -115,7 +115,7 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                   status === ba.status
                     ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
-                    : "text-slate-400 border border-white/[0.06] hover:bg-white/[0.04]"
+                    : "text-slate-500 border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] hover:bg-white/[0.04]"
                 }`}
               >
                 Tetap: {STATUS_LABELS[ba.status]}
@@ -128,7 +128,7 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                     status === s
                       ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
-                      : "text-slate-400 border border-white/[0.06] hover:bg-white/[0.04]"
+                      : "text-slate-500 border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] hover:bg-white/[0.04]"
                   }`}
                 >
                   → {STATUS_LABELS[s]}
@@ -139,8 +139,8 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
         )}
 
         {/* Content edit */}
-        <div className="glass-card p-6 space-y-5">
-          <h2 className="text-sm font-semibold text-white border-b border-white/[0.06] pb-3">
+        <div className="neo-card p-6 space-y-5">
+          <h2 className="text-sm font-semibold text-slate-800 border-b border-slate-300 pb-4 mb-4">
             Edit Konten
           </h2>
 
@@ -217,7 +217,7 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-medium hover:from-sky-400 hover:to-indigo-500 disabled:opacity-50 transition-all shadow-lg shadow-sky-500/20 cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-slate-800 font-medium hover:from-sky-400 hover:to-indigo-500 disabled:opacity-50 transition-all shadow-lg shadow-sky-500/20 cursor-pointer"
           >
             {loading ? (
               <>

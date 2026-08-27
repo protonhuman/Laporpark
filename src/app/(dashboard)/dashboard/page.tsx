@@ -33,7 +33,7 @@ const STATUS_CARD_STYLES: Record<StatusBA, string> = {
 };
 
 const STATUS_ICON_STYLES: Record<StatusBA, string> = {
-  draft: "text-slate-400",
+  draft: "text-slate-500",
   menunggu_review: "text-amber-400",
   diperiksa: "text-blue-400",
   revisi: "text-orange-400",
@@ -41,8 +41,24 @@ const STATUS_ICON_STYLES: Record<StatusBA, string> = {
   selesai: "text-sky-400",
 };
 
+import { redirect } from "next/navigation";
+
 export default async function DashboardPage() {
   const supabase = await createClient();
+
+  // Get current user role
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    
+    if (profile && (profile.role === "team_leader" || profile.role === "teknisi")) {
+      redirect("/berita-acara");
+    }
+  }
 
   // Count BA per status
   const statuses: StatusBA[] = [
@@ -80,8 +96,8 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       {/* Page header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-        <p className="text-slate-400 text-sm mt-1">
+        <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
+        <p className="text-slate-500 text-sm mt-1">
           Ringkasan Berita Acara Parkir
         </p>
       </div>
@@ -93,15 +109,15 @@ export default async function DashboardPage() {
           return (
             <div
               key={status}
-              className={`glass-card glass-card-hover p-5 bg-gradient-to-br ${STATUS_CARD_STYLES[status]}`}
+              className={`neo-card neo-card-hover p-5 bg-gradient-to-br ${STATUS_CARD_STYLES[status]}`}
             >
               <div className="flex items-center justify-between mb-3">
                 <Icon className={`w-5 h-5 ${STATUS_ICON_STYLES[status]}`} />
-                <span className="text-2xl font-bold text-white">
+                <span className="text-2xl font-bold text-slate-800">
                   {counts[status]}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-medium">
+              <p className="text-xs text-slate-500 font-medium">
                 {STATUS_LABELS[status]}
               </p>
             </div>
@@ -112,57 +128,57 @@ export default async function DashboardPage() {
       {/* Quick actions + total */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Total card */}
-        <div className="glass-card p-6 flex items-center gap-5 border border-[#00ffcc]/20">
+        <div className="neo-card p-6 flex items-center gap-5 border border-[#00ffcc]/20">
           <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00ffcc]/20 to-[#39ff14]/20">
             <TrendingUp className="w-7 h-7 text-[#00ffcc]" />
           </div>
           <div>
-            <p className="text-3xl font-bold text-white">{totalBA}</p>
-            <p className="text-sm text-slate-400">Total Berita Acara</p>
+            <p className="text-3xl font-bold text-slate-800">{totalBA}</p>
+            <p className="text-sm text-slate-500">Total Berita Acara</p>
           </div>
         </div>
 
         {/* Quick action: Buat BA Baru */}
         <Link
           href="/berita-acara/baru"
-          className="glass-card glass-card-hover p-6 flex items-center gap-5 group"
+          className="neo-card neo-card-hover p-6 flex items-center gap-5 group"
         >
           <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#39ff14]/20 to-[#00ffcc]/20 group-hover:from-[#39ff14]/30 group-hover:to-[#00ffcc]/30 transition-all shadow-[0_0_15px_rgba(57,255,20,0.1)] group-hover:shadow-[0_0_20px_rgba(57,255,20,0.3)]">
             <FilePlus className="w-7 h-7 text-[#39ff14]" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-white">
+            <p className="text-sm font-semibold text-slate-800">
               Buat Berita Acara Baru
             </p>
             <p className="text-xs text-slate-500">Laporkan insiden baru</p>
           </div>
-          <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
+          <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-500 transition-colors" />
         </Link>
 
         {/* Quick action: Lihat Semua */}
         <Link
           href="/berita-acara"
-          className="glass-card glass-card-hover p-6 flex items-center gap-5 group"
+          className="neo-card neo-card-hover p-6 flex items-center gap-5 group"
         >
           <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ff00ff]/20 to-[#00ffcc]/20 group-hover:from-[#ff00ff]/30 group-hover:to-[#00ffcc]/30 transition-all shadow-[0_0_15px_rgba(255,0,255,0.1)] group-hover:shadow-[0_0_20px_rgba(255,0,255,0.3)]">
             <FileText className="w-7 h-7 text-[#ff00ff]" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-white">
+            <p className="text-sm font-semibold text-slate-800">
               Lihat Semua BA
             </p>
             <p className="text-xs text-slate-500">
               Daftar &amp; pencarian
             </p>
           </div>
-          <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
+          <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-500 transition-colors" />
         </Link>
       </div>
 
       {/* Recent BA */}
-      <div className="glass-card overflow-hidden">
-        <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-white">
+      <div className="neo-card overflow-hidden">
+        <div className="px-6 py-4 border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-slate-800">
             Berita Acara Terbaru
           </h2>
           <Link
@@ -188,7 +204,7 @@ export default async function DashboardPage() {
                     </span>
                     <StatusBadge status={ba.status} />
                   </div>
-                  <p className="text-sm text-white truncate font-medium">
+                  <p className="text-sm text-slate-800 truncate font-medium">
                     {ba.judul_masalah}
                   </p>
                   <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">

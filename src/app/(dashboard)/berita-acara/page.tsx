@@ -75,14 +75,14 @@ export default async function BeritaAcaraListPage({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Daftar Berita Acara</h1>
-          <p className="text-slate-400 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-slate-800">Daftar Berita Acara</h1>
+          <p className="text-slate-500 text-sm mt-1">
             {count ?? 0} total laporan
           </p>
         </div>
         <Link
           href="/berita-acara/baru"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-sm font-medium hover:from-sky-400 hover:to-indigo-500 transition-all shadow-lg shadow-sky-500/20"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-slate-800 text-sm font-medium hover:from-sky-400 hover:to-indigo-500 transition-all shadow-lg shadow-sky-500/20"
         >
           <FilePlus className="w-4 h-4" />
           Buat BA Baru
@@ -90,7 +90,7 @@ export default async function BeritaAcaraListPage({
       </div>
 
       {/* Filters */}
-      <div className="glass-card p-4">
+      <div className="neo-card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Search */}
           <form className="flex-1 relative" action="/berita-acara" method="GET">
@@ -106,7 +106,7 @@ export default async function BeritaAcaraListPage({
               type="text"
               defaultValue={searchQuery}
               placeholder="Cari judul atau nomor BA..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.04] text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.04] text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
             />
           </form>
 
@@ -117,7 +117,7 @@ export default async function BeritaAcaraListPage({
               className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                 !statusFilter
                   ? "bg-sky-500/15 text-sky-400 border border-sky-500/20"
-                  : "text-slate-400 hover:bg-white/[0.04] border border-white/[0.06]"
+                  : "text-slate-500 hover:bg-white/[0.04] border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)]"
               }`}
             >
               Semua
@@ -131,7 +131,7 @@ export default async function BeritaAcaraListPage({
                 className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${
                   statusFilter === value
                     ? "bg-sky-500/15 text-sky-400 border border-sky-500/20"
-                    : "text-slate-400 hover:bg-white/[0.04] border border-white/[0.06]"
+                    : "text-slate-500 hover:bg-white/[0.04] border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)]"
                 }`}
               >
                 {label}
@@ -142,11 +142,11 @@ export default async function BeritaAcaraListPage({
       </div>
 
       {/* Table */}
-      <div className="glass-card overflow-hidden">
+      <div className="neo-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] text-left">
+              <tr className="border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] text-left">
                 <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
                   Nomor BA
                 </th>
@@ -185,12 +185,12 @@ export default async function BeritaAcaraListPage({
                     <td className="px-6 py-4">
                       <Link
                         href={`/berita-acara/${ba.id}`}
-                        className="text-white font-medium hover:text-sky-300 transition-colors"
+                        className="text-slate-800 font-medium hover:text-sky-300 transition-colors"
                       >
                         {ba.judul_masalah}
                       </Link>
                     </td>
-                    <td className="px-6 py-4 text-slate-400 text-xs">
+                    <td className="px-6 py-4 text-slate-500 text-xs">
                       {
                         JENIS_INSIDEN_LABELS[
                           ba.jenis_insiden as keyof typeof JENIS_INSIDEN_LABELS
@@ -200,7 +200,7 @@ export default async function BeritaAcaraListPage({
                     <td className="px-6 py-4">
                       <StatusBadge status={ba.status} />
                     </td>
-                    <td className="px-6 py-4 text-slate-400 text-xs">
+                    <td className="px-6 py-4 text-slate-500 text-xs">
                       {ba.pembuat?.nama ?? "—"}
                     </td>
                     <td className="px-6 py-4 text-slate-500 text-xs">
@@ -228,7 +228,7 @@ export default async function BeritaAcaraListPage({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-white/[0.06] flex items-center justify-between">
+          <div className="px-6 py-4 border-t border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] flex items-center justify-between">
             <p className="text-xs text-slate-500">
               Halaman {page} dari {totalPages}
             </p>
@@ -236,7 +236,7 @@ export default async function BeritaAcaraListPage({
               {page > 1 && (
                 <Link
                   href={buildUrl({ page: String(page - 1) })}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.06] hover:bg-white/[0.04] transition-colors"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] hover:bg-white/[0.04] transition-colors"
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
                   Prev
@@ -245,7 +245,7 @@ export default async function BeritaAcaraListPage({
               {page < totalPages && (
                 <Link
                   href={buildUrl({ page: String(page + 1) })}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.06] hover:bg-white/[0.04] transition-colors"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] hover:bg-white/[0.04] transition-colors"
                 >
                   Next
                   <ChevronRight className="w-3.5 h-3.5" />

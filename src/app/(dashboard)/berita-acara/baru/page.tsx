@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   Send,
   Undo2,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -128,11 +129,11 @@ export default function CreateBAPage() {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50 transition-all duration-200";
+    "w-full neo-inset px-5 py-3.5 text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus-ring transition-all duration-200";
 
   const textareaClass = `${inputClass} min-h-[120px] resize-y`;
 
-  const labelClass = "block text-sm font-medium text-slate-300 mb-1.5";
+  const labelClass = "block text-sm font-medium text-slate-600 mb-1.5";
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -140,15 +141,15 @@ export default function CreateBAPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/berita-acara"
-          className="p-2 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-400 hover:text-white transition-all"
+          className="p-2 rounded-xl border border-white/[0.08] hover:bg-white/[0.04] text-slate-500 hover:text-slate-800 transition-all"
         >
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-slate-800">
             Buat Berita Acara Baru
           </h1>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <p className="text-slate-500 text-sm mt-0.5">
             Laporkan insiden di area parkir
           </p>
         </div>
@@ -165,8 +166,8 @@ export default function CreateBAPage() {
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section: Informasi Kejadian */}
-        <div className="glass-card p-6 space-y-5">
-          <h2 className="text-sm font-semibold text-white border-b border-white/[0.06] pb-3">
+        <div className="neo-card p-6 space-y-5">
+          <h2 className="text-sm font-semibold text-slate-800 border-b border-slate-300 pb-4 mb-4">
             Informasi Kejadian
           </h2>
 
@@ -216,18 +217,23 @@ export default function CreateBAPage() {
               <label htmlFor="jenis_insiden" className={labelClass}>
                 Jenis Insiden *
               </label>
-              <select
-                id="jenis_insiden"
-                name="jenis_insiden"
-                required
-                className={inputClass}
-              >
-                {Object.entries(JENIS_INSIDEN_LABELS).map(([value, label]) => (
-                  <option key={value} value={value} className="bg-[#0a0e1a]">
-                    {label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  id="jenis_insiden"
+                  name="jenis_insiden"
+                  required
+                  className={`${inputClass} appearance-none pr-10 cursor-pointer`}
+                >
+                  {Object.entries(JENIS_INSIDEN_LABELS).map(([value, label]) => (
+                    <option key={value} value={value} className="bg-[#e0e5ec] text-slate-800">
+                      {label}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
+                  <ChevronDown className="w-4 h-4" />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -247,9 +253,9 @@ export default function CreateBAPage() {
         </div>
 
         {/* Section: Detail Laporan */}
-        <div className="glass-card p-6 space-y-5">
-          <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-            <h2 className="text-sm font-semibold text-white">Detail Laporan</h2>
+        <div className="neo-card p-6 space-y-5">
+          <div className="flex items-center justify-between border-b border-slate-300 pb-4 mb-4">
+            <h2 className="text-sm font-semibold text-slate-800">Detail Laporan</h2>
 
             {/* AI Rapikan button */}
             <div className="flex items-center gap-2">
@@ -257,9 +263,9 @@ export default function CreateBAPage() {
                 <button
                   type="button"
                   onClick={handleUndoAi}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-amber-400 border border-amber-500/20 hover:bg-amber-500/10 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-amber-700 bg-amber-500/10 hover:bg-amber-500/20 transition-colors cursor-pointer"
                 >
-                  <Undo2 className="w-3 h-3" />
+                  <Undo2 className="w-4 h-4" />
                   Undo AI
                 </button>
               )}
@@ -267,12 +273,12 @@ export default function CreateBAPage() {
                 type="button"
                 onClick={handleAiRapikan}
                 disabled={aiLoading}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 text-violet-300 border border-violet-500/20 hover:from-violet-500/30 hover:to-fuchsia-500/30 disabled:opacity-50 transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-500 hover:to-fuchsia-500 disabled:opacity-50 transition-all shadow-[0_4px_15px_rgba(139,92,246,0.3)] cursor-pointer"
               >
                 {aiLoading ? (
-                  <Loader2 className="w-3 h-3 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <Sparkles className="w-3 h-3" />
+                  <Sparkles className="w-4 h-4" />
                 )}
                 {aiLoading ? "Merapikan..." : "Minta AI Merapikan"}
               </button>
@@ -352,8 +358,8 @@ export default function CreateBAPage() {
         </div>
 
         {/* Section: Lampiran Foto */}
-        <div className="glass-card p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-white border-b border-white/[0.06] pb-3">
+        <div className="neo-card p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-slate-800 border-b border-slate-300 pb-4 mb-4">
             Lampiran Foto{" "}
             <span className="text-slate-500 font-normal">(opsional)</span>
           </h2>
@@ -365,7 +371,7 @@ export default function CreateBAPage() {
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-medium hover:from-sky-400 hover:to-indigo-500 disabled:opacity-50 transition-all shadow-lg shadow-sky-500/20 cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold hover:from-sky-400 hover:to-indigo-500 disabled:opacity-50 transition-all shadow-[0_4px_15px_rgba(14,165,233,0.3)] cursor-pointer"
           >
             {loading ? (
               <>
