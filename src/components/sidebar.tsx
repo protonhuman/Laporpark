@@ -142,6 +142,12 @@ export default function Sidebar({ user }: SidebarProps) {
             Keluar
           </button>
         </form>
+
+        {/* Corporate Identity Logos */}
+        <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-white/[0.04]">
+          <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="h-5 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+          <img src="/logo-cp.png" alt="Centre Park" className="h-4 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+        </div>
       </div>
     </div>
   );

@@ -25,8 +25,9 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md mx-4">
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl neo-card mb-4 text-accent">
-            <ShieldCheck className="w-8 h-8" />
+          <div className="flex items-center justify-center gap-6 mb-8">
+            <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="h-14 object-contain drop-shadow-sm" />
+            <img src="/logo-cp.png" alt="Centre Park" className="h-10 object-contain drop-shadow-sm" />
           </div>
           <h1 className="text-3xl font-bold text-foreground tracking-tight">
             Lapor Park
