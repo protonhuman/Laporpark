@@ -122,26 +122,7 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
         </div>
       </div>
 
-      {/* PAGE BREAK UNTUK LAMPIRAN */}
-      {ba.lampiran_foto && ba.lampiran_foto.length > 0 && (
-        <div className="print:break-before-page pt-12">
-          <h2 className="text-lg font-bold mb-6">Dokumentasi Kejadian</h2>
-          <div className="grid grid-cols-2 gap-6">
-            {ba.lampiran_foto.map((url, idx) => (
-              <div key={idx} className="mb-4">
-                {/* We use standard img for printing reliability instead of Next Image */}
-                <img 
-                  src={url} 
-                  alt={`Dokumentasi ${idx + 1}`} 
-                  className="w-full h-auto max-h-[400px] object-contain border border-gray-200 p-1"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* PAGE BREAK UNTUK PENGESAHAN (Atau biarkan menyambung jika cukup) */}
+      {/* PENGESAHAN (Biarkan menyambung jika cukup) */}
       <div className="mt-16 pt-8 print:break-inside-avoid">
         <p className="mb-6">
           Demikian berita acara kronologis ini kami sampaikan, atas perhatian dan kerjasamanya kami ucapkan terimakasih.
@@ -202,6 +183,25 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
           </tbody>
         </table>
       </div>
+
+      {/* PAGE BREAK UNTUK LAMPIRAN (Dipindah ke halaman terakhir setelah ttd) */}
+      {ba.lampiran_foto && ba.lampiran_foto.length > 0 && (
+        <div className="print:break-before-page pt-12">
+          <h2 className="text-lg font-bold mb-6">Dokumentasi Kejadian</h2>
+          <div className="grid grid-cols-2 gap-6">
+            {ba.lampiran_foto.map((url, idx) => (
+              <div key={idx} className="mb-4">
+                {/* We use standard img for printing reliability instead of Next Image */}
+                <img 
+                  src={url} 
+                  alt={`Dokumentasi ${idx + 1}`} 
+                  className="w-full h-auto max-h-[400px] object-contain border border-gray-200 p-1"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
     </>
   );
