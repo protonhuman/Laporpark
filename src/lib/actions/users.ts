@@ -1,7 +1,7 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 
 // Type for the payload
@@ -11,26 +11,6 @@ export interface CreateUserPayload {
   password?: string;
   role: "team_leader" | "carpark_manager" | "supervisor" | "teknisi";
   signature_url?: string;
-}
-
-/**
- * Helper to get the Admin Supabase client
- * Bypasses RLS and allows auth admin operations
- */
-function getAdminClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error("Missing Supabase URL or Service Role Key");
-  }
-
-  return createClient(supabaseUrl, serviceRoleKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  });
 }
 
 /**
@@ -58,7 +38,7 @@ export async function createUserAction(payload: CreateUserPayload) {
     }
 
     // 2. Create the user using admin client
-    const adminClient = getAdminClient();
+    const adminClient = createAdminClient();
     const passwordToUse = payload.password || "password123";
 
     const { data: newUser, error: createError } = await adminClient.auth.admin.createUser({
@@ -77,9 +57,23 @@ export async function createUserAction(payload: CreateUserPayload) {
       return { error: `Gagal membuat pengguna: ${createError.message}` };
     }
 
-    // 3. Since we have a trigger on auth.users in the database, 
-    // the user profile might be automatically created.
-    // However, the trigger might be async or delayed.
+    // 3. Immediately upsert profile into public.users to ensure it exists right away
+    if (newUser?.user) {
+      const { error: profileError } = await adminClient.from("users").upsert(
+        {
+          id: newUser.user.id,
+          nama: payload.nama,
+          email: payload.email,
+          role: payload.role,
+          signature_url: payload.signature_url || null,
+        },
+        { onConflict: "id" }
+      );
+
+      if (profileError) {
+        console.error("Failed to insert user profile into public.users:", profileError);
+      }
+    }
     
     revalidatePath("/pengguna");
     return { success: true };
@@ -117,7 +111,7 @@ export async function deleteUserAction(userId: string) {
     }
 
     // 2. Delete the user using admin client
-    const adminClient = getAdminClient();
+    const adminClient = createAdminClient();
     
     const { error: deleteError } = await adminClient.auth.admin.deleteUser(userId);
 
@@ -165,7 +159,7 @@ export async function updateUserPasswordAction(userId: string, newPassword: stri
     }
 
     // 2. Update the user using admin client
-    const adminClient = getAdminClient();
+    const adminClient = createAdminClient();
     
     const { error: updateError } = await adminClient.auth.admin.updateUserById(userId, {
       password: newPassword
@@ -214,7 +208,7 @@ export async function updateUserAction(userId: string, newName: string, newEmail
     }
 
     // 2. Update the user using admin client (to bypass RLS)
-    const adminClient = getAdminClient();
+    const adminClient = createAdminClient();
     
     // Update public.users table
     const { error: dbError } = await adminClient

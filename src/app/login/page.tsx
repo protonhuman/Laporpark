@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/actions/auth";
 import { AlertCircle, Loader2 } from "lucide-react";
+import WaterDropLoader from "@/components/water-drop-loader";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
@@ -15,14 +19,27 @@ export default function LoginPage() {
     if (result?.error) {
       setError(result.error);
       setLoading(false);
+    } else if (result?.success) {
+      setIsSuccess(true);
+      setLoading(false);
+      router.prefetch("/dashboard");
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 1600);
     }
-    // If successful, signIn() calls redirect() — we never reach here.
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center relative bg-background text-foreground py-12 overflow-y-auto overflow-x-hidden">
-      {/* Login Card */}
-      <div className="relative z-10 w-full max-w-md mx-4">
+      {/* Water Droplet & Ripple Loading Animation */}
+      {isSuccess && <WaterDropLoader />}
+
+      {/* Login Card Container */}
+      <div
+        className={`relative z-10 w-full max-w-md mx-4 transition-all duration-700 ease-out ${
+          isSuccess ? "filter blur-[3px] scale-[0.97] opacity-30 pointer-events-none" : ""
+        }`}
+      >
         {/* Brand Title */}
         <div className="text-center mb-8 login-brand">
           <h1 className="text-3xl font-bold text-foreground tracking-tight">

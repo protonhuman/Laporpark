@@ -1,0 +1,21 @@
+import { createClient } from "@supabase/supabase-js";
+
+/**
+ * Creates an admin Supabase client using the SERVICE_ROLE_KEY.
+ * Bypasses RLS. Should only be used on the server for admin/system tasks.
+ */
+export function createAdminClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error("Missing Supabase URL or Service Role Key");
+  }
+
+  return createClient(supabaseUrl, serviceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}

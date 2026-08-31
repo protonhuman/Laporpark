@@ -25,46 +25,66 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  // Get user profile from our users table
-  let { data: profile } = await supabase
+  // 1. First attempt: Get user profile using standard client
+  let profile: User | null = null;
+  const { data: userProfile } = await supabase
     .from("users")
     .select("*")
     .eq("id", authUser.id)
-    .single();
+    .maybeSingle();
+
+  if (userProfile) {
+    profile = userProfile as User;
+  } else {
+    // 2. Fallback attempt using Admin Client (bypasses RLS & cookie/token propagation timing right after login)
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const supabaseAdmin = createAdminClient();
+    const { data: adminProfile } = await supabaseAdmin
+      .from("users")
+      .select("*")
+      .eq("id", authUser.id)
+      .maybeSingle();
+
+    if (adminProfile) {
+      profile = adminProfile as User;
+    } else {
+      // 3. Profile genuinely doesn't exist in public.users yet — auto-create using upsert
+      const role = (authUser.user_metadata?.role as User["role"]) || "team_leader";
+      const newProfile: User = {
+        id: authUser.id,
+        nama: authUser.user_metadata?.nama || authUser.email?.split("@")[0] || "User",
+        email: authUser.email || "",
+        role: role,
+      };
+
+      const { data: upsertedProfile, error: upsertError } = await supabaseAdmin
+        .from("users")
+        .upsert(newProfile, { onConflict: "id" })
+        .select()
+        .single();
+
+      if (upsertError) {
+        console.error("Gagal menyinkronkan profil user:", upsertError);
+        return (
+          <div className="min-h-screen flex items-center justify-center bg-background">
+            <div className="neo-card p-8 max-w-md text-center">
+              <h2 className="text-xl font-bold text-foreground mb-2">
+                Profil Tidak Ditemukan
+              </h2>
+              <p className="text-slate-500 text-sm">
+                Gagal menyinkronkan profil. Silakan hubungi administrator.
+              </p>
+            </div>
+          </div>
+        );
+      }
+
+      profile = (upsertedProfile as User) || newProfile;
+    }
+  }
 
   if (!profile) {
-    // Attempt to auto-create missing user using service role key
-    const { createClient: createAdminClient } = await import('@supabase/supabase-js');
-    const supabaseAdmin = createAdminClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-    
-    const newProfile = {
-      id: authUser.id,
-      nama: authUser.user_metadata?.nama || authUser.email?.split("@")[0] || "User",
-      email: authUser.email,
-      role: authUser.user_metadata?.role || "team_leader",
-    };
-    
-    const { error: insertError } = await supabaseAdmin.from("users").insert(newProfile);
-
-    if (insertError) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-background">
-          <div className="neo-card p-8 max-w-md text-center">
-            <h2 className="text-xl font-bold text-foreground mb-2">
-              Profil Tidak Ditemukan
-            </h2>
-            <p className="text-slate-500 text-sm">
-              Gagal menyinkronkan profil. Silakan hubungi administrator.
-            </p>
-          </div>
-        </div>
-      );
-    }
-    
-    profile = newProfile;
+    redirect("/login");
   }
 
   const user: User = {

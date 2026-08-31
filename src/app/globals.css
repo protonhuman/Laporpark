@@ -273,3 +273,194 @@ body {
 .login-footer {
   animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both;
 }
+
+/* ================================================================
+   Water Droplet & Ripple Loading Transition
+   ================================================================ */
+
+@keyframes waterDropFall {
+  0% {
+    opacity: 0;
+    transform: translateY(-240px) scale(0.6, 1.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-160px) scale(0.75, 1.45);
+  }
+  78% {
+    opacity: 1;
+    transform: translateY(0px) scale(0.9, 1.2);
+  }
+  88% {
+    opacity: 1;
+    transform: translateY(10px) scale(1.9, 0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(14px) scale(2.6, 0.1);
+  }
+}
+
+@keyframes waterSplash {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(calc(var(--sx) * 0.6), calc(var(--sy) * 0.8)) scale(1.1);
+  }
+  65% {
+    opacity: 0.9;
+    transform: translate(var(--sx), var(--sy)) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--sx) * 1.25), calc(var(--sy) + 36px)) scale(0.2);
+  }
+}
+
+@keyframes rippleExpand1 {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    border-width: 6px;
+  }
+  8% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 0.75;
+  }
+  100% {
+    width: 1300px;
+    height: 1300px;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+@keyframes rippleExpand2 {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    border-width: 5px;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    width: 1050px;
+    height: 1050px;
+    opacity: 0;
+    border-width: 1.5px;
+  }
+}
+
+@keyframes rippleExpand3 {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    border-width: 4px;
+  }
+  12% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.45;
+  }
+  100% {
+    width: 800px;
+    height: 800px;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+@keyframes rippleCenterPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  70% {
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes waterFill {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 65%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes liquidPulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 14px rgba(79, 70, 229, 0.45));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 26px rgba(99, 102, 241, 0.8));
+  }
+}
+
+.teardrop-shape {
+  width: 26px;
+  height: 38px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #818cf8 35%, #4f46e5 75%, #3730a3 100%);
+  box-shadow: 
+    0 6px 18px rgba(79, 70, 229, 0.5),
+    inset 0 3px 6px rgba(255, 255, 255, 0.9),
+    inset 0 -4px 8px rgba(30, 27, 75, 0.5);
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2));
+}
+
+.water-drop-anim {
+  animation: waterDropFall 0.55s cubic-bezier(0.45, 0.05, 0.85, 0.35) forwards;
+}
+
+.water-ripple-1 {
+  animation: rippleExpand1 1.7s cubic-bezier(0.12, 0.6, 0.25, 1) 0.48s forwards;
+}
+
+.water-ripple-2 {
+  animation: rippleExpand2 1.7s cubic-bezier(0.12, 0.6, 0.25, 1) 0.64s forwards;
+}
+
+.water-ripple-3 {
+  animation: rippleExpand3 1.7s cubic-bezier(0.12, 0.6, 0.25, 1) 0.80s forwards;
+}
+
+.water-center-content {
+  animation: rippleCenterPop 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
+}
+
+.water-bar-fill {
+  animation: waterFill 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) 0.55s both;
+}
+
+.water-liquid-pulse {
+  animation: liquidPulseGlow 1.8s ease-in-out infinite;
+}
+
