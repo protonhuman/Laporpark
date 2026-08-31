@@ -3,7 +3,7 @@
 // Mirrors the Supabase/Postgres schema from migrations
 // ============================================================
 
-export type UserRole = "team_leader" | "carpark_manager" | "supervisor" | "teknisi";
+export type UserRole = "admin" | "supervisor" | "carpark_manager" | "team_leader" | "teknisi";
 
 export type JenisInsiden =
   | "kerusakan_kendaraan"
@@ -96,6 +96,7 @@ export interface UpdateBAPayload {
   pihak_terlibat?: string;
   lokasi_zona?: string;
   status?: StatusBA;
+  lampiran_foto?: string[];
 }
 
 // ---- UI helpers ----
@@ -120,8 +121,9 @@ export const JENIS_INSIDEN_LABELS: Record<JenisInsiden, string> = {
 };
 
 export const ROLE_LABELS: Record<UserRole, string> = {
-  team_leader: "Team Leader",
-  carpark_manager: "Carpark Manager",
+  admin: "Admin",
   supervisor: "Supervisor",
+  carpark_manager: "Carpark Manager",
+  team_leader: "Team Leader",
   teknisi: "Teknisi",
 };

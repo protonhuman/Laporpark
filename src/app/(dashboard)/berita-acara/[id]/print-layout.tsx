@@ -30,159 +30,258 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
         {approver?.signature_url && <img src={approver.signature_url} alt="preload" />}
       </div>
 
-      <div className="hidden print:block print:bg-white print:text-black font-sans max-w-4xl mx-auto text-sm leading-relaxed">
-      {/* 1. KOP SURAT (Header) */}
-      <div className="flex justify-between items-start mb-2">
-        {/* Placeholder for Angkasa Pura Logo */}
-        <div className="w-32 h-10 flex items-center justify-start text-xs text-gray-400">
-          <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="max-h-full object-contain" />
-          {/* Text fallback just in case logo isn't uploaded yet */}
-          <span className="sr-only">Angkasa Pura | SUPPORTS</span>
-        </div>
-        
-        {/* Placeholder for Centre Park Logo */}
-        <div className="w-32 h-10 flex items-center justify-end text-xs text-gray-400">
-          <img src="/logo-cp.png" alt="Centre Park" className="max-h-full object-contain" />
-          <span className="sr-only">Centre Park</span>
-        </div>
-      </div>
-
-      {/* 2. JUDUL BA */}
-      <div className="text-center mb-4 mt-0">
-        <h1 className="text-lg font-bold underline mb-1 uppercase">BERITA ACARA KRONOLOGIS</h1>
-        <p className="text-sm">No: {ba.nomor_ba}</p>
-      </div>
-
-      {/* 3. META INFO */}
-      <div className="mb-4 grid grid-cols-[160px_20px_1fr] gap-y-2">
-        <div>Tanggal Kejadian</div>
-        <div>:</div>
-        <div>{formattedDate}</div>
-
-        <div>Tanggal Pelaporan</div>
-        <div>:</div>
-        <div>{createdDate}</div>
-      </div>
-
-      {/* 4. CONTENT SECTIONS */}
-      <div className="space-y-6">
-        {/* I. Permasalahan */}
-        <div>
-          <div className="flex font-bold mb-2">
-            <span className="w-8">I.</span>
-            <span>Permasalahan</span>
+      <div
+        className="hidden print:block print:bg-white print:text-black max-w-4xl mx-auto text-[11pt] leading-normal"
+        style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
+      >
+        {/* 1. KOP SURAT (Header) */}
+        <div className="flex justify-between items-center mb-3">
+          {/* Logo Angkasa Pura */}
+          <div className="w-32 h-10 flex items-center justify-start text-xs text-gray-400">
+            <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="max-h-full object-contain" />
+            <span className="sr-only">Angkasa Pura | SUPPORTS</span>
           </div>
-          <div className="ml-8 text-justify">
-            {ba.judul_masalah}
+          
+          {/* Logo Centre Park */}
+          <div className="w-32 h-10 flex items-center justify-end text-xs text-gray-400">
+            <img src="/logo-cp.png" alt="Centre Park" className="max-h-full object-contain" />
+            <span className="sr-only">Centre Park</span>
           </div>
         </div>
 
-        {/* II. Kronologis Kejadian */}
-        <div>
-          <div className="flex font-bold mb-2">
-            <span className="w-8">II.</span>
-            <span>Kronologis Kejadian</span>
+        {/* 2. JUDUL BA */}
+        <div className="text-center mb-3 mt-1">
+          <h1 className="text-[13pt] font-bold underline mb-0.5 uppercase tracking-wide">BERITA ACARA KRONOLOGIS</h1>
+          <p className="text-[11pt] text-gray-800">No: {ba.nomor_ba}</p>
+        </div>
+
+        {/* 3. META INFO */}
+        <div className="mb-3.5 grid grid-cols-[160px_16px_1fr] gap-y-1 text-[11pt]">
+          <div className="font-medium">Tanggal Kejadian</div>
+          <div>:</div>
+          <div>{formattedDate}</div>
+
+          <div className="font-medium">Tanggal Pelaporan</div>
+          <div>:</div>
+          <div>{createdDate}</div>
+        </div>
+
+        {/* 4. CONTENT SECTIONS */}
+        <div className="space-y-3">
+          {/* I. Permasalahan */}
+          <div>
+            <div className="flex font-bold mb-1">
+              <span className="w-6">I.</span>
+              <span>Permasalahan</span>
+            </div>
+            <div className="ml-6 text-justify">
+              {ba.judul_masalah}
+            </div>
           </div>
-          <div className="ml-8 text-justify whitespace-pre-wrap">
-            {ba.kronologi}
+
+          {/* II. Kronologis Kejadian */}
+          <div>
+            <div className="flex font-bold mb-1">
+              <span className="w-6">II.</span>
+              <span>Kronologis Kejadian</span>
+            </div>
+            <div className="ml-6 text-justify whitespace-pre-wrap">
+              {ba.kronologi}
+            </div>
+          </div>
+
+          {/* III. Tindakan yang dilakukan */}
+          <div>
+            <div className="flex font-bold mb-1">
+              <span className="w-6">III.</span>
+              <span>Tindakan yang dilakukan</span>
+            </div>
+            <div className="ml-6 text-justify whitespace-pre-wrap">
+              {ba.tindakan_dilakukan}
+            </div>
+          </div>
+
+          {/* IV. Penyelesaian */}
+          <div>
+            <div className="flex font-bold mb-1">
+              <span className="w-6">IV.</span>
+              <span>Penyelesaian</span>
+            </div>
+            <div className="ml-6 text-justify whitespace-pre-wrap">
+              {ba.penyelesaian || "-"}
+            </div>
+          </div>
+
+          {/* V. Mitigasi */}
+          <div>
+            <div className="flex font-bold mb-1">
+              <span className="w-6">V.</span>
+              <span>Mitigasi</span>
+            </div>
+            <div className="ml-6 text-justify whitespace-pre-wrap">
+              {ba.mitigasi || "-"}
+            </div>
           </div>
         </div>
 
-        {/* III. Tindakan yang dilakukan */}
-        <div>
-          <div className="flex font-bold mb-2">
-            <span className="w-8">III.</span>
-            <span>Tindakan yang dilakukan</span>
-          </div>
-          <div className="ml-8 text-justify whitespace-pre-wrap">
-            {ba.tindakan_dilakukan}
-          </div>
-        </div>
+        {/* PENGESAHAN */}
+        <div className="mt-8 pt-2 print:break-inside-avoid">
+          <p className="mb-3 text-[11pt] text-justify leading-relaxed">
+            Demikian berita acara kronologis ini kami sampaikan, atas perhatian dan kerjasamanya kami ucapkan terimakasih.
+          </p>
 
-        {/* IV. Penyelesaian */}
-        <div>
-          <div className="flex font-bold mb-2">
-            <span className="w-8">IV.</span>
-            <span>Penyelesaian</span>
-          </div>
-          <div className="ml-8 text-justify whitespace-pre-wrap">
-            {ba.penyelesaian || "-"}
-          </div>
-        </div>
-
-        {/* V. Mitigasi */}
-        <div>
-          <div className="flex font-bold mb-2">
-            <span className="w-8">V.</span>
-            <span>Mitigasi</span>
-          </div>
-          <div className="ml-8 text-justify whitespace-pre-wrap">
-            {ba.mitigasi || "-"}
-          </div>
-        </div>
-      </div>
-
-      {/* PENGESAHAN (Biarkan menyambung jika cukup) */}
-      <div className="mt-16 pt-8 print:break-inside-avoid">
-        <p className="mb-6">
-          Demikian berita acara kronologis ini kami sampaikan, atas perhatian dan kerjasamanya kami ucapkan terimakasih.
-        </p>
-        <p className="mb-8">Banjarbaru, {createdDate}</p>
-
-        {/* TABEL TANDA TANGAN */}
-        <table className="w-full border-collapse border border-black text-center text-sm table-fixed">
-          <thead>
-            <tr>
-              <th className="border border-black p-2 font-normal w-1/3">Dibuat Oleh</th>
-              <th className="border border-black p-2 font-normal w-1/3">Diperiksa Oleh</th>
-              <th className="border border-black p-2 font-normal w-1/3">Mengetahui</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border border-black h-32 align-bottom p-2">
-                <div className="flex flex-col items-center justify-end h-full">
-                  {ba.pembuat?.signature_url && (
-                    <img src={ba.pembuat.signature_url} className="h-32 w-auto object-contain -mb-2" alt="Tanda Tangan Pembuat" />
-                  )}
-                  <span className="font-bold underline mb-1">{ba.pembuat?.nama ?? "—"}</span>
-                  <span>{ROLE_LABELS[ba.pembuat?.role as keyof typeof ROLE_LABELS] ?? "Staff"}</span>
-                </div>
-              </td>
-              <td className="border border-black h-32 align-bottom p-2">
-                <div className="flex flex-col items-center justify-end h-full">
-                  {checker ? (
-                    <>
-                      {checker.signature_url && (
-                        <img src={checker.signature_url} className="h-32 w-auto object-contain -mb-2" alt="Tanda Tangan Pemeriksa" />
-                      )}
-                      <span className="font-bold underline mb-1">{checker.nama}</span>
-                      <span>Carpark Manager CP</span>
-                    </>
+          {/* KONDISI 1: JIKA PEMBUAT ADALAH SUPERVISOR ATAU ADMIN (Tanpa Box / Borderless) */}
+          {ba.pembuat?.role === "supervisor" || ba.pembuat?.role === "admin" ? (
+            <div className="flex flex-col items-end">
+              <div className="w-64 text-center">
+                <p className="text-[11pt] mb-1">Banjarbaru, {createdDate}</p>
+                <p className="text-[11pt] font-semibold mb-0.5">Dibuat Oleh,</p>
+                <div className="h-16 flex items-center justify-center my-1">
+                  {ba.pembuat?.signature_url ? (
+                    <img
+                      src={ba.pembuat.signature_url}
+                      className="h-14 max-h-14 w-auto object-contain"
+                      alt="Tanda Tangan Pembuat"
+                    />
                   ) : (
-                    <span className="text-gray-400 italic mb-4">Belum Diperiksa</span>
+                    <div className="h-14 flex items-center justify-center text-gray-400 italic text-[11pt]">
+                      (Tanda Tangan)
+                    </div>
                   )}
                 </div>
-              </td>
-              <td className="border border-black h-32 align-bottom p-2">
-                <div className="flex flex-col items-center justify-end h-full">
-                  {approver ? (
-                    <>
-                      {approver.signature_url && (
-                        <img src={approver.signature_url} className="h-32 w-auto object-contain -mb-2" alt="Tanda Tangan Penyetuju" />
-                      )}
-                      <span className="font-bold underline mb-1">{approver.nama}</span>
-                      <span>Supervisor Parkir</span>
-                    </>
-                  ) : (
-                    <span className="text-gray-400 italic mb-4">Belum Disetujui</span>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                <p className="font-bold underline text-[11pt] leading-tight">
+                  {ba.pembuat?.nama ?? "—"}
+                </p>
+                <p className="text-[10pt] text-gray-600 leading-tight mt-0.5">
+                  {ba.pembuat?.role === "admin" ? "Admin" : "Supervisor Parkir"}
+                </p>
+              </div>
+            </div>
+          ) : ba.pembuat?.role === "carpark_manager" ? (
+            /* KONDISI 2: JIKA PEMBUAT ADALAH CARPARK MANAGER (2 KOLOM: Dibuat Oleh & Mengetahui) */
+            <div>
+              <p className="mb-2 text-[11pt] text-right">Banjarbaru, {createdDate}</p>
+              <table className="w-full border-collapse border border-black text-center text-[11pt] table-fixed">
+                <thead>
+                  <tr className="bg-gray-50/50">
+                    <th className="border border-black py-1 px-2 font-semibold w-1/2 text-[11pt]">Dibuat Oleh</th>
+                    <th className="border border-black py-1 px-2 font-semibold w-1/2 text-[11pt]">Mengetahui</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    {/* Dibuat Oleh (Manager) */}
+                    <td className="border border-black h-20 align-bottom p-1.5">
+                      <div className="flex flex-col items-center justify-end h-full">
+                        {ba.pembuat?.signature_url ? (
+                          <img src={ba.pembuat.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Pembuat" />
+                        ) : (
+                          <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                            (Tanda Tangan)
+                          </div>
+                        )}
+                        <span className="font-bold underline text-[11pt] leading-tight">{ba.pembuat?.nama ?? "—"}</span>
+                        <span className="text-[10pt] text-gray-600 leading-tight">Carpark Manager CP</span>
+                      </div>
+                    </td>
+                    {/* Mengetahui (Supervisor) */}
+                    <td className="border border-black h-20 align-bottom p-1.5">
+                      <div className="flex flex-col items-center justify-end h-full">
+                        {approver ? (
+                          <>
+                            {approver.signature_url ? (
+                              <img src={approver.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Penyetuju" />
+                            ) : (
+                              <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                                (Tanda Tangan)
+                              </div>
+                            )}
+                            <span className="font-bold underline text-[11pt] leading-tight">{approver.nama}</span>
+                            <span className="text-[10pt] text-gray-600 leading-tight">Supervisor Parkir</span>
+                          </>
+                        ) : (
+                          <span className="text-gray-400 italic text-[10pt] mb-2">Belum Disetujui</span>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            /* KONDISI 3: JIKA PEMBUAT ADALAH TEAM LEADER / TEKNISI / STAFF (3 KOLOM) */
+            <div>
+              <p className="mb-2 text-[11pt] text-right">Banjarbaru, {createdDate}</p>
+              <table className="w-full border-collapse border border-black text-center text-[11pt] table-fixed">
+                <thead>
+                  <tr className="bg-gray-50/50">
+                    <th className="border border-black py-1 px-2 font-semibold w-1/3 text-[11pt]">Dibuat Oleh</th>
+                    <th className="border border-black py-1 px-2 font-semibold w-1/3 text-[11pt]">Diperiksa Oleh</th>
+                    <th className="border border-black py-1 px-2 font-semibold w-1/3 text-[11pt]">Mengetahui</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    {/* Dibuat Oleh (Team Leader / Teknisi) */}
+                    <td className="border border-black h-20 align-bottom p-1.5">
+                      <div className="flex flex-col items-center justify-end h-full">
+                        {ba.pembuat?.signature_url ? (
+                          <img src={ba.pembuat.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Pembuat" />
+                        ) : (
+                          <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                            (Tanda Tangan)
+                          </div>
+                        )}
+                        <span className="font-bold underline text-[11pt] leading-tight">{ba.pembuat?.nama ?? "—"}</span>
+                        <span className="text-[10pt] text-gray-600 leading-tight">{ROLE_LABELS[ba.pembuat?.role as keyof typeof ROLE_LABELS] ?? "Staff"}</span>
+                      </div>
+                    </td>
+                    {/* Diperiksa Oleh (Manager) */}
+                    <td className="border border-black h-20 align-bottom p-1.5">
+                      <div className="flex flex-col items-center justify-end h-full">
+                        {checker ? (
+                          <>
+                            {checker.signature_url ? (
+                              <img src={checker.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Pemeriksa" />
+                            ) : (
+                              <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                                (Tanda Tangan)
+                              </div>
+                            )}
+                            <span className="font-bold underline text-[11pt] leading-tight">{checker.nama}</span>
+                            <span className="text-[10pt] text-gray-600 leading-tight">Carpark Manager CP</span>
+                          </>
+                        ) : (
+                          <span className="text-gray-400 italic text-[10pt] mb-2">Belum Diperiksa</span>
+                        )}
+                      </div>
+                    </td>
+                    {/* Mengetahui (Supervisor) */}
+                    <td className="border border-black h-20 align-bottom p-1.5">
+                      <div className="flex flex-col items-center justify-end h-full">
+                        {approver ? (
+                          <>
+                            {approver.signature_url ? (
+                              <img src={approver.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Penyetuju" />
+                            ) : (
+                              <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                                (Tanda Tangan)
+                              </div>
+                            )}
+                            <span className="font-bold underline text-[11pt] leading-tight">{approver.nama}</span>
+                            <span className="text-[10pt] text-gray-600 leading-tight">Supervisor Parkir</span>
+                          </>
+                        ) : (
+                          <span className="text-gray-400 italic text-[10pt] mb-2">Belum Disetujui</span>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
 
       {/* PAGE BREAK UNTUK LAMPIRAN (Dipindah ke halaman terakhir setelah ttd) */}
       {ba.lampiran_foto && ba.lampiran_foto.length > 0 && (

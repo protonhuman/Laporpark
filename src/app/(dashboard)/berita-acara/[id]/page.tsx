@@ -6,6 +6,7 @@ import DeleteBAButton from "./delete-button";
 import ApprovalActions from "./approval-actions";
 import PDFButton from "./pdf-button";
 import PrintLayout from "./print-layout";
+import ManagePhotosModal from "./manage-photos-modal";
 import {
   JENIS_INSIDEN_LABELS,
   ROLE_LABELS,
@@ -65,32 +66,34 @@ export default async function BeritaAcaraDetailPage({
 
   const canEdit =
     (currentProfile?.role === "carpark_manager" ||
-    currentProfile?.role === "supervisor") && 
+    currentProfile?.role === "supervisor" ||
+    currentProfile?.role === "admin") && 
     (ba.status !== "disetujui" && ba.status !== "selesai");
-  const canDelete = currentProfile?.role === "supervisor";
+  const canDelete = currentProfile?.role === "supervisor" || currentProfile?.role === "admin";
+  const canManagePhotos =
+    currentProfile?.role === "supervisor" ||
+    currentProfile?.role === "admin" ||
+    currentProfile?.role === "carpark_manager" ||
+    ba.dibuat_oleh === authUser!.id;
 
-  // Determine Checker and Approver from logs and creator role
-  let checker: { nama: string; date: string; signature_url?: string | null } | null = null;
-  let approver: { nama: string; date: string; signature_url?: string | null } | null = null;
-
-  if (ba.pembuat?.role === "carpark_manager") {
-    checker = { nama: ba.pembuat.nama, date: ba.created_at, signature_url: ba.pembuat.signature_url };
-  } else if (ba.pembuat?.role === "supervisor") {
-    approver = { nama: ba.pembuat.nama, date: ba.created_at, signature_url: ba.pembuat.signature_url };
-  }
+  // Determine Checker and Approver from audit logs
+  type SignerInfo = { nama: string; date: string; signature_url?: string | null };
+  let checker: SignerInfo | null = null;
+  let approver: SignerInfo | null = null;
 
   // Scan logs from oldest to newest to find who checked/approved
   const chronologicalLogs = [...(auditLogs || [])].reverse();
-  chronologicalLogs.forEach((log) => {
+  for (const log of chronologicalLogs) {
     if (log.field_changed === "status") {
+      const logUser = log.user as { nama?: string; signature_url?: string | null } | null;
       if (log.new_value === "diperiksa") {
-        checker = { nama: log.user?.nama ?? "Manager", date: log.changed_at, signature_url: log.user?.signature_url };
+        checker = { nama: logUser?.nama ?? "Manager", date: log.changed_at, signature_url: logUser?.signature_url };
       }
       if (log.new_value === "disetujui") {
-        approver = { nama: log.user?.nama ?? "Supervisor", date: log.changed_at, signature_url: log.user?.signature_url };
+        approver = { nama: logUser?.nama ?? "Supervisor", date: log.changed_at, signature_url: logUser?.signature_url };
       }
     }
-  });
+  }
 
   // Build field labels map
   const FIELD_LABELS: Record<string, string> = {
@@ -217,14 +220,22 @@ export default async function BeritaAcaraDetailPage({
       </div>
 
       {/* Foto lampiran */}
-      {ba.lampiran_foto && ba.lampiran_foto.length > 0 && (
-        <div className="neo-card p-5">
-          <div className="flex items-center gap-2 text-slate-500 mb-3">
+      <div className="neo-card p-5 print:hidden">
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-2 text-slate-500">
             <ImageIcon className="w-4 h-4" />
             <span className="text-xs font-medium uppercase tracking-wider">
               Lampiran Foto
             </span>
           </div>
+          {canManagePhotos && (
+            <ManagePhotosModal
+              baId={ba.id}
+              initialPhotos={ba.lampiran_foto || []}
+            />
+          )}
+        </div>
+        {ba.lampiran_foto && ba.lampiran_foto.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {ba.lampiran_foto.map((url: string, i: number) => (
               <a
@@ -242,8 +253,12 @@ export default async function BeritaAcaraDetailPage({
               </a>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <p className="text-xs text-slate-500 italic py-2">
+            Belum ada foto dokumentasi. Anda dapat menambahkannya melalui tombol &quot;Kelola Lampiran Foto&quot;.
+          </p>
+        )}
+      </div>
 
       {/* Personnel info */}
       <div className="neo-card p-5 print:hidden">

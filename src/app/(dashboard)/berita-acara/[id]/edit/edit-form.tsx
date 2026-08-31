@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { updateBeritaAcara } from "@/lib/actions/berita-acara";
+import PhotoUpload from "@/components/photo-upload";
 import type { BeritaAcara, UpdateBAPayload, StatusBA } from "@/lib/types";
 import { STATUS_LABELS } from "@/lib/types";
 import {
@@ -41,6 +42,7 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
   );
   const [lokasiZona, setLokasiZona] = useState(ba.lokasi_zona);
   const [status, setStatus] = useState<StatusBA>(ba.status);
+  const [photos, setPhotos] = useState<string[]>(ba.lampiran_foto || []);
 
   const availableStatuses = STATUS_TRANSITIONS[ba.status] ?? [];
 
@@ -57,6 +59,7 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
       mitigasi,
       pihak_terlibat: pihakTerlibat || undefined,
       lokasi_zona: lokasiZona,
+      lampiran_foto: photos,
       ...(status !== ba.status ? { status } : {}),
     };
 
@@ -209,6 +212,11 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
               onChange={(e) => setMitigasi(e.target.value)}
               className={textareaClass}
             />
+          </div>
+
+          <div>
+            <label className={labelClass}>Lampiran Foto Dokumentasi</label>
+            <PhotoUpload photos={photos} onChange={setPhotos} maxPhotos={5} />
           </div>
         </div>
 

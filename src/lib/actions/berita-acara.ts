@@ -57,7 +57,7 @@ export async function createBeritaAcara(payload: CreateBAPayload) {
   let initialStatus: StatusBA = "menunggu_review";
   if (profile?.role === "carpark_manager") {
     initialStatus = "diperiksa";
-  } else if (profile?.role === "supervisor") {
+  } else if (profile?.role === "supervisor" || profile?.role === "admin") {
     initialStatus = "disetujui";
   }
 
@@ -116,7 +116,7 @@ export async function updateBeritaAcara(
 
   if (
     !profile ||
-    (profile.role !== "carpark_manager" && profile.role !== "supervisor")
+    (profile.role !== "carpark_manager" && profile.role !== "supervisor" && profile.role !== "admin")
   ) {
     return { error: "Anda tidak memiliki izin untuk mengedit BA." };
   }
@@ -209,8 +209,8 @@ export async function deleteBeritaAcara(baId: string) {
     .eq("id", user.id)
     .single();
 
-  if (!profile || profile.role !== "supervisor") {
-    return { error: "Hanya Supervisor yang dapat menghapus BA." };
+  if (!profile || (profile.role !== "supervisor" && profile.role !== "admin")) {
+    return { error: "Hanya Supervisor atau Admin yang dapat menghapus BA." };
   }
 
   const { error } = await supabase
@@ -256,8 +256,8 @@ export async function updateStatusBAAction(id: string, newStatus: StatusBA) {
       return { error: "Hanya Carpark Manager yang dapat menandai telah diperiksa." };
     }
 
-    if (newStatus === "disetujui" && profile.role !== "supervisor") {
-      return { error: "Hanya Supervisor yang dapat menyetujui." };
+    if (newStatus === "disetujui" && profile.role !== "supervisor" && profile.role !== "admin") {
+      return { error: "Hanya Supervisor atau Admin yang dapat menyetujui." };
     }
 
     if (newStatus === "revisi" && profile.role === "team_leader") {
@@ -306,3 +306,80 @@ export async function updateStatusBAAction(id: string, newStatus: StatusBA) {
     };
   }
 }
+
+/**
+ * Update photo attachments (lampiran_foto) for a Berita Acara.
+ * Allowed even after status is "selesai" or "disetujui".
+ */
+export async function updateLampiranFotoAction(
+  baId: string,
+  photos: string[]
+) {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (!authUser) {
+      return { error: "Sesi telah berakhir, silakan login kembali." };
+    }
+
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", authUser.id)
+      .single();
+
+    const { data: ba } = await supabase
+      .from("berita_acara")
+      .select("id, dibuat_oleh, lampiran_foto")
+      .eq("id", baId)
+      .single();
+
+    if (!ba) return { error: "Berita Acara tidak ditemukan." };
+
+    // Allowed if user is supervisor, admin, carpark_manager, or the creator of the BA
+    const isAuthorized =
+      profile?.role === "supervisor" ||
+      profile?.role === "admin" ||
+      profile?.role === "carpark_manager" ||
+      ba.dibuat_oleh === authUser.id;
+
+    if (!isAuthorized) {
+      return { error: "Anda tidak memiliki wewenang untuk mengubah lampiran foto." };
+    }
+
+    const oldPhotos = ba.lampiran_foto || [];
+
+    const { error: updateError } = await supabase
+      .from("berita_acara")
+      .update({
+        lampiran_foto: photos,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", baId);
+
+    if (updateError) throw updateError;
+
+    // Log the change in audit log
+    await supabase.from("ba_audit_log").insert({
+      ba_id: baId,
+      user_id: authUser.id,
+      field_changed: "lampiran_foto",
+      old_value: `${oldPhotos.length} foto`,
+      new_value: `${photos.length} foto`,
+    });
+
+    revalidatePath(`/berita-acara/${baId}`);
+    revalidatePath("/berita-acara");
+
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("Update lampiran foto error:", err);
+    return {
+      error: err instanceof Error ? err.message : "Gagal memperbarui lampiran foto.",
+    };
+  }
+}
+

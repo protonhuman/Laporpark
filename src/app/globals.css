@@ -132,12 +132,18 @@ body {
 @media print {
   @page {
     size: A4;
-    margin: 15mm 20mm 20mm 20mm;
+    margin: 12mm 15mm 12mm 15mm;
   }
   
-  body {
+  body, .print\:block {
     background: #ffffff !important;
     color: #000000 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 11pt !important;
+  }
+
+  .print\:block * {
+    font-family: Arial, Helvetica, sans-serif !important;
   }
 
   .print\:hidden {

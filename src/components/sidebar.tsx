@@ -48,11 +48,11 @@ export default function Sidebar({ user }: SidebarProps) {
   // Dynamic nav items based on role
   const navItems = NAV_ITEMS.filter((item) => {
     if (item.href === "/dashboard") {
-      return user.role === "carpark_manager" || user.role === "supervisor";
+      return user.role === "carpark_manager" || user.role === "supervisor" || user.role === "admin";
     }
     return true;
   });
-  if (user.role === "supervisor") {
+  if (user.role === "supervisor" || user.role === "admin") {
     navItems.push({
       href: "/pengguna",
       label: "Manajemen Pengguna",

@@ -29,7 +29,7 @@ export default function ApprovalActions({ baId, currentStatus, userRole }: Appro
   if (currentStatus === "selesai") return null;
 
   const isManager = userRole === "carpark_manager";
-  const isSupervisor = userRole === "supervisor";
+  const isSupervisor = userRole === "supervisor" || userRole === "admin";
 
   return (
     <div className="flex flex-wrap gap-2 items-center bg-white/[0.02] border border-white/[0.08] p-3 rounded-xl print:hidden">

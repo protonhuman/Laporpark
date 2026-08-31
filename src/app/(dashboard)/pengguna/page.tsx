@@ -21,8 +21,8 @@ export default async function PenggunaPage() {
     .eq("id", currentUser.id)
     .single();
 
-  if (!profile || profile.role !== "supervisor") {
-    // Only supervisors can access this page
+  if (!profile || (profile.role !== "supervisor" && profile.role !== "admin")) {
+    // Only supervisors and admins can access this page
     redirect("/dashboard");
   }
 
@@ -108,11 +108,13 @@ export default async function PenggunaPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border
-                        ${u.role === 'supervisor' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
-                        ${u.role === 'carpark_manager' ? 'bg-sky-500/10 text-sky-400 border-sky-500/20' : ''}
-                        ${u.role === 'team_leader' ? 'bg-slate-500/10 text-slate-600 border-slate-500/20' : ''}
+                        ${u.role === 'admin' ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20' : ''}
+                        ${u.role === 'supervisor' ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20' : ''}
+                        ${u.role === 'carpark_manager' ? 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20' : ''}
+                        ${u.role === 'team_leader' ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20' : ''}
+                        ${u.role === 'teknisi' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' : ''}
                       `}>
-                        {u.role === 'supervisor' && <ShieldAlert className="w-3 h-3" />}
+                        {(u.role === 'admin' || u.role === 'supervisor') && <ShieldAlert className="w-3 h-3" />}
                         {ROLE_LABELS[u.role as keyof typeof ROLE_LABELS]}
                       </span>
                     </td>

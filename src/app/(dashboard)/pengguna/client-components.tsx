@@ -197,10 +197,11 @@ export function CreateUserModal() {
                   onChange={(e) => setRole(e.target.value as CreateUserPayload["role"])}
                   className={inputClass}
                 >
-                  <option value="teknisi" className="bg-[#0a0e1a]">Teknisi</option>
-                  <option value="team_leader" className="bg-[#0a0e1a]">Team Leader</option>
-                  <option value="carpark_manager" className="bg-[#0a0e1a]">Carpark Manager</option>
+                  <option value="admin" className="bg-[#0a0e1a]">Admin</option>
                   <option value="supervisor" className="bg-[#0a0e1a]">Supervisor</option>
+                  <option value="carpark_manager" className="bg-[#0a0e1a]">Carpark Manager</option>
+                  <option value="team_leader" className="bg-[#0a0e1a]">Team Leader</option>
+                  <option value="teknisi" className="bg-[#0a0e1a]">Teknisi</option>
                 </select>
               </div>
 
