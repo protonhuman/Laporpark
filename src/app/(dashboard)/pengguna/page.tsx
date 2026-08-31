@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { ROLE_LABELS } from "@/lib/types";
-import { CreateUserModal, DeleteUserButton, UpdatePasswordButton, UpdateUserButton } from "./client-components";
-import { ShieldAlert, Mail, User as UserIcon } from "lucide-react";
+import { CreateUserModal, DeleteUserButton, UpdatePasswordButton, UpdateUserButton, PasswordCell } from "./client-components";
+import { ShieldAlert, Mail, User as UserIcon, KeyRound } from "lucide-react";
 
 export default async function PenggunaPage() {
   const supabase = await createClient();
@@ -25,15 +26,25 @@ export default async function PenggunaPage() {
     redirect("/dashboard");
   }
 
-  // 2. Fetch users
-  const { data: users, error } = await supabase
-    .from("users")
-    .select("*")
-    .order("nama", { ascending: true });
+  // 2. Fetch users from public.users and auth metadata
+  const adminClient = createAdminClient();
+  const [{ data: dbUsers, error }, { data: authData }] = await Promise.all([
+    supabase.from("users").select("*").order("nama", { ascending: true }),
+    adminClient.auth.admin.listUsers({ perPage: 1000 }),
+  ]);
 
   if (error) {
     console.error("Error fetching users:", error);
   }
+
+  const authMap = new Map(
+    authData?.users?.map((u) => [u.id, (u.user_metadata?.password_display as string) || null]) || []
+  );
+
+  const users = (dbUsers || []).map((u) => ({
+    ...u,
+    password_display: authMap.get(u.id) || null,
+  }));
 
   return (
     <div className="space-y-6">
@@ -57,6 +68,9 @@ export default async function PenggunaPage() {
                 </th>
                 <th className="px-6 py-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
                   Email
+                </th>
+                <th className="px-6 py-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  Kata Sandi
                 </th>
                 <th className="px-6 py-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
                   Hak Akses (Role)
@@ -90,6 +104,9 @@ export default async function PenggunaPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
+                      <PasswordCell password={u.password_display} />
+                    </td>
+                    <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border
                         ${u.role === 'supervisor' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
                         ${u.role === 'carpark_manager' ? 'bg-sky-500/10 text-sky-400 border-sky-500/20' : ''}
@@ -112,7 +129,7 @@ export default async function PenggunaPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
                     Tidak ada pengguna ditemukan.
                   </td>
                 </tr>

@@ -49,6 +49,7 @@ export async function createUserAction(payload: CreateUserPayload) {
         nama: payload.nama,
         role: payload.role,
         signature_url: payload.signature_url || null,
+        password_display: passwordToUse,
       },
     });
 
@@ -160,9 +161,17 @@ export async function updateUserPasswordAction(userId: string, newPassword: stri
 
     // 2. Update the user using admin client
     const adminClient = createAdminClient();
+
+    // Preserve existing metadata
+    const { data: targetUser } = await adminClient.auth.admin.getUserById(userId);
+    const existingMeta = targetUser?.user?.user_metadata || {};
     
     const { error: updateError } = await adminClient.auth.admin.updateUserById(userId, {
-      password: newPassword
+      password: newPassword,
+      user_metadata: {
+        ...existingMeta,
+        password_display: newPassword,
+      },
     });
 
     if (updateError) {
@@ -170,9 +179,55 @@ export async function updateUserPasswordAction(userId: string, newPassword: stri
       return { error: `Gagal mengubah password: ${updateError.message}` };
     }
 
+    revalidatePath("/pengguna");
     return { success: true };
   } catch (err: unknown) {
     console.error("Update Password Exception:", err);
+    return {
+      error: err instanceof Error ? err.message : "Terjadi kesalahan sistem.",
+    };
+  }
+}
+
+/**
+ * Allows any authenticated user to change their own password.
+ * Saves the new password to auth and updates password_display in metadata
+ * so the supervisor can assist/view if needed.
+ */
+export async function changeMyPasswordAction(newPassword: string) {
+  try {
+    const supabase = await createServerClient();
+    const {
+      data: { user: currentUser },
+    } = await supabase.auth.getUser();
+
+    if (!currentUser) return { error: "Tidak terautentikasi." };
+
+    if (!newPassword || newPassword.length < 6) {
+      return { error: "Password baru harus memiliki minimal 6 karakter." };
+    }
+
+    const adminClient = createAdminClient();
+    const { data: targetUser } = await adminClient.auth.admin.getUserById(currentUser.id);
+    const existingMeta = targetUser?.user?.user_metadata || {};
+
+    const { error: updateError } = await adminClient.auth.admin.updateUserById(currentUser.id, {
+      password: newPassword,
+      user_metadata: {
+        ...existingMeta,
+        password_display: newPassword,
+      },
+    });
+
+    if (updateError) {
+      console.error("Change My Password Error:", updateError);
+      return { error: `Gagal mengubah password: ${updateError.message}` };
+    }
+
+    revalidatePath("/pengguna");
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("Change My Password Exception:", err);
     return {
       error: err instanceof Error ? err.message : "Terjadi kesalahan sistem.",
     };

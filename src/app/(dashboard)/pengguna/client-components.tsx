@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { createClient } from "@/lib/supabase/client";
 import { createUserAction, deleteUserAction, updateUserPasswordAction, updateUserAction, type CreateUserPayload } from "@/lib/actions/users";
 import ConfirmDialog from "@/components/confirm-dialog";
-import { UserPlus, Loader2, X, AlertCircle, Trash2, KeyRound, CheckCircle2, Pencil, Upload } from "lucide-react";
+import { UserPlus, Loader2, X, AlertCircle, Trash2, KeyRound, CheckCircle2, Pencil, Upload, Eye, EyeOff, Copy, Check } from "lucide-react";
 
 export function CreateUserModal() {
   const [open, setOpen] = useState(false);
@@ -559,3 +559,62 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
     </>
   );
 }
+
+export function PasswordCell({ password }: { password?: string | null }) {
+  const [show, setShow] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    if (!password) return;
+    navigator.clipboard.writeText(password);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  if (!password) {
+    return (
+      <span
+        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-200 text-slate-500 border border-slate-300/60 cursor-help"
+        title="Password dienkripsi di sistem autentikasi Supabase sebelum fitur pencatatan aktif. Anda dapat mengubahnya via tombol kunci di kolom Aksi."
+      >
+        <KeyRound className="w-3 h-3 text-slate-500" />
+        Belum dicatat
+      </span>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1.5">
+      <span
+        className={`font-mono text-xs ${
+          show
+            ? "text-slate-800 font-semibold bg-white/60 px-2 py-0.5 rounded-md border border-slate-300/60 select-all"
+            : "text-slate-500 tracking-widest"
+        }`}
+      >
+        {show ? password : "••••••••"}
+      </span>
+      <button
+        type="button"
+        onClick={() => setShow(!show)}
+        className="p-1 rounded-md text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
+        title={show ? "Sembunyikan password" : "Lihat password"}
+      >
+        {show ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+      </button>
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="p-1 rounded-md text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
+        title={copied ? "Tersalin!" : "Salin password"}
+      >
+        {copied ? (
+          <Check className="w-3.5 h-3.5 text-emerald-600" />
+        ) : (
+          <Copy className="w-3.5 h-3.5" />
+        )}
+      </button>
+    </div>
+  );
+}
+
