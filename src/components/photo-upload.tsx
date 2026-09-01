@@ -77,7 +77,8 @@ export default function PhotoUpload({
               <button
                 type="button"
                 onClick={() => removePhoto(i)}
-                className="absolute top-2 right-2 p-1 rounded-lg bg-black/60 text-slate-800 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/70 text-white opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity cursor-pointer"
+                title="Hapus foto"
               >
                 <X className="w-3.5 h-3.5" />
               </button>

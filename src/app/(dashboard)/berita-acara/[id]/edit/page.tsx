@@ -25,7 +25,7 @@ export default async function EditBAPage({
 
   if (
     !profile ||
-    (profile.role !== "carpark_manager" && profile.role !== "supervisor" && profile.role !== "admin")
+    (profile.role !== "carpark_manager" && profile.role !== "supervisor")
   ) {
     // Not authorized — redirect back to detail
     redirect(`/berita-acara/${id}`);

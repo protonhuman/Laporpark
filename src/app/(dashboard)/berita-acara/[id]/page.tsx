@@ -66,13 +66,11 @@ export default async function BeritaAcaraDetailPage({
 
   const canEdit =
     (currentProfile?.role === "carpark_manager" ||
-    currentProfile?.role === "supervisor" ||
-    currentProfile?.role === "admin") && 
+    currentProfile?.role === "supervisor") && 
     (ba.status !== "disetujui" && ba.status !== "selesai");
-  const canDelete = currentProfile?.role === "supervisor" || currentProfile?.role === "admin";
+  const canDelete = currentProfile?.role === "supervisor";
   const canManagePhotos =
     currentProfile?.role === "supervisor" ||
-    currentProfile?.role === "admin" ||
     currentProfile?.role === "carpark_manager" ||
     ba.dibuat_oleh === authUser!.id;
 

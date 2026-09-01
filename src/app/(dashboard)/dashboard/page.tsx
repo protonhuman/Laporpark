@@ -55,7 +55,7 @@ export default async function DashboardPage() {
       .eq("id", user.id)
       .single();
     
-    if (profile && (profile.role === "team_leader" || profile.role === "teknisi")) {
+    if (profile && (profile.role === "team_leader" || profile.role === "teknisi" || profile.role === "admin")) {
       redirect("/berita-acara");
     }
   }

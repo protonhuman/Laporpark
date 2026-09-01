@@ -130,8 +130,8 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
             Demikian berita acara kronologis ini kami sampaikan, atas perhatian dan kerjasamanya kami ucapkan terimakasih.
           </p>
 
-          {/* KONDISI 1: JIKA PEMBUAT ADALAH SUPERVISOR ATAU ADMIN (Tanpa Box / Borderless) */}
-          {ba.pembuat?.role === "supervisor" || ba.pembuat?.role === "admin" ? (
+          {/* KONDISI 1: JIKA PEMBUAT ADALAH SUPERVISOR (Tanpa Box / Borderless) */}
+          {ba.pembuat?.role === "supervisor" ? (
             <div className="flex flex-col items-end">
               <div className="w-64 text-center">
                 <p className="text-[11pt] mb-1">Banjarbaru, {createdDate}</p>
@@ -153,7 +153,7 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
                   {ba.pembuat?.nama ?? "—"}
                 </p>
                 <p className="text-[10pt] text-gray-600 leading-tight mt-0.5">
-                  {ba.pembuat?.role === "admin" ? "Admin" : "Supervisor Parkir"}
+                  Supervisor Parkir
                 </p>
               </div>
             </div>

@@ -254,7 +254,7 @@ export default function CreateBAPage() {
 
         {/* Section: Detail Laporan */}
         <div className="neo-card p-6 space-y-5">
-          <div className="flex items-center justify-between border-b border-slate-300 pb-4 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-300 pb-4 mb-4">
             <h2 className="text-sm font-semibold text-slate-800">Detail Laporan</h2>
 
             {/* AI Rapikan button */}

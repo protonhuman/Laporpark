@@ -33,8 +33,8 @@ export async function createUserAction(payload: CreateUserPayload) {
       .eq("id", currentUser.id)
       .single();
 
-    if (!profile || (profile.role !== "supervisor" && profile.role !== "admin")) {
-      return { error: "Akses ditolak. Hanya supervisor atau admin yang dapat membuat pengguna baru." };
+    if (!profile || profile.role !== "supervisor") {
+      return { error: "Akses ditolak. Hanya supervisor yang dapat membuat pengguna baru." };
     }
 
     // 2. Create the user using admin client
@@ -107,8 +107,8 @@ export async function deleteUserAction(userId: string) {
       .eq("id", currentUser.id)
       .single();
 
-    if (!profile || (profile.role !== "supervisor" && profile.role !== "admin")) {
-      return { error: "Akses ditolak. Hanya supervisor atau admin yang dapat menghapus pengguna." };
+    if (!profile || profile.role !== "supervisor") {
+      return { error: "Akses ditolak. Hanya supervisor yang dapat menghapus pengguna." };
     }
 
     // 2. Delete the user using admin client
@@ -151,8 +151,8 @@ export async function updateUserPasswordAction(userId: string, newPassword: stri
       .eq("id", currentUser.id)
       .single();
 
-    if (!profile || (profile.role !== "supervisor" && profile.role !== "admin")) {
-      return { error: "Akses ditolak. Hanya supervisor atau admin yang dapat mengubah password pengguna." };
+    if (!profile || profile.role !== "supervisor") {
+      return { error: "Akses ditolak. Hanya supervisor yang dapat mengubah password pengguna." };
     }
 
     if (newPassword.length < 6) {
@@ -254,8 +254,8 @@ export async function updateUserAction(userId: string, newName: string, newEmail
       .eq("id", currentUser.id)
       .single();
 
-    if (!profile || (profile.role !== "supervisor" && profile.role !== "admin")) {
-      return { error: "Akses ditolak. Hanya supervisor atau admin yang dapat mengubah profil pengguna." };
+    if (!profile || profile.role !== "supervisor") {
+      return { error: "Akses ditolak. Hanya supervisor yang dapat mengubah profil pengguna." };
     }
 
     if (!newName.trim() || !newEmail.trim()) {

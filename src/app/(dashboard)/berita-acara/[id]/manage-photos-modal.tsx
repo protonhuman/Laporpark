@@ -66,7 +66,7 @@ export default function ManagePhotosModal({
       {open &&
         createPortal(
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-            <div className="bg-slate-100 dark:bg-slate-900 border border-white/20 dark:border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+            <div className="bg-slate-100 dark:bg-slate-900 border border-white/20 dark:border-white/10 rounded-2xl p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center">

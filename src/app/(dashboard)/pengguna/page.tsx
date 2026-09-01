@@ -21,9 +21,9 @@ export default async function PenggunaPage() {
     .eq("id", currentUser.id)
     .single();
 
-  if (!profile || (profile.role !== "supervisor" && profile.role !== "admin")) {
-    // Only supervisors and admins can access this page
-    redirect("/dashboard");
+  if (!profile || profile.role !== "supervisor") {
+    // Only supervisors can access this page
+    redirect("/berita-acara");
   }
 
   // 2. Fetch users from public.users and auth metadata
@@ -114,7 +114,7 @@ export default async function PenggunaPage() {
                         ${u.role === 'team_leader' ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20' : ''}
                         ${u.role === 'teknisi' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' : ''}
                       `}>
-                        {(u.role === 'admin' || u.role === 'supervisor') && <ShieldAlert className="w-3 h-3" />}
+                        {u.role === 'supervisor' && <ShieldAlert className="w-3 h-3" />}
                         {ROLE_LABELS[u.role as keyof typeof ROLE_LABELS]}
                       </span>
                     </td>

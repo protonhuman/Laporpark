@@ -63,14 +63,14 @@ export default function WaterDropLoader({ onComplete }: WaterDropLoaderProps) {
 
         {/* Center Content: Neumorphic Liquid Pod */}
         <div className="water-center-content relative z-30 flex flex-col items-center">
-          <div className="neo-card p-8 rounded-3xl flex flex-col items-center text-center max-w-xs mx-4 shadow-[12px_12px_24px_var(--shadow-dark),-12px_-12px_24px_var(--shadow-light)] border border-white/40">
+          <div className="neo-card p-6 sm:p-8 rounded-3xl flex flex-col items-center text-center max-w-[290px] sm:max-w-xs mx-4 shadow-[12px_12px_24px_var(--shadow-dark),-12px_-12px_24px_var(--shadow-light)] border border-white/40">
             {/* Water Drop & Check Icon */}
-            <div className="relative mb-5">
-              <div className="w-16 h-16 rounded-2xl neo-inset flex items-center justify-center text-accent water-liquid-pulse">
-                <Droplets className="w-8 h-8 text-indigo-600" />
+            <div className="relative mb-4 sm:mb-5">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl neo-inset flex items-center justify-center text-accent water-liquid-pulse">
+                <Droplets className="w-7 h-7 sm:w-8 sm:h-8 text-indigo-600" />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-md">
-                <CheckCircle2 className="w-4 h-4" />
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-md">
+                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
             </div>
 
@@ -80,15 +80,15 @@ export default function WaterDropLoader({ onComplete }: WaterDropLoaderProps) {
             </span>
 
             {/* Title */}
-            <h3 className="text-lg font-bold text-foreground mb-1">
+            <h3 className="text-base sm:text-lg font-bold text-foreground mb-1">
               Menyiapkan Dashboard
             </h3>
-            <p className="text-xs text-slate-500 mb-5">
+            <p className="text-xs text-slate-500 mb-4 sm:mb-5">
               Memuat profil dan sesi Anda...
             </p>
 
             {/* Animated Liquid Progress Bar */}
-            <div className="w-48 h-2.5 rounded-full neo-inset p-0.5 overflow-hidden">
+            <div className="w-40 sm:w-48 h-2.5 rounded-full neo-inset p-0.5 overflow-hidden">
               <div className="water-bar-fill h-full rounded-full bg-gradient-to-r from-indigo-500 via-indigo-400 to-cyan-400 shadow-[0_0_12px_rgba(79,70,229,0.5)]" />
             </div>
           </div>

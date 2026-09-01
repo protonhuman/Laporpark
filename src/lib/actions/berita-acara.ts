@@ -57,7 +57,7 @@ export async function createBeritaAcara(payload: CreateBAPayload) {
   let initialStatus: StatusBA = "menunggu_review";
   if (profile?.role === "carpark_manager") {
     initialStatus = "diperiksa";
-  } else if (profile?.role === "supervisor" || profile?.role === "admin") {
+  } else if (profile?.role === "supervisor") {
     initialStatus = "disetujui";
   }
 
@@ -116,7 +116,7 @@ export async function updateBeritaAcara(
 
   if (
     !profile ||
-    (profile.role !== "carpark_manager" && profile.role !== "supervisor" && profile.role !== "admin")
+    (profile.role !== "carpark_manager" && profile.role !== "supervisor")
   ) {
     return { error: "Anda tidak memiliki izin untuk mengedit BA." };
   }
@@ -209,8 +209,8 @@ export async function deleteBeritaAcara(baId: string) {
     .eq("id", user.id)
     .single();
 
-  if (!profile || (profile.role !== "supervisor" && profile.role !== "admin")) {
-    return { error: "Hanya Supervisor atau Admin yang dapat menghapus BA." };
+  if (!profile || profile.role !== "supervisor") {
+    return { error: "Hanya Supervisor yang dapat menghapus BA." };
   }
 
   const { error } = await supabase
@@ -256,11 +256,11 @@ export async function updateStatusBAAction(id: string, newStatus: StatusBA) {
       return { error: "Hanya Carpark Manager yang dapat menandai telah diperiksa." };
     }
 
-    if (newStatus === "disetujui" && profile.role !== "supervisor" && profile.role !== "admin") {
-      return { error: "Hanya Supervisor atau Admin yang dapat menyetujui." };
+    if (newStatus === "disetujui" && profile.role !== "supervisor") {
+      return { error: "Hanya Supervisor yang dapat menyetujui." };
     }
 
-    if (newStatus === "revisi" && profile.role === "team_leader") {
+    if (newStatus === "revisi" && (profile.role === "team_leader" || profile.role === "teknisi" || profile.role === "admin")) {
       return { error: "Anda tidak berhak meminta revisi." };
     }
 
@@ -339,10 +339,9 @@ export async function updateLampiranFotoAction(
 
     if (!ba) return { error: "Berita Acara tidak ditemukan." };
 
-    // Allowed if user is supervisor, admin, carpark_manager, or the creator of the BA
+    // Allowed if user is supervisor, carpark_manager, or the creator of the BA
     const isAuthorized =
       profile?.role === "supervisor" ||
-      profile?.role === "admin" ||
       profile?.role === "carpark_manager" ||
       ba.dibuat_oleh === authUser.id;
 

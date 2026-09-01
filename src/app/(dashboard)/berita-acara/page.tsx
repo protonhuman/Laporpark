@@ -141,8 +141,50 @@ export default async function BeritaAcaraListPage({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="neo-card overflow-hidden">
+      {/* Mobile Card List (Phones) */}
+      <div className="block md:hidden space-y-3">
+        {items && items.length > 0 ? (
+          items.map((ba) => (
+            <Link
+              key={ba.id}
+              href={`/berita-acara/${ba.id}`}
+              className="neo-card p-4 block hover:border-sky-500/30 transition-all space-y-2.5"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-xs text-sky-500 font-semibold">
+                  {ba.nomor_ba}
+                </span>
+                <StatusBadge status={ba.status} />
+              </div>
+              <h3 className="font-semibold text-slate-800 text-sm leading-snug line-clamp-2">
+                {ba.judul_masalah}
+              </h3>
+              <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-200/60 dark:border-white/[0.06]">
+                <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/[0.04]">
+                  {JENIS_INSIDEN_LABELS[ba.jenis_insiden as keyof typeof JENIS_INSIDEN_LABELS]}
+                </span>
+                <span>
+                  {new Date(ba.created_at).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </span>
+              </div>
+              <div className="text-[11px] text-slate-400">
+                Oleh: <span className="text-slate-600 font-medium">{ba.pembuat?.nama ?? "—"}</span>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div className="neo-card p-8 text-center text-slate-500 text-sm">
+            Tidak ada Berita Acara ditemukan.
+          </div>
+        )}
+      </div>
+
+      {/* Desktop & Tablet Table */}
+      <div className="hidden md:block neo-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
