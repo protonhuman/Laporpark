@@ -6,8 +6,8 @@
 export type UserRole = "admin" | "supervisor" | "carpark_manager" | "team_leader" | "teknisi";
 
 export type JenisInsiden =
+  | "kerusakan"
   | "kerusakan_kendaraan"
-  | "sengketa"
   | "komplain"
   | "kehilangan"
   | "gangguan_sistem"
@@ -111,8 +111,8 @@ export const STATUS_LABELS: Record<StatusBA, string> = {
 } as const;
 
 export const JENIS_INSIDEN_LABELS: Record<JenisInsiden, string> = {
+  kerusakan: "Kerusakan",
   kerusakan_kendaraan: "Kerusakan Kendaraan",
-  sengketa: "Sengketa",
   komplain: "Komplain",
   kehilangan: "Kehilangan",
   gangguan_sistem: "Gangguan Sistem",
