@@ -125,8 +125,8 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
         </div>
 
         {/* PENGESAHAN */}
-        <div className="mt-8 pt-2 print:break-inside-avoid">
-          <p className="mb-3 text-[11pt] text-justify leading-relaxed">
+        <div className="mt-6 pt-1 print:break-inside-avoid">
+          <p className="mb-2 text-[11pt] text-justify leading-relaxed">
             Demikian berita acara kronologis ini kami sampaikan, atas perhatian dan kerjasamanya kami ucapkan terimakasih.
           </p>
 
@@ -136,15 +136,15 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
               <div className="w-64 text-center">
                 <p className="text-[11pt] mb-1">Banjarbaru, {createdDate}</p>
                 <p className="text-[11pt] font-semibold mb-0.5">Dibuat Oleh,</p>
-                <div className="h-16 flex items-center justify-center my-1">
+                <div className="h-24 flex items-center justify-center my-1">
                   {ba.pembuat?.signature_url ? (
                     <img
                       src={ba.pembuat.signature_url}
-                      className="h-14 max-h-14 w-auto object-contain"
+                      className="h-20 max-h-20 w-auto max-w-[85%] object-contain"
                       alt="Tanda Tangan Pembuat"
                     />
                   ) : (
-                    <div className="h-14 flex items-center justify-center text-gray-400 italic text-[11pt]">
+                    <div className="h-20 flex items-center justify-center text-gray-400 italic text-[11pt]">
                       (Tanda Tangan)
                     </div>
                   )}
@@ -164,19 +164,19 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
               <table className="w-full border-collapse border border-black text-center text-[11pt] table-fixed">
                 <thead>
                   <tr className="bg-gray-50/50">
-                    <th className="border border-black py-1 px-2 font-semibold w-1/2 text-[11pt]">Dibuat Oleh</th>
-                    <th className="border border-black py-1 px-2 font-semibold w-1/2 text-[11pt]">Mengetahui</th>
+                    <th className="border border-black py-1.5 px-2 font-semibold w-1/2 text-[11pt]">Dibuat Oleh</th>
+                    <th className="border border-black py-1.5 px-2 font-semibold w-1/2 text-[11pt]">Mengetahui</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     {/* Dibuat Oleh (Manager) */}
-                    <td className="border border-black h-20 align-bottom p-1.5">
+                    <td className="border border-black h-28 align-bottom p-2">
                       <div className="flex flex-col items-center justify-end h-full">
                         {ba.pembuat?.signature_url ? (
-                          <img src={ba.pembuat.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Pembuat" />
+                          <img src={ba.pembuat.signature_url} className="h-20 max-h-20 w-auto max-w-[85%] object-contain mb-1" alt="Tanda Tangan Pembuat" />
                         ) : (
-                          <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                          <div className="h-20 flex items-center justify-center text-gray-400 italic text-[10pt]">
                             (Tanda Tangan)
                           </div>
                         )}
@@ -185,14 +185,14 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
                       </div>
                     </td>
                     {/* Mengetahui (Supervisor) */}
-                    <td className="border border-black h-20 align-bottom p-1.5">
+                    <td className="border border-black h-28 align-bottom p-2">
                       <div className="flex flex-col items-center justify-end h-full">
                         {approver ? (
                           <>
                             {approver.signature_url ? (
-                              <img src={approver.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Penyetuju" />
+                              <img src={approver.signature_url} className="h-20 max-h-20 w-auto max-w-[85%] object-contain mb-1" alt="Tanda Tangan Penyetuju" />
                             ) : (
-                              <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                              <div className="h-20 flex items-center justify-center text-gray-400 italic text-[10pt]">
                                 (Tanda Tangan)
                               </div>
                             )}
@@ -215,20 +215,20 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
               <table className="w-full border-collapse border border-black text-center text-[11pt] table-fixed">
                 <thead>
                   <tr className="bg-gray-50/50">
-                    <th className="border border-black py-1 px-2 font-semibold w-1/3 text-[11pt]">Dibuat Oleh</th>
-                    <th className="border border-black py-1 px-2 font-semibold w-1/3 text-[11pt]">Diperiksa Oleh</th>
-                    <th className="border border-black py-1 px-2 font-semibold w-1/3 text-[11pt]">Mengetahui</th>
+                    <th className="border border-black py-1.5 px-2 font-semibold w-1/3 text-[11pt]">Dibuat Oleh</th>
+                    <th className="border border-black py-1.5 px-2 font-semibold w-1/3 text-[11pt]">Diperiksa Oleh</th>
+                    <th className="border border-black py-1.5 px-2 font-semibold w-1/3 text-[11pt]">Mengetahui</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    {/* Dibuat Oleh (Team Leader / Teknisi) */}
-                    <td className="border border-black h-20 align-bottom p-1.5">
+                    {/* Dibuat Oleh (Team Leader / Teknisi / Admin) */}
+                    <td className="border border-black h-28 align-bottom p-2">
                       <div className="flex flex-col items-center justify-end h-full">
                         {ba.pembuat?.signature_url ? (
-                          <img src={ba.pembuat.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Pembuat" />
+                          <img src={ba.pembuat.signature_url} className="h-20 max-h-20 w-auto max-w-[85%] object-contain mb-1" alt="Tanda Tangan Pembuat" />
                         ) : (
-                          <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                          <div className="h-20 flex items-center justify-center text-gray-400 italic text-[10pt]">
                             (Tanda Tangan)
                           </div>
                         )}
@@ -237,14 +237,14 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
                       </div>
                     </td>
                     {/* Diperiksa Oleh (Manager) */}
-                    <td className="border border-black h-20 align-bottom p-1.5">
+                    <td className="border border-black h-28 align-bottom p-2">
                       <div className="flex flex-col items-center justify-end h-full">
                         {checker ? (
                           <>
                             {checker.signature_url ? (
-                              <img src={checker.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Pemeriksa" />
+                              <img src={checker.signature_url} className="h-20 max-h-20 w-auto max-w-[85%] object-contain mb-1" alt="Tanda Tangan Pemeriksa" />
                             ) : (
-                              <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                              <div className="h-20 flex items-center justify-center text-gray-400 italic text-[10pt]">
                                 (Tanda Tangan)
                               </div>
                             )}
@@ -257,14 +257,14 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
                       </div>
                     </td>
                     {/* Mengetahui (Supervisor) */}
-                    <td className="border border-black h-20 align-bottom p-1.5">
+                    <td className="border border-black h-28 align-bottom p-2">
                       <div className="flex flex-col items-center justify-end h-full">
                         {approver ? (
                           <>
                             {approver.signature_url ? (
-                              <img src={approver.signature_url} className="h-14 max-h-14 w-auto object-contain mb-0.5" alt="Tanda Tangan Penyetuju" />
+                              <img src={approver.signature_url} className="h-20 max-h-20 w-auto max-w-[85%] object-contain mb-1" alt="Tanda Tangan Penyetuju" />
                             ) : (
-                              <div className="h-14 flex items-center justify-center text-gray-400 italic text-[10pt]">
+                              <div className="h-20 flex items-center justify-center text-gray-400 italic text-[10pt]">
                                 (Tanda Tangan)
                               </div>
                             )}

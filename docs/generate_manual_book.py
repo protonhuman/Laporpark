@@ -365,7 +365,7 @@ html_content = f"""<!DOCTYPE html>
   .sig-box td {{
     border: 1px solid #334155;
     padding: 10px 6px 6px 6px;
-    height: 58px;
+    height: 72px;
     vertical-align: bottom;
   }}
   .sig-role {{
