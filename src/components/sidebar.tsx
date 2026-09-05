@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Users,
 } from "lucide-react";
+import BrandLockup from "@/components/brand-lockup";
 import { useState } from "react";
 
 interface SidebarProps {
@@ -68,35 +69,23 @@ export default function Sidebar({ user }: SidebarProps) {
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
-      {/* Brand */}
-      <div className="px-6 py-5 border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)]">
-        <div className="flex items-center justify-between">
-          <Link href={user.role === "carpark_manager" || user.role === "supervisor" ? "/dashboard" : "/berita-acara"} className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#00ffcc] to-[#39ff14] shadow-lg shadow-[#00ffcc]/30">
-              <ShieldCheck className="w-5 h-5 text-black" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-slate-800 tracking-tight">
-                Lapor Park
-              </h1>
-              <p className="text-[11px] text-slate-500 leading-none">
-                Berita Acara Digital
-              </p>
-            </div>
+      {/* Brand & Corporate Lockup */}
+      <div className="px-4 py-4.5 border-b border-slate-300/40 shadow-[0_4px_12px_rgba(163,177,198,0.25)] bg-gradient-to-b from-white/30 to-transparent">
+        <div className="flex items-start justify-between">
+          <Link
+            href={user.role === "carpark_manager" || user.role === "supervisor" ? "/dashboard" : "/berita-acara"}
+            className="flex-1 block group"
+          >
+            <BrandLockup variant="sidebar" />
           </Link>
           
           {/* Close Button for Mobile inside Sidebar */}
           <button
             onClick={() => setMobileOpen(false)}
-            className="lg:hidden p-2 -mr-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/[0.04] transition-colors"
+            className="lg:hidden p-1.5 -mr-1 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/50 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
-        </div>
-        {/* Corporate Identity Logos */}
-        <div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-slate-200/40">
-          <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="h-7 w-auto object-contain drop-shadow-sm" />
-          <img src="/logo-cp.png" alt="Centre Park" className="h-5 w-auto object-contain drop-shadow-sm" />
         </div>
       </div>
 

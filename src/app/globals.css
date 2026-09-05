@@ -470,3 +470,98 @@ body {
   animation: liquidPulseGlow 1.8s ease-in-out infinite;
 }
 
+/* ================================================================
+   Lapor Park & Corporate Brand Animations
+   ================================================================ */
+
+@keyframes logoAuraPulse {
+  0%, 100% {
+    transform: scale(0.98);
+    opacity: 0.55;
+    filter: blur(10px) drop-shadow(0 0 12px rgba(0, 255, 204, 0.4));
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.85;
+    filter: blur(14px) drop-shadow(0 0 22px rgba(0, 255, 204, 0.75));
+  }
+}
+
+@keyframes logoOrbitalSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes logoOrbitalSpinReverse {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes logoShimmerSweep {
+  0% {
+    transform: translateX(-150%) rotate(30deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.75;
+  }
+  60% {
+    transform: translateX(180%) rotate(30deg);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(200%) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+@keyframes emblemFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(0.5deg);
+  }
+}
+
+@keyframes checkmarkGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(0, 255, 204, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(0, 255, 204, 1));
+  }
+}
+
+.anim-logo-aura {
+  animation: logoAuraPulse 3.5s ease-in-out infinite;
+}
+
+.anim-orbital-spin {
+  animation: logoOrbitalSpin 12s linear infinite;
+}
+
+.anim-orbital-spin-slow {
+  animation: logoOrbitalSpinReverse 18s linear infinite;
+}
+
+.anim-shimmer-sweep {
+  animation: logoShimmerSweep 4s ease-in-out infinite;
+}
+
+.anim-emblem-float {
+  animation: emblemFloat 4s ease-in-out infinite;
+}
+
+.anim-checkmark-glow {
+  animation: checkmarkGlow 2.5s ease-in-out infinite;
+}
+

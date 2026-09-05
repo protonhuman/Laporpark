@@ -43,6 +43,8 @@ const STATUS_ICON_STYLES: Record<StatusBA, string> = {
 
 import { redirect } from "next/navigation";
 
+import BrandLockup from "@/components/brand-lockup";
+
 export default async function DashboardPage() {
   const supabase = await createClient();
 
@@ -94,13 +96,8 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Page header */}
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
-        <p className="text-slate-500 text-sm mt-1">
-          Ringkasan Berita Acara Parkir
-        </p>
-      </div>
+      {/* Executive Brand & Partner Banner with Animated Lapor Park Emblem */}
+      <BrandLockup variant="banner" />
 
       {/* Stats overview */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

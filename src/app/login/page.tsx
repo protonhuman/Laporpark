@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/actions/auth";
 import { AlertCircle, Loader2 } from "lucide-react";
 import WaterDropLoader from "@/components/water-drop-loader";
+import LaporParkLogo from "@/components/lapor-park-logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,22 +41,40 @@ export default function LoginPage() {
           isSuccess ? "filter blur-[3px] scale-[0.97] opacity-30 pointer-events-none" : ""
         }`}
       >
-        {/* Brand Title */}
-        <div className="text-center mb-8 login-brand">
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">
-            Lapor Park
+        {/* Brand Title with Animated Emblem */}
+        <div className="flex flex-col items-center text-center mb-6 login-brand">
+          <div className="mb-3">
+            <LaporParkLogo size="lg" interactive={true} />
+          </div>
+          <h1 className="text-3xl font-extrabold text-foreground tracking-tight flex items-center gap-1.5">
+            <span>Lapor</span>
+            <span className="text-emerald-500">Park</span>
           </h1>
           <p className="text-slate-500 mt-1 text-sm">
-            Sistem Berita Acara Parkir Digital
+            Sistem Manajemen Berita Acara Parkir
           </p>
         </div>
 
         {/* Neumorphic card */}
         <div className="neo-card p-8 login-card">
-          {/* Logos inside card */}
-          <div className="flex items-center justify-between mb-6">
-            <img src="/logo-aps.png" alt="Angkasa Pura Supports" className="h-12 w-auto object-contain drop-shadow-md login-logo-left" />
-            <img src="/logo-cp.png" alt="Centre Park" className="h-9 w-auto object-contain drop-shadow-md login-logo-right" />
+          {/* Corporate Partner Logos inside card - Presisi Lockup */}
+          <div className="mb-6 p-2.5 rounded-xl bg-white/40 border border-white/60 shadow-[inset_1px_1px_3px_rgba(255,255,255,0.8),inset_-1px_-1px_3px_rgba(163,177,198,0.25)]">
+            <div className="grid grid-cols-2 items-center gap-3 px-2 py-1">
+              <div className="flex items-center justify-center h-10 px-2 rounded-lg bg-white/60 border border-white/80 shadow-sm transition-transform duration-200 hover:scale-105">
+                <img
+                  src="/logo-aps.png"
+                  alt="Angkasa Pura Supports"
+                  className="h-7 max-h-7 w-auto max-w-full object-contain drop-shadow-sm"
+                />
+              </div>
+              <div className="flex items-center justify-center h-10 px-2 rounded-lg bg-white/60 border border-white/80 shadow-sm transition-transform duration-200 hover:scale-105">
+                <img
+                  src="/logo-cp.png"
+                  alt="Centre Park"
+                  className="h-6.5 max-h-7 w-auto max-w-full object-contain drop-shadow-sm"
+                />
+              </div>
+            </div>
           </div>
           <h2 className="text-xl font-semibold text-foreground mb-6 text-center login-title">Masuk</h2>
 
