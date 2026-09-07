@@ -132,9 +132,7 @@ export default async function BeritaAcaraDetailPage({
           <h1 className="text-2xl font-bold text-slate-800">{ba.judul_masalah}</h1>
         </div>
         <div className="flex gap-2 print:hidden">
-          {(ba.status === "disetujui" || ba.status === "selesai") && (
-            <PDFButton />
-          )}
+          <PDFButton />
           {canEdit && (
             <Link
               href={`/berita-acara/${id}/edit`}

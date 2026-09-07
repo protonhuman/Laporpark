@@ -7,8 +7,10 @@ import {
   JENIS_INSIDEN_LABELS,
   type JenisInsiden,
   type CreateBAPayload,
+  type BeritaAcaraWithUsers,
 } from "@/lib/types";
 import { DAFTAR_BANDARA } from "@/lib/constants";
+import PrintLayout from "../[id]/print-layout";
 import {
   Loader2,
   Sparkles,
@@ -42,6 +44,8 @@ export default function CreateBAPage() {
   // User auth state for airport binding
   const [userRole, setUserRole] = useState<string>("team_leader");
   const [userKodeBandara, setUserKodeBandara] = useState<string>("BDJ");
+  const [userName, setUserName] = useState<string>("Saya (Draft)");
+  const [userSignature, setUserSignature] = useState<string | null>(null);
   const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
@@ -52,7 +56,7 @@ export default function CreateBAPage() {
       if (user) {
         const { data: profile } = await supabase
           .from("users")
-          .select("role, kode_bandara")
+          .select("role, kode_bandara, nama, signature_url")
           .eq("id", user.id)
           .single();
         if (profile) {
@@ -60,6 +64,8 @@ export default function CreateBAPage() {
           if (profile.kode_bandara) {
             setUserKodeBandara(profile.kode_bandara);
           }
+          if (profile.nama) setUserName(profile.nama);
+          if (profile.signature_url) setUserSignature(profile.signature_url);
         }
       }
       setUserLoading(false);
@@ -493,54 +499,40 @@ export default function CreateBAPage() {
               </button>
             </div>
             
-            <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-600">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1">Kejadian</p>
-                  <p className="font-medium text-slate-800">{previewData.tanggal_kejadian} {previewData.waktu_kejadian}</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1">Lokasi</p>
-                  <p className="font-medium text-slate-800">{previewData.kode_bandara} - {previewData.lokasi_zona}</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1">Jenis Insiden</p>
-                  <p className="font-medium text-slate-800">{JENIS_INSIDEN_LABELS[previewData.jenis_insiden]}</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1">Pihak Terlibat</p>
-                  <p className="font-medium text-slate-800">{previewData.pihak_terlibat || "-"}</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4 pt-4 border-t border-slate-100">
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Judul Masalah</p>
-                  <p className="font-medium text-slate-800">{previewData.judul_masalah}</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Kronologi</p>
-                  <p className="whitespace-pre-wrap">{previewData.kronologi}</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Tindakan Dilakukan</p>
-                  <p className="whitespace-pre-wrap">{previewData.tindakan_dilakukan}</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Penyelesaian</p>
-                  <p className="whitespace-pre-wrap">{previewData.penyelesaian}</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Mitigasi</p>
-                  <p className="whitespace-pre-wrap">{previewData.mitigasi}</p>
-                </div>
-                {previewData.lampiran_foto && (
-                  <div>
-                    <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Lampiran</p>
-                    <p className="font-medium text-slate-800">{previewData.lampiran_foto.length} Foto</p>
-                  </div>
-                )}
-              </div>
+            <div className="p-0 sm:p-6 overflow-y-auto bg-slate-50">
+              <PrintLayout 
+                previewMode={true} 
+                checker={null} 
+                approver={null} 
+                ba={{
+                  id: "draft",
+                  nomor_ba: "BA/DRAFT/" + new Date().getFullYear(),
+                  tanggal_kejadian: previewData.tanggal_kejadian,
+                  waktu_kejadian: previewData.waktu_kejadian,
+                  kode_bandara: previewData.kode_bandara,
+                  lokasi_zona: previewData.lokasi_zona,
+                  jenis_insiden: previewData.jenis_insiden,
+                  pihak_terlibat: previewData.pihak_terlibat || null,
+                  judul_masalah: previewData.judul_masalah,
+                  kronologi: previewData.kronologi,
+                  tindakan_dilakukan: previewData.tindakan_dilakukan,
+                  penyelesaian: previewData.penyelesaian || null,
+                  mitigasi: previewData.mitigasi || null,
+                  lampiran_foto: previewData.lampiran_foto || null,
+                  status: "menunggu_pemeriksaan",
+                  dibuat_oleh: "me",
+                  direview_oleh: null,
+                  disetujui_oleh: null,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
+                  pembuat: {
+                    id: "me",
+                    nama: userName,
+                    role: userRole,
+                    signature_url: userSignature,
+                  }
+                }} 
+              />
             </div>
             
             <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50">

@@ -6,9 +6,10 @@ interface PrintLayoutProps {
   ba: BeritaAcaraWithUsers;
   checker: { nama: string; date: string; signature_url?: string | null } | null;
   approver: { nama: string; date: string; signature_url?: string | null } | null;
+  previewMode?: boolean;
 }
 
-export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps) {
+export default function PrintLayout({ ba, checker, approver, previewMode = false }: PrintLayoutProps) {
   // Helper to format date explicitly like "15 April 2025"
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("id-ID", {
@@ -29,14 +30,20 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
     <>
       {/* PRELOAD IMAGES: Browser will not load images inside 'display: none'.
           We render them here as 1x1 invisible pixels so they are downloaded and cached before the user prints! */}
-      <div className="absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none print:hidden">
-        {ba.pembuat?.signature_url && <img src={ba.pembuat.signature_url} alt="preload" />}
-        {checker?.signature_url && <img src={checker.signature_url} alt="preload" />}
-        {approver?.signature_url && <img src={approver.signature_url} alt="preload" />}
-      </div>
+      {!previewMode && (
+        <div className="absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none print:hidden">
+          {ba.pembuat?.signature_url && <img src={ba.pembuat.signature_url} alt="preload" />}
+          {checker?.signature_url && <img src={checker.signature_url} alt="preload" />}
+          {approver?.signature_url && <img src={approver.signature_url} alt="preload" />}
+        </div>
+      )}
 
       <div
-        className="hidden print:block print:bg-white print:text-black max-w-4xl mx-auto text-[11pt] leading-normal"
+        className={
+          previewMode
+            ? "block bg-white text-black max-w-4xl mx-auto text-[11pt] leading-normal p-8 sm:p-12 shadow-sm rounded-sm"
+            : "hidden print:block print:bg-white print:text-black max-w-4xl mx-auto text-[11pt] leading-normal"
+        }
         style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
       >
         {/* 1. KOP SURAT (Header) */}
