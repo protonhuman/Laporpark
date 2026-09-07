@@ -151,7 +151,7 @@ export default function CreateBAPage() {
     const payload: CreateBAPayload = {
       tanggal_kejadian: formData.get("tanggal_kejadian") as string,
       waktu_kejadian: formData.get("waktu_kejadian") as string,
-      kode_bandara: formData.get("kode_bandara") as string,
+      kode_bandara: (formData.get("kode_bandara") as string) || userKodeBandara,
       lokasi_zona: formData.get("lokasi_zona") as string,
       jenis_insiden: formData.get("jenis_insiden") as JenisInsiden,
       pihak_terlibat: (formData.get("pihak_terlibat") as string) || undefined,
@@ -279,6 +279,9 @@ export default function CreateBAPage() {
                   </option>
                 ))}
               </select>
+              {userRole !== "superadmin" && (
+                <input type="hidden" name="kode_bandara" value={userKodeBandara} />
+              )}
               <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
                 <ChevronDown className="w-4 h-4" />
               </div>
@@ -510,7 +513,7 @@ export default function CreateBAPage() {
                   nomor_ba: "BA/DRAFT/" + new Date().getFullYear(),
                   tanggal_kejadian: previewData.tanggal_kejadian,
                   waktu_kejadian: previewData.waktu_kejadian,
-                  kode_bandara: previewData.kode_bandara,
+                  kode_bandara: previewData.kode_bandara || userKodeBandara,
                   lokasi_zona: previewData.lokasi_zona,
                   jenis_insiden: previewData.jenis_insiden,
                   pihak_terlibat: previewData.pihak_terlibat || null,
