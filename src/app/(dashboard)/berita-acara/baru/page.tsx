@@ -17,6 +17,8 @@ import {
   Send,
   Undo2,
   ChevronDown,
+  X,
+  Eye,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -26,6 +28,10 @@ export default function CreateBAPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
+
+  // Preview state
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewData, setPreviewData] = useState<CreateBAPayload | null>(null);
 
   // Store original text for undo after AI cleanup
   const [originalTexts, setOriginalTexts] = useState<Record<string, string>>(
@@ -129,9 +135,8 @@ export default function CreateBAPage() {
     setAiApplied(false);
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
     const formData = new FormData(e.currentTarget);
@@ -151,10 +156,20 @@ export default function CreateBAPage() {
       lampiran_foto: photos.length > 0 ? photos : undefined,
     };
 
-    const result = await createBeritaAcara(payload);
+    setPreviewData(payload);
+    setShowPreview(true);
+  }
+
+  async function handleConfirmSubmit() {
+    if (!previewData) return;
+    setLoading(true);
+    setError(null);
+
+    const result = await createBeritaAcara(previewData);
     if (result?.error) {
       setError(result.error);
       setLoading(false);
+      setShowPreview(false);
     }
     // On success, createBeritaAcara calls redirect()
   }
@@ -434,23 +449,114 @@ export default function CreateBAPage() {
         <div className="flex justify-end">
           <button
             type="submit"
-            disabled={loading}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold hover:from-sky-400 hover:to-indigo-500 disabled:opacity-50 transition-all shadow-[0_4px_15px_rgba(14,165,233,0.3)] cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold hover:from-sky-400 hover:to-indigo-500 transition-all shadow-[0_4px_15px_rgba(14,165,233,0.3)] cursor-pointer"
           >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Menyimpan...
-              </>
-            ) : (
-              <>
-                <Send className="w-4 h-4" />
-                Kirim Berita Acara
-              </>
-            )}
+            <Eye className="w-4 h-4" />
+            Preview Laporan
           </button>
         </div>
       </form>
+
+      {/* Modal Preview */}
+      {showPreview && previewData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            onClick={() => !loading && setShowPreview(false)}
+          />
+          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+              <h3 className="text-lg font-bold text-slate-800">Preview Berita Acara</h3>
+              <button
+                type="button"
+                onClick={() => !loading && setShowPreview(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-600">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1">Kejadian</p>
+                  <p className="font-medium text-slate-800">{previewData.tanggal_kejadian} {previewData.waktu_kejadian}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1">Lokasi</p>
+                  <p className="font-medium text-slate-800">{previewData.kode_bandara} - {previewData.lokasi_zona}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1">Jenis Insiden</p>
+                  <p className="font-medium text-slate-800">{JENIS_INSIDEN_LABELS[previewData.jenis_insiden]}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1">Pihak Terlibat</p>
+                  <p className="font-medium text-slate-800">{previewData.pihak_terlibat || "-"}</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4 pt-4 border-t border-slate-100">
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Judul Masalah</p>
+                  <p className="font-medium text-slate-800">{previewData.judul_masalah}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Kronologi</p>
+                  <p className="whitespace-pre-wrap">{previewData.kronologi}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Tindakan Dilakukan</p>
+                  <p className="whitespace-pre-wrap">{previewData.tindakan_dilakukan}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Penyelesaian</p>
+                  <p className="whitespace-pre-wrap">{previewData.penyelesaian}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Mitigasi</p>
+                  <p className="whitespace-pre-wrap">{previewData.mitigasi}</p>
+                </div>
+                {previewData.lampiran_foto && (
+                  <div>
+                    <p className="font-semibold text-slate-500 text-xs uppercase tracking-wider mb-1.5">Lampiran</p>
+                    <p className="font-medium text-slate-800">{previewData.lampiran_foto.length} Foto</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50">
+              <button
+                type="button"
+                onClick={() => setShowPreview(false)}
+                disabled={loading}
+                className="px-4 py-2.5 rounded-xl font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-200/50 transition-colors"
+              >
+                Edit Kembali
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmSubmit}
+                disabled={loading}
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold hover:from-emerald-400 hover:to-teal-500 disabled:opacity-50 transition-all shadow-md"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Menyimpan...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Konfirmasi & Kirim
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
