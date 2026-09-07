@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 
 interface LaporParkLogoProps {
   size?: "sm" | "md" | "lg" | "xl";
@@ -16,6 +16,11 @@ export default function LaporParkLogo({
   className = "",
 }: LaporParkLogoProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const reactId = useId();
+  // Safe ID without colons for SVG selector compatibility
+  const uid = reactId.replace(/[^a-zA-Z0-9_-]/g, "");
+  const shieldGradId = `lpShieldGrad_${uid}`;
+  const checkGradId = `lpCheckGrad_${uid}`;
 
   // Size configurations
   const sizeMap = {
@@ -78,7 +83,10 @@ export default function LaporParkLogo({
         </svg>
 
         {/* Layer 3: Solid / Neumorphic Shield Badge Base */}
-        <div className="relative w-full h-full rounded-2xl bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] p-[1.5px] shadow-xl overflow-hidden group">
+        <div 
+          className="relative w-full h-full rounded-2xl bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] p-[1.5px] shadow-xl overflow-hidden group"
+          style={{ WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden", transform: "translateZ(0)" }}
+        >
           {/* Subtle gradient border highlight */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#00ffcc] via-transparent to-[#39ff14] opacity-80" />
 
@@ -92,15 +100,15 @@ export default function LaporParkLogo({
               viewBox="0 0 48 48"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="w-[72%] h-[72%] relative z-10 drop-shadow-[0_2px_8px_rgba(0,255,204,0.5)]"
+              className="w-[72%] h-[72%] relative z-10"
             >
               <defs>
-                <linearGradient id="lpShieldGrad" x1="6" y1="4" x2="42" y2="44" gradientUnits="userSpaceOnUse">
+                <linearGradient id={shieldGradId} x1="6" y1="4" x2="42" y2="44" gradientUnits="userSpaceOnUse">
                   <stop offset="0%" stopColor="#00ffcc" />
                   <stop offset="50%" stopColor="#00c8ff" />
                   <stop offset="100%" stopColor="#39ff14" />
                 </linearGradient>
-                <linearGradient id="lpCheckGrad" x1="18" y1="20" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+                <linearGradient id={checkGradId} x1="18" y1="20" x2="34" y2="34" gradientUnits="userSpaceOnUse">
                   <stop offset="0%" stopColor="#ffffff" />
                   <stop offset="100%" stopColor="#00ffcc" />
                 </linearGradient>
@@ -109,9 +117,9 @@ export default function LaporParkLogo({
               {/* Outer Protective Shield Geometry */}
               <path
                 d="M24 4L8 10V22C8 32.5 14.8 42.2 24 44.5C33.2 42.2 40 32.5 40 22V10L24 4Z"
-                fill="url(#lpShieldGrad)"
+                fill={`url(#${shieldGradId})`}
                 fillOpacity="0.16"
-                stroke="url(#lpShieldGrad)"
+                stroke={`url(#${shieldGradId})`}
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -120,7 +128,7 @@ export default function LaporParkLogo({
               {/* Parking "P" Spine */}
               <path
                 d="M17 14V33"
-                stroke="url(#lpShieldGrad)"
+                stroke={`url(#${shieldGradId})`}
                 strokeWidth="3.2"
                 strokeLinecap="round"
               />
@@ -128,7 +136,7 @@ export default function LaporParkLogo({
               {/* Parking "P" Upper Loop */}
               <path
                 d="M17 14H25.5C28.5 14 31 16.5 31 19.5C31 22.5 28.5 25 25.5 25H17"
-                stroke="url(#lpShieldGrad)"
+                stroke={`url(#${shieldGradId})`}
                 strokeWidth="3.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -137,7 +145,7 @@ export default function LaporParkLogo({
               {/* Digital Checkmark (Official / Verified Report) */}
               <path
                 d="M23 27L28 32L36 21"
-                stroke="url(#lpCheckGrad)"
+                stroke={`url(#${checkGradId})`}
                 strokeWidth="3.4"
                 strokeLinecap="round"
                 strokeLinejoin="round"

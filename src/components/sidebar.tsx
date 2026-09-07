@@ -19,6 +19,7 @@ import {
   Users,
 } from "lucide-react";
 import BrandLockup from "@/components/brand-lockup";
+import LaporParkLogo from "@/components/lapor-park-logo";
 import { useState } from "react";
 
 interface SidebarProps {
@@ -155,21 +156,39 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <>
-      {/* Mobile toggle button */}
-      {!mobileOpen && (
-        <button
-          type="button"
-          onClick={() => setMobileOpen(true)}
-          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-xl bg-white/[0.05] border border-white/[0.08] text-slate-800 backdrop-blur-xl cursor-pointer print:hidden"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
-      )}
+      {/* Mobile Top Header Bar */}
+      <header className="lg:hidden fixed top-0 inset-x-0 h-14 z-30 flex items-center justify-between px-3 bg-white/80 backdrop-blur-xl border-b border-slate-200/70 shadow-sm print:hidden">
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="p-2 -ml-1 rounded-xl text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
+            aria-label="Buka Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <Link
+            href={user.role === "carpark_manager" || user.role === "supervisor" ? "/dashboard" : "/berita-acara"}
+            className="flex items-center gap-2"
+          >
+            <LaporParkLogo size="sm" interactive={false} />
+            <span className="font-extrabold text-base text-slate-800 tracking-tight leading-none">
+              Lapor<span className="text-emerald-500">Park</span>
+            </span>
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-slate-200/70 text-slate-700 border border-slate-300/60">
+            {user.role === "superadmin" ? "Semua Bandara" : (user.kode_bandara || "BDJ")}
+          </span>
+        </div>
+      </header>
 
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-30 bg-black/60 backdrop-blur-sm print:hidden"
+          className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm print:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -181,7 +200,7 @@ export default function Sidebar({ user }: SidebarProps) {
 
       {/* Sidebar - Mobile */}
       <aside
-        className={`lg:hidden fixed inset-y-0 left-0 z-40 w-72 border-r border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] bg-background neo-card backdrop-blur-xl transform transition-transform duration-300 ease-out print:hidden ${
+        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 border-r border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] bg-background neo-card backdrop-blur-xl transform transition-transform duration-300 ease-out print:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
