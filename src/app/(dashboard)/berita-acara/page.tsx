@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import StatusBadge from "@/components/status-badge";
+import BandaraFilter from "@/components/bandara-filter";
 import {
   JENIS_INSIDEN_LABELS,
   STATUS_LABELS,
@@ -24,6 +25,7 @@ export default async function BeritaAcaraListPage({
     page?: string;
     status?: string;
     jenis?: string;
+    bandara?: string;
     q?: string;
   }>;
 }) {
@@ -31,9 +33,26 @@ export default async function BeritaAcaraListPage({
   const page = Math.max(1, parseInt(params.page ?? "1", 10));
   const statusFilter = params.status as StatusBA | undefined;
   const jenisFilter = params.jenis as JenisInsiden | undefined;
+  const bandaraFilter = params.bandara;
   const searchQuery = params.q ?? "";
 
   const supabase = await createClient();
+
+  // Get current user's kode_bandara for filtering
+  const { data: { user: authUser } } = await supabase.auth.getUser();
+  let userKodeBandara = "BDJ";
+  let userRole = "team_leader";
+  if (authUser) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role, kode_bandara")
+      .eq("id", authUser.id)
+      .single();
+    if (profile) {
+      userKodeBandara = profile.kode_bandara || "BDJ";
+      userRole = profile.role;
+    }
+  }
 
   // Build query
   let query = supabase
@@ -43,6 +62,13 @@ export default async function BeritaAcaraListPage({
       { count: "exact" }
     )
     .order("created_at", { ascending: false });
+
+  // Filter by user's airport (admin sees all)
+  if (userRole !== "superadmin") {
+    query = query.eq("kode_bandara", userKodeBandara);
+  } else if (bandaraFilter && bandaraFilter !== "ALL") {
+    query = query.eq("kode_bandara", bandaraFilter);
+  }
 
   if (statusFilter) query = query.eq("status", statusFilter);
   if (jenisFilter) query = query.eq("jenis_insiden", jenisFilter);
@@ -63,7 +89,7 @@ export default async function BeritaAcaraListPage({
   // Helper to build URL with params
   function buildUrl(overrides: Record<string, string | undefined>) {
     const p = new URLSearchParams();
-    const merged = { page: String(page), status: statusFilter, jenis: jenisFilter, q: searchQuery, ...overrides };
+    const merged = { page: String(page), status: statusFilter, jenis: jenisFilter, bandara: bandaraFilter, q: searchQuery, ...overrides };
     for (const [k, v] of Object.entries(merged)) {
       if (v) p.set(k, v);
     }
@@ -92,6 +118,11 @@ export default async function BeritaAcaraListPage({
       {/* Filters */}
       <div className="neo-card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
+          {userRole === "superadmin" && (
+            <div>
+              <BandaraFilter userRole={userRole} />
+            </div>
+          )}
           {/* Search */}
           <form className="flex-1 relative" action="/berita-acara" method="GET">
             {statusFilter && (
@@ -188,23 +219,23 @@ export default async function BeritaAcaraListPage({
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] text-left">
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
+              <tr className="border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] text-center">
+                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
                   Nomor BA
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
                   Judul Masalah
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
                   Jenis
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
                   Status
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
                   Dibuat Oleh
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
                   Tanggal
                 </th>
               </tr>
@@ -216,7 +247,7 @@ export default async function BeritaAcaraListPage({
                     key={ba.id}
                     className="hover:bg-white/[0.02] transition-colors"
                   >
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-center">
                       <Link
                         href={`/berita-acara/${ba.id}`}
                         className="font-mono text-xs text-sky-400 hover:text-sky-300"
@@ -224,7 +255,7 @@ export default async function BeritaAcaraListPage({
                         {ba.nomor_ba}
                       </Link>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-center">
                       <Link
                         href={`/berita-acara/${ba.id}`}
                         className="text-slate-800 font-medium hover:text-sky-300 transition-colors"
@@ -232,20 +263,22 @@ export default async function BeritaAcaraListPage({
                         {ba.judul_masalah}
                       </Link>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 text-xs">
+                    <td className="px-6 py-4 text-slate-500 text-xs text-center">
                       {
                         JENIS_INSIDEN_LABELS[
                           ba.jenis_insiden as keyof typeof JENIS_INSIDEN_LABELS
                         ]
                       }
                     </td>
-                    <td className="px-6 py-4">
-                      <StatusBadge status={ba.status} />
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex justify-center">
+                        <StatusBadge status={ba.status} />
+                      </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 text-xs">
+                    <td className="px-6 py-4 text-slate-500 text-xs text-center">
                       {ba.pembuat?.nama ?? "—"}
                     </td>
-                    <td className="px-6 py-4 text-slate-500 text-xs">
+                    <td className="px-6 py-4 text-slate-500 text-xs text-center whitespace-nowrap">
                       {new Date(ba.created_at).toLocaleDateString("id-ID", {
                         day: "numeric",
                         month: "short",

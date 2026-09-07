@@ -8,6 +8,7 @@ import {
   type JenisInsiden,
   type CreateBAPayload,
 } from "@/lib/types";
+import { DAFTAR_BANDARA } from "@/lib/constants";
 import {
   Loader2,
   Sparkles,
@@ -18,6 +19,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function CreateBAPage() {
   const [loading, setLoading] = useState(false);
@@ -30,6 +32,34 @@ export default function CreateBAPage() {
     {}
   );
   const [aiApplied, setAiApplied] = useState(false);
+
+  // User auth state for airport binding
+  const [userRole, setUserRole] = useState<string>("team_leader");
+  const [userKodeBandara, setUserKodeBandara] = useState<string>("BDJ");
+  const [userLoading, setUserLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadUser() {
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from("users")
+          .select("role, kode_bandara")
+          .eq("id", user.id)
+          .single();
+        if (profile) {
+          setUserRole(profile.role);
+          if (profile.kode_bandara) {
+            setUserKodeBandara(profile.kode_bandara);
+          }
+        }
+      }
+      setUserLoading(false);
+    }
+    loadUser();
+  }, []);
 
   // Form field refs (using controlled state for AI integration)
   const [judul, setJudul] = useState("");
@@ -109,6 +139,7 @@ export default function CreateBAPage() {
     const payload: CreateBAPayload = {
       tanggal_kejadian: formData.get("tanggal_kejadian") as string,
       waktu_kejadian: formData.get("waktu_kejadian") as string,
+      kode_bandara: formData.get("kode_bandara") as string,
       lokasi_zona: formData.get("lokasi_zona") as string,
       jenis_insiden: formData.get("jenis_insiden") as JenisInsiden,
       pihak_terlibat: (formData.get("pihak_terlibat") as string) || undefined,
@@ -137,6 +168,13 @@ export default function CreateBAPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      {/* Loading overlay if auth data is fetching */}
+      {userLoading && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-sm">
+          <Loader2 className="w-8 h-8 animate-spin text-sky-500" />
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
@@ -196,6 +234,32 @@ export default function CreateBAPage() {
                 required
                 className={inputClass}
               />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="kode_bandara" className={labelClass}>
+              Lokasi Bandara *
+            </label>
+            <div className="relative">
+              <select
+                id="kode_bandara"
+                name="kode_bandara"
+                required
+                value={userKodeBandara}
+                onChange={(e) => setUserKodeBandara(e.target.value)}
+                disabled={userRole !== "superadmin"}
+                className={`${inputClass} appearance-none pr-10 ${userRole !== "superadmin" ? "bg-white/[0.02] cursor-not-allowed opacity-80" : "cursor-pointer"}`}
+              >
+                {DAFTAR_BANDARA.map((b) => (
+                  <option key={b.kode} value={b.kode} className="bg-[#e0e5ec] text-slate-800">
+                    {b.nama} — {b.lokasi} ({b.kode})
+                  </option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
+                <ChevronDown className="w-4 h-4" />
+              </div>
             </div>
           </div>
 

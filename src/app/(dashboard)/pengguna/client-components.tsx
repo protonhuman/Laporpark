@@ -125,10 +125,13 @@ export function CreateUserModal() {
                   placeholder="budi@laporpark.bdj.id"
                   className={inputClass}
                 />
+                <p className="text-[10px] text-slate-500 mt-1">
+                  * Bandara otomatis diatur berdasarkan ekstensi email (contoh: .bdj.id → BDJ).
+                </p>
               </div>
 
               <div>
-                <label className={labelClass}>Password (opsional, default: password123)</label>
+                <label className={labelClass}>Password (opsional, default: 123123)</label>
                 <input
                   type="password"
                   value={password}
@@ -197,11 +200,11 @@ export function CreateUserModal() {
                   onChange={(e) => setRole(e.target.value as CreateUserPayload["role"])}
                   className={inputClass}
                 >
-                  <option value="admin" className="bg-[#0a0e1a]">Admin</option>
-                  <option value="supervisor" className="bg-[#0a0e1a]">Supervisor</option>
-                  <option value="carpark_manager" className="bg-[#0a0e1a]">Carpark Manager</option>
-                  <option value="team_leader" className="bg-[#0a0e1a]">Team Leader</option>
-                  <option value="teknisi" className="bg-[#0a0e1a]">Teknisi</option>
+                  <option value="admin" className="bg-white text-slate-800">Admin</option>
+                  <option value="supervisor" className="bg-white text-slate-800">Supervisor</option>
+                  <option value="carpark_manager" className="bg-white text-slate-800">Carpark Manager</option>
+                  <option value="team_leader" className="bg-white text-slate-800">Team Leader</option>
+                  <option value="teknisi" className="bg-white text-slate-800">Teknisi</option>
                 </select>
               </div>
 

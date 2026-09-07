@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Sidebar from "@/components/sidebar";
 import type { User } from "@/lib/types";
+import { extractKodeBandaraFromEmail } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -50,11 +51,13 @@ export default async function DashboardLayout({
     } else {
       // 3. Profile genuinely doesn't exist in public.users yet — auto-create using upsert
       const role = (authUser.user_metadata?.role as User["role"]) || "team_leader";
+      const emailStr = authUser.email || "";
       const newProfile: User = {
         id: authUser.id,
-        nama: authUser.user_metadata?.nama || authUser.email?.split("@")[0] || "User",
-        email: authUser.email || "",
+        nama: authUser.user_metadata?.nama || emailStr.split("@")[0] || "User",
+        email: emailStr,
         role: role,
+        kode_bandara: extractKodeBandaraFromEmail(emailStr),
       };
 
       const { data: upsertedProfile, error: upsertError } = await supabaseAdmin
@@ -92,6 +95,7 @@ export default async function DashboardLayout({
     nama: profile.nama,
     email: profile.email,
     role: profile.role,
+    kode_bandara: profile.kode_bandara || extractKodeBandaraFromEmail(profile.email),
   };
 
   return (

@@ -5,11 +5,13 @@ import { updateBeritaAcara } from "@/lib/actions/berita-acara";
 import PhotoUpload from "@/components/photo-upload";
 import type { BeritaAcara, UpdateBAPayload, StatusBA } from "@/lib/types";
 import { STATUS_LABELS } from "@/lib/types";
+import { DAFTAR_BANDARA } from "@/lib/constants";
 import {
   Loader2,
   ArrowLeft,
   Save,
   AlertCircle,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -41,6 +43,7 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
     ba.pihak_terlibat ?? ""
   );
   const [lokasiZona, setLokasiZona] = useState(ba.lokasi_zona);
+  const [kodeBandara, setKodeBandara] = useState(ba.kode_bandara);
   const [status, setStatus] = useState<StatusBA>(ba.status);
   const [photos, setPhotos] = useState<string[]>(ba.lampiran_foto || []);
 
@@ -58,6 +61,7 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
       penyelesaian,
       mitigasi,
       pihak_terlibat: pihakTerlibat || undefined,
+      kode_bandara: kodeBandara,
       lokasi_zona: lokasiZona,
       lampiran_foto: photos,
       ...(status !== ba.status ? { status } : {}),
@@ -149,6 +153,25 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
+              <label className={labelClass}>Lokasi Bandara</label>
+              <div className="relative">
+                <select
+                  value={kodeBandara}
+                  onChange={(e) => setKodeBandara(e.target.value)}
+                  className={`${inputClass} appearance-none pr-10 cursor-pointer`}
+                >
+                  {DAFTAR_BANDARA.map((b) => (
+                    <option key={b.kode} value={b.kode} className="bg-[#e0e5ec] text-slate-800">
+                      {b.nama} — {b.lokasi} ({b.kode})
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
+                  <ChevronDown className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+            <div>
               <label className={labelClass}>Lokasi / Zona</label>
               <input
                 type="text"
@@ -157,6 +180,9 @@ export default function EditBAForm({ ba, userRole }: EditFormProps) {
                 className={inputClass}
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Pihak Terlibat</label>
               <input

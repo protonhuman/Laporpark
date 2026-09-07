@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { signOut } from "@/lib/actions/auth";
 import type { User } from "@/lib/types";
 import { ROLE_LABELS } from "@/lib/types";
+import { getBandaraByKode } from "@/lib/constants";
 import ChangePasswordModal from "@/components/change-password-modal";
 import {
   LayoutDashboard,
@@ -49,11 +50,14 @@ export default function Sidebar({ user }: SidebarProps) {
   // Dynamic nav items based on role
   const navItems = NAV_ITEMS.filter((item) => {
     if (item.href === "/dashboard") {
-      return user.role === "carpark_manager" || user.role === "supervisor";
+      return user.role === "carpark_manager" || user.role === "supervisor" || user.role === "superadmin";
+    }
+    if (item.href === "/berita-acara/baru") {
+      return user.role !== "superadmin";
     }
     return true;
   });
-  if (user.role === "supervisor") {
+  if (user.role === "supervisor" || user.role === "superadmin") {
     navItems.push({
       href: "/pengguna",
       label: "Manajemen Pengguna",
@@ -126,9 +130,12 @@ export default function Sidebar({ user }: SidebarProps) {
           <p className="text-sm font-medium text-slate-800 truncate">
             {user.nama}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5 mb-1.5 font-medium">
             {ROLE_LABELS[user.role]}
           </p>
+          <div className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-200/50 dark:bg-white/[0.04] text-[10px] font-semibold text-slate-600 border border-slate-300/50 dark:border-white/[0.08]">
+            {user.role === "superadmin" ? "Semua Bandara" : (getBandaraByKode(user.kode_bandara)?.nama || user.kode_bandara || "BDJ")}
+          </div>
         </div>
         <ChangePasswordModal />
         <form action={signOut}>

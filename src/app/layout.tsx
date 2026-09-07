@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Lapor Park — Berita Acara Parkir Digital",
   description:
-    "Sistem pelaporan insiden parkir digital Bandara Internasional Syamsudin Noor. Berita Acara terstruktur dengan alur approval dan audit trail.",
+    "Sistem pelaporan insiden parkir digital untuk bandara-bandara di Indonesia. Berita Acara terstruktur dengan alur approval dan audit trail.",
 };
 
 export const viewport: import("next").Viewport = {

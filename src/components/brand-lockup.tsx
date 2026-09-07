@@ -75,7 +75,7 @@ export default function BrandLockup({
                 Lapor<span className="text-emerald-500">Park</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Sistem Manajemen Berita Acara Parkir Bandara Internasional Syamsudin Noor Banjarmasin
+                Sistem Manajemen Berita Acara Parkir
               </p>
             </div>
           </div>

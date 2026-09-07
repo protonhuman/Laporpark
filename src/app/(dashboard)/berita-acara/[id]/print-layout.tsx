@@ -1,4 +1,5 @@
 import { type BeritaAcaraWithUsers, ROLE_LABELS } from "@/lib/types";
+import { getBandaraByKode } from "@/lib/constants";
 import Image from "next/image";
 
 interface PrintLayoutProps {
@@ -19,6 +20,10 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
 
   const formattedDate = formatDate(ba.tanggal_kejadian);
   const createdDate = formatDate(ba.created_at);
+
+  // Resolve airport info for dynamic city name
+  const bandara = getBandaraByKode(ba.kode_bandara);
+  const cityName = bandara?.lokasi ?? "Banjarbaru";
 
   return (
     <>
@@ -64,6 +69,10 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
           <div className="font-medium">Tanggal Pelaporan</div>
           <div>:</div>
           <div>{createdDate}</div>
+
+          <div className="font-medium">Lokasi Bandara</div>
+          <div>:</div>
+          <div>{bandara ? `${bandara.nama} (${bandara.kode})` : ba.kode_bandara}</div>
         </div>
 
         {/* 4. CONTENT SECTIONS */}
@@ -134,7 +143,7 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
           {ba.pembuat?.role === "supervisor" ? (
             <div className="flex flex-col items-end">
               <div className="w-64 text-center">
-                <p className="text-[11pt] mb-1">Banjarbaru, {createdDate}</p>
+                <p className="text-[11pt] mb-1">{cityName}, {createdDate}</p>
                 <p className="text-[11pt] font-semibold mb-0.5">Dibuat Oleh,</p>
                 <div className="h-24 flex items-center justify-center my-1">
                   {ba.pembuat?.signature_url ? (
@@ -160,7 +169,7 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
           ) : ba.pembuat?.role === "carpark_manager" ? (
             /* KONDISI 2: JIKA PEMBUAT ADALAH CARPARK MANAGER (2 KOLOM: Dibuat Oleh & Mengetahui) */
             <div>
-              <p className="mb-2 text-[11pt] text-right">Banjarbaru, {createdDate}</p>
+              <p className="mb-2 text-[11pt] text-right">{cityName}, {createdDate}</p>
               <table className="w-full border-collapse border border-black text-center text-[11pt] table-fixed">
                 <thead>
                   <tr className="bg-gray-50/50">
@@ -211,7 +220,7 @@ export default function PrintLayout({ ba, checker, approver }: PrintLayoutProps)
           ) : (
             /* KONDISI 3: JIKA PEMBUAT ADALAH TEAM LEADER / TEKNISI / STAFF (3 KOLOM) */
             <div>
-              <p className="mb-2 text-[11pt] text-right">Banjarbaru, {createdDate}</p>
+              <p className="mb-2 text-[11pt] text-right">{cityName}, {createdDate}</p>
               <table className="w-full border-collapse border border-black text-center text-[11pt] table-fixed">
                 <thead>
                   <tr className="bg-gray-50/50">

@@ -145,7 +145,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-xs text-slate-500 font-medium mt-8 login-footer">
-          Bandara Internasional Syamsudin Noor — Unit Parkir
+          Angkasa Pura Supports — Unit Parkir
         </p>
       </div>
     </div>

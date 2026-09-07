@@ -3,7 +3,7 @@
 // Mirrors the Supabase/Postgres schema from migrations
 // ============================================================
 
-export type UserRole = "admin" | "supervisor" | "carpark_manager" | "team_leader" | "teknisi";
+export type UserRole = "superadmin" | "admin" | "supervisor" | "carpark_manager" | "team_leader" | "teknisi";
 
 export type JenisInsiden =
   | "kerusakan"
@@ -27,6 +27,7 @@ export interface User {
   nama: string;
   email: string;
   role: UserRole;
+  kode_bandara: string;
   signature_url?: string | null;
 }
 
@@ -35,6 +36,7 @@ export interface BeritaAcara {
   nomor_ba: string;
   tanggal_kejadian: string; // ISO date string
   waktu_kejadian: string; // HH:mm:ss
+  kode_bandara: string;
   lokasi_zona: string;
   jenis_insiden: JenisInsiden;
   pihak_terlibat: string | null;
@@ -76,6 +78,7 @@ export interface AuditLogWithUser extends AuditLog {
 export interface CreateBAPayload {
   tanggal_kejadian: string;
   waktu_kejadian: string;
+  kode_bandara: string;
   lokasi_zona: string;
   jenis_insiden: JenisInsiden;
   pihak_terlibat?: string;
@@ -94,6 +97,7 @@ export interface UpdateBAPayload {
   penyelesaian?: string;
   mitigasi?: string;
   pihak_terlibat?: string;
+  kode_bandara?: string;
   lokasi_zona?: string;
   status?: StatusBA;
   lampiran_foto?: string[];
@@ -121,6 +125,7 @@ export const JENIS_INSIDEN_LABELS: Record<JenisInsiden, string> = {
 };
 
 export const ROLE_LABELS: Record<UserRole, string> = {
+  superadmin: "Superadmin",
   admin: "Admin",
   supervisor: "Supervisor",
   carpark_manager: "Carpark Manager",

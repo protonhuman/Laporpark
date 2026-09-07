@@ -44,8 +44,15 @@ const STATUS_ICON_STYLES: Record<StatusBA, string> = {
 import { redirect } from "next/navigation";
 
 import BrandLockup from "@/components/brand-lockup";
+import BandaraFilter from "@/components/bandara-filter";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bandara?: string }>;
+}) {
+  const params = await searchParams;
+  const bandaraFilter = params.bandara;
   const supabase = await createClient();
 
   // Get current user role
@@ -53,13 +60,17 @@ export default async function DashboardPage() {
   if (user) {
     const { data: profile } = await supabase
       .from("users")
-      .select("role")
+      .select("role, kode_bandara")
       .eq("id", user.id)
       .single();
     
     if (profile && (profile.role === "team_leader" || profile.role === "teknisi" || profile.role === "admin")) {
       redirect("/berita-acara");
     }
+
+    // Store kode_bandara for filtering
+    var userKodeBandara = profile?.kode_bandara || "BDJ";
+    var userRole = profile?.role || "team_leader";
   }
 
   // Count BA per status
@@ -78,26 +89,55 @@ export default async function DashboardPage() {
   };
 
   for (const status of statuses) {
-    const { count } = await supabase
+    let countQuery = supabase
       .from("berita_acara")
       .select("*", { count: "exact", head: true })
       .eq("status", status);
+    if (userRole !== "superadmin") {
+      countQuery = countQuery.eq("kode_bandara", userKodeBandara);
+    } else if (bandaraFilter && bandaraFilter !== "ALL") {
+      countQuery = countQuery.eq("kode_bandara", bandaraFilter);
+    }
+    const { count } = await countQuery;
     counts[status] = count ?? 0;
   }
 
   const totalBA = Object.values(counts).reduce((a, b) => a + b, 0);
 
   // Get 5 most recent BA with user info
-  const { data: recentBA } = await supabase
+  let recentQuery = supabase
     .from("berita_acara")
     .select("*, pembuat:users!berita_acara_dibuat_oleh_fkey(nama)")
     .order("created_at", { ascending: false })
     .limit(5);
+  if (userRole !== "superadmin") {
+    recentQuery = recentQuery.eq("kode_bandara", userKodeBandara);
+  } else if (bandaraFilter && bandaraFilter !== "ALL") {
+    recentQuery = recentQuery.eq("kode_bandara", bandaraFilter);
+  }
+  const { data: recentBA } = await recentQuery;
 
   return (
     <div className="space-y-8">
       {/* Executive Brand & Partner Banner with Animated Lapor Park Emblem */}
       <BrandLockup variant="banner" />
+
+      {userRole === "superadmin" && (
+        <div className="neo-card p-5 bg-gradient-to-r from-sky-500/5 via-indigo-500/5 to-purple-500/5 border border-sky-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2 truncate">
+              <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse shrink-0"></span>
+              Pusat Kendali Operasional
+            </h2>
+            <p className="text-sm text-slate-500 mt-1 truncate">
+              Pilih lokasi bandara untuk memfilter seluruh data statistik dan laporan di bawah ini.
+            </p>
+          </div>
+          <div className="w-full sm:w-[320px] shrink-0 mt-3 sm:mt-0">
+            <BandaraFilter userRole={userRole} />
+          </div>
+        </div>
+      )}
 
       {/* Stats overview */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -136,21 +176,23 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick action: Buat BA Baru */}
-        <Link
-          href="/berita-acara/baru"
-          className="neo-card neo-card-hover p-6 flex items-center gap-5 group"
-        >
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#39ff14]/20 to-[#00ffcc]/20 group-hover:from-[#39ff14]/30 group-hover:to-[#00ffcc]/30 transition-all shadow-[0_0_15px_rgba(57,255,20,0.1)] group-hover:shadow-[0_0_20px_rgba(57,255,20,0.3)]">
-            <FilePlus className="w-7 h-7 text-[#39ff14]" />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-slate-800">
-              Buat Berita Acara Baru
-            </p>
-            <p className="text-xs text-slate-500">Laporkan insiden baru</p>
-          </div>
-          <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-500 transition-colors" />
-        </Link>
+        {userRole !== "superadmin" && (
+          <Link
+            href="/berita-acara/baru"
+            className="neo-card neo-card-hover p-6 flex items-center gap-5 group"
+          >
+            <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#39ff14]/20 to-[#00ffcc]/20 group-hover:from-[#39ff14]/30 group-hover:to-[#00ffcc]/30 transition-all shadow-[0_0_15px_rgba(57,255,20,0.1)] group-hover:shadow-[0_0_20px_rgba(57,255,20,0.3)]">
+              <FilePlus className="w-7 h-7 text-[#39ff14]" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-slate-800">
+                Buat Berita Acara Baru
+              </p>
+              <p className="text-xs text-slate-500">Laporkan insiden baru</p>
+            </div>
+            <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-500 transition-colors" />
+          </Link>
+        )}
 
         {/* Quick action: Lihat Semua */}
         <Link

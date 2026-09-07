@@ -14,6 +14,7 @@ import {
   type AuditLogWithUser,
   type StatusBA,
 } from "@/lib/types";
+import { getBandaraByKode } from "@/lib/constants";
 import {
   ArrowLeft,
   Calendar,
@@ -24,6 +25,7 @@ import {
   Pencil,
   History,
   ImageIcon,
+  Building2,
 } from "lucide-react";
 
 export default async function BeritaAcaraDetailPage({
@@ -101,6 +103,7 @@ export default async function BeritaAcaraDetailPage({
     penyelesaian: "Penyelesaian",
     mitigasi: "Mitigasi",
     pihak_terlibat: "Pihak Terlibat",
+    kode_bandara: "Bandara",
     lokasi_zona: "Lokasi/Zona",
     status: "Status",
   };
@@ -146,7 +149,19 @@ export default async function BeritaAcaraDetailPage({
       </div>
 
       {/* Meta info cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        <div className="neo-card p-4 col-span-2 sm:col-span-1">
+          <div className="flex items-center gap-2 text-slate-500 mb-1">
+            <Building2 className="w-3.5 h-3.5" />
+            <span className="text-xs">Bandara</span>
+          </div>
+          <p className="text-sm text-slate-800 font-medium">
+            {(() => {
+              const bandara = getBandaraByKode(ba.kode_bandara);
+              return bandara ? `${bandara.lokasi} (${bandara.kode})` : ba.kode_bandara;
+            })()}
+          </p>
+        </div>
         <div className="neo-card p-4">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <Calendar className="w-3.5 h-3.5" />

@@ -3,13 +3,14 @@
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
+import { extractKodeBandaraFromEmail } from "@/lib/constants";
 
 // Type for the payload
 export interface CreateUserPayload {
   email: string;
   nama: string;
   password?: string;
-  role: "admin" | "team_leader" | "carpark_manager" | "supervisor" | "teknisi";
+  role: "superadmin" | "admin" | "team_leader" | "carpark_manager" | "supervisor" | "teknisi";
   signature_url?: string;
 }
 
@@ -33,13 +34,15 @@ export async function createUserAction(payload: CreateUserPayload) {
       .eq("id", currentUser.id)
       .single();
 
-    if (!profile || profile.role !== "supervisor") {
-      return { error: "Akses ditolak. Hanya supervisor yang dapat membuat pengguna baru." };
+    if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
+      return { error: "Akses ditolak. Hanya supervisor dan superadmin yang dapat membuat pengguna baru." };
     }
 
     // 2. Create the user using admin client
     const adminClient = createAdminClient();
-    const passwordToUse = payload.password || "password123";
+    const passwordToUse = payload.password || "123123";
+    const kodeBandara = extractKodeBandaraFromEmail(payload.email);
+    const roleToUse = kodeBandara === "ALL" ? "superadmin" : payload.role;
 
     const { data: newUser, error: createError } = await adminClient.auth.admin.createUser({
       email: payload.email,
@@ -47,9 +50,10 @@ export async function createUserAction(payload: CreateUserPayload) {
       email_confirm: true,
       user_metadata: {
         nama: payload.nama,
-        role: payload.role,
+        role: roleToUse,
         signature_url: payload.signature_url || null,
         password_display: passwordToUse,
+        kode_bandara: kodeBandara,
       },
     });
 
@@ -65,7 +69,8 @@ export async function createUserAction(payload: CreateUserPayload) {
           id: newUser.user.id,
           nama: payload.nama,
           email: payload.email,
-          role: payload.role,
+          role: roleToUse,
+          kode_bandara: kodeBandara,
           signature_url: payload.signature_url || null,
         },
         { onConflict: "id" }
@@ -107,8 +112,8 @@ export async function deleteUserAction(userId: string) {
       .eq("id", currentUser.id)
       .single();
 
-    if (!profile || profile.role !== "supervisor") {
-      return { error: "Akses ditolak. Hanya supervisor yang dapat menghapus pengguna." };
+    if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
+      return { error: "Akses ditolak. Hanya supervisor dan superadmin yang dapat menghapus pengguna." };
     }
 
     // 2. Delete the user using admin client
@@ -151,8 +156,8 @@ export async function updateUserPasswordAction(userId: string, newPassword: stri
       .eq("id", currentUser.id)
       .single();
 
-    if (!profile || profile.role !== "supervisor") {
-      return { error: "Akses ditolak. Hanya supervisor yang dapat mengubah password pengguna." };
+    if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
+      return { error: "Akses ditolak. Hanya supervisor dan superadmin yang dapat mengubah password pengguna." };
     }
 
     if (newPassword.length < 6) {
@@ -254,8 +259,8 @@ export async function updateUserAction(userId: string, newName: string, newEmail
       .eq("id", currentUser.id)
       .single();
 
-    if (!profile || profile.role !== "supervisor") {
-      return { error: "Akses ditolak. Hanya supervisor yang dapat mengubah profil pengguna." };
+    if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
+      return { error: "Akses ditolak. Hanya supervisor dan superadmin yang dapat mengubah profil pengguna." };
     }
 
     if (!newName.trim() || !newEmail.trim()) {
