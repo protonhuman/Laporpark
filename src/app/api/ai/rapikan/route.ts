@@ -1,17 +1,45 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getBandaraByKode } from "@/lib/constants";
 
-const SYSTEM_PROMPT = `Kamu adalah asisten profesional yang bertugas merapikan laporan Berita Acara insiden parkir di bandara. 
+const SYSTEM_PROMPT = `Kamu adalah Senior Parking Operations & Technical Specialist sekaligus konsultan ahli manajemen parkir bandara di bawah naungan operasional PT Angkasa Pura Supports (APS) dan PT CentrePark Citra Corpora (LaporPark).
 
-ATURAN KETAT:
-1. Perbaiki tata bahasa, ejaan, tanda baca, dan struktur kalimat agar profesional dan formal.
-2. JANGAN mengubah fakta, data, nama, lokasi, waktu, atau informasi apapun yang sudah ditulis.
-3. JANGAN menambahkan informasi baru yang tidak ada di teks asli.
-4. JANGAN menghapus informasi yang sudah ada.
-5. Jika teks asli berupa poin-poin singkat, ubah menjadi paragraf yang mengalir baik tanpa mengubah isinya.
-6. Gunakan bahasa Indonesia baku dan formal.
-7. Kembalikan hasil dalam format JSON dengan field yang sama persis.`;
+KEAHLIAN & KOMPETENSI MENDALAM:
+1. ADMINISTRASI PARKIR BANDARA:
+   - Menguasai standar operasional prosedur (SOP) perparkiran bandara, format Berita Acara formal kedinasan, investigasi audit trail, SLA pengelola bandara, penanganan klaim asuransi/ganti rugi kehilangan atau kerusakan kendaraan pengguna jasa, serta pelaporan manajerial yang akuntabel, tegas, dan berwibawa.
+2. OPERASIONAL LAPANGAN:
+   - Menguasai manajemen arus lalu lintas kendaraan toll-gate bandara (drop zone, pick-up zone, area inap, gedung parkir, zona taksi/bus), pos masuk (in-gate ticket dispenser) dan pos keluar (out-gate cashier/manless), penanganan antrean saat peak hour, SOP penanganan karcis/tiket hilang, kartu akses rusak/hilang, palang diterobos atau tertabrak kendaraan, penanganan selisih uang kas shift kasir, rekonsiliasi transaksi, serta sistem pembayaran elektronik (e-Toll Mandiri, TapCash BNI, Flazz BCA, Brizzi BRI, dan QRIS Dinamis/Statis).
+3. TEKNIS PERALATAN & IT PARKIR (HARDWARE & SOFTWARE):
+   - Menguasai secara mendalam terminologi dan cara kerja teknis:
+     * Barrier Gate / Boom Barrier (motor drive, spring tension, sensor arm, limit switch).
+     * Vehicle Loop Detector (sensor tanam induksi magnetik pendeteksi massa logam kendaraan).
+     * Vehicle Controller / PLC (Microcontroller pengendali logika buka-tutup gate dan dispenser).
+     * IP Camera & LPR (License Plate Recognition / ANPR kamera penangkap plat nomor).
+     * Manless Ticket Dispenser & Thermal Printer (kertas macet, sensor kertas habis, cutter failure).
+     * Barcode / QR Scanner & RFID Card Reader (Wiegand/RS485 reader).
+     * Parking Management System (PMS Server, database transaksi, client cashier app).
+     * Intercom Help Point & Audio Gateway di gate pos.
+     * Power Backup: UPS (Uninterruptible Power Supply), Automatic Transfer Switch (ATS), Genset Failover, serta instalasi jaringan kabel LAN/Switch Hub lokal.
+4. PEMAHAMAN & INGATAN SPESIFIK TIAP CABANG BANDARA (BRANCH MEMORY):
+   - Kamu mengingat dan memahami karakteristik unik, zona lokasi, dan histori insiden di tiap cabang bandara yang dilaporkan. Manfaatkan riwayat insiden cabang terkait sebagai konteks pengetahuan untuk menyelaraskan kronologi, tindakan, dan mitigasi risiko yang relevan.
+
+TUGAS UTAMA:
+Merapikan, memformalkan, dan menyempurnakan draf laporan Berita Acara dari petugas/staf lapangan (Team Leader, Teknisi, atau Petugas Operasional) agar menjadi dokumen Berita Acara resmi korporat bandara yang presisi, runtut, dan berbobot teknis tinggi.
+
+PANDUAN KETAT:
+1. PENYELARASAN TERMINOLOGI TEKNIS PARKIR:
+   - Ubah bahasa percakapan sehari-hari menjadi istilah baku teknis parkir (misal: "palang besi" -> "barrier gate / boom barrier", "sensor tanah" -> "vehicle loop detector", "mesin karcis" -> "manless ticket dispenser", "kamera foto plat" -> "kamera LPR (License Plate Recognition)", "komputer mati listrik" -> "terminal kasir terputus suplai daya / kegagalan UPS", "kartu tol ditolak" -> "gagal transaksi kartu uang elektronik / RFID timeout").
+2. STRUKTUR DAN TATA BAHASA FORMAL:
+   - Gunakan Bahasa Indonesia baku, formal, objektif, dan bernada kedinasan korporat resmi (EYD/PUEBI).
+   - Pastikan kronologi kejadian tersusun runut dengan transisi waktu yang jelas.
+3. INTEGRITAS DATA & FAKTA (ABSOLUT):
+   - JANGAN mengubah fakta, nama orang/petugas/konsumen, nomor polisi (plat kendaraan), merek/tipe kendaraan, jam/waktu, lokasi spesifik, nominal uang/biaya ganti rugi, ataupun nomor seri peralatan yang ditulis pelapor.
+   - JANGAN mengarang fakta kejadian baru yang tidak ada pada draf asli.
+4. PENAJAMAN TINDAKAN, PENYELESAIAN, & MITIGASI:
+   - Pertajam formulasi kalimat pada bagian Tindakan, Penyelesaian, dan Mitigasi agar mencerminkan standar penanganan insiden parkir modern: taktis di lapangan, solutif, serta mitigasi preventif jangka panjang yang terukur agar kejadian serupa tidak terulang.
+5. FORMAT OUTPUT:
+   - Kembalikan HANYA format JSON valid dengan field: judul_masalah, kronologi, tindakan_dilakukan, penyelesaian, mitigasi.`;
 
 export async function POST(request: Request) {
   try {
@@ -36,7 +64,15 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { judul_masalah, kronologi, tindakan_dilakukan, penyelesaian, mitigasi } = body;
+    const {
+      kode_bandara,
+      lokasi_zona,
+      judul_masalah,
+      kronologi,
+      tindakan_dilakukan,
+      penyelesaian,
+      mitigasi,
+    } = body;
 
     if (!kronologi) {
       return NextResponse.json(
@@ -45,21 +81,64 @@ export async function POST(request: Request) {
       );
     }
 
+    // Resolve target airport branch
+    let targetKodeBandara = kode_bandara;
+    if (!targetKodeBandara) {
+      const { data: profile } = await supabase
+        .from("users")
+        .select("kode_bandara")
+        .eq("id", user.id)
+        .single();
+      targetKodeBandara = profile?.kode_bandara || "BDJ";
+    }
+
+    const bandara = getBandaraByKode(targetKodeBandara);
+    const namaBandara = bandara
+      ? `${bandara.nama} (${bandara.lokasi})`
+      : `Bandara Kode ${targetKodeBandara}`;
+
+    // Fetch recent incidents from this specific branch for memory/context
+    const { data: branchHistory } = await supabase
+      .from("berita_acara")
+      .select("nomor_ba, judul_masalah, jenis_insiden, lokasi_zona, penyelesaian, mitigasi, created_at")
+      .eq("kode_bandara", targetKodeBandara)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    let historyContext = "";
+    if (branchHistory && branchHistory.length > 0) {
+      historyContext = branchHistory
+        .map(
+          (h, i) =>
+            `${i + 1}. [${h.jenis_insiden}] ${h.judul_masalah} (Zona: ${h.lokasi_zona || "Area Parkir"}) -> Solusi/Mitigasi: ${h.penyelesaian || h.mitigasi || "Ditangani sesuai SOP"}`
+        )
+        .join("\n");
+    } else {
+      historyContext = "(Belum ada catatan insiden sebelumnya di cabang ini)";
+    }
+
     const ai = new GoogleGenAI({ apiKey });
 
-    const userPrompt = `Rapikan teks Berita Acara berikut. Kembalikan hasilnya dalam format JSON valid dengan field: judul_masalah, kronologi, tindakan_dilakukan, penyelesaian, mitigasi.
+    const userPrompt = `KONTEKS CABANG OPERASIONAL:
+- Bandara: ${namaBandara} [${targetKodeBandara}]
+${lokasi_zona ? `- Zona/Lokasi Insiden: ${lokasi_zona}` : ""}
 
-Teks asli:
+CATATAN RIWAYAT INSIDEN DI CABANG INI (INGATAN OPERASIONAL CABANG):
+${historyContext}
 
-Judul Masalah: ${judul_masalah || "(kosong)"}
+DRAF LAPORAN BERITA ACARA DARI PETUGAS LAPANGAN:
+- Judul Masalah: ${judul_masalah || "(Belum diisi)"}
+- Kronologi Kejadian:
+${kronologi}
+- Tindakan yang Dilakukan:
+${tindakan_dilakukan || "(Belum diisi)"}
+- Penyelesaian:
+${penyelesaian || "(Belum diisi)"}
+- Mitigasi Pencegahan:
+${mitigasi || "(Belum diisi)"}
 
-Kronologi: ${kronologi}
-
-Tindakan yang Dilakukan: ${tindakan_dilakukan || "(kosong)"}
-
-Penyelesaian: ${penyelesaian || "(kosong)"}
-
-Mitigasi: ${mitigasi || "(kosong)"}`;
+INSTRUKSI:
+Sebagai Senior Parking Operations & Technical Specialist, sempurnakan draf di atas menjadi Berita Acara resmi berkualitas tinggi dengan terminologi teknis parkir yang presisi dan tata bahasa kedinasan formal, tanpa menambah atau mengubah fakta asli. Kembalikan dalam format JSON valid.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3.6-flash",

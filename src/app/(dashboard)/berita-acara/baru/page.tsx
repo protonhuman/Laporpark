@@ -99,11 +99,15 @@ export default function CreateBAPage() {
       mitigasi,
     });
 
+    const lokasiZonaInput = (document.getElementById("lokasi_zona") as HTMLInputElement)?.value || "";
+
     try {
       const res = await fetch("/api/ai/rapikan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          kode_bandara: userKodeBandara,
+          lokasi_zona: lokasiZonaInput,
           judul_masalah: judul,
           kronologi,
           tindakan_dilakukan: tindakan,
