@@ -8,6 +8,7 @@ import {
   type JenisInsiden,
   type CreateBAPayload,
   type BeritaAcaraWithUsers,
+  type UserRole,
 } from "@/lib/types";
 import { DAFTAR_BANDARA } from "@/lib/constants";
 import PrintLayout from "../[id]/print-layout";
@@ -516,19 +517,20 @@ export default function CreateBAPage() {
                   judul_masalah: previewData.judul_masalah,
                   kronologi: previewData.kronologi,
                   tindakan_dilakukan: previewData.tindakan_dilakukan,
-                  penyelesaian: previewData.penyelesaian || null,
-                  mitigasi: previewData.mitigasi || null,
+                  penyelesaian: previewData.penyelesaian || "",
+                  mitigasi: previewData.mitigasi || "",
                   lampiran_foto: previewData.lampiran_foto || null,
-                  status: "menunggu_pemeriksaan",
+                  status: "menunggu_review",
                   dibuat_oleh: "me",
                   direview_oleh: null,
-                  disetujui_oleh: null,
                   created_at: new Date().toISOString(),
                   updated_at: new Date().toISOString(),
                   pembuat: {
                     id: "me",
+                    email: "",
+                    kode_bandara: userKodeBandara,
                     nama: userName,
-                    role: userRole,
+                    role: userRole as UserRole,
                     signature_url: userSignature,
                   }
                 }} 
