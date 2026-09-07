@@ -459,13 +459,30 @@ export default function CreateBAPage() {
 
       {/* Modal Preview */}
       {showPreview && previewData && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-          <div
-            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-            onClick={() => !loading && setShowPreview(false)}
-          />
-          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+        <>
+          <style>{`
+            @keyframes modalFadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            @keyframes modalSlideUp {
+              from { opacity: 0; transform: translateY(20px) scale(0.97); }
+              to { opacity: 1; transform: translateY(0) scale(1); }
+            }
+            .animate-modal-backdrop {
+              animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            .animate-modal-content {
+              animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+          `}</style>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            <div
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-modal-backdrop"
+              onClick={() => !loading && setShowPreview(false)}
+            />
+            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 animate-modal-content">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
               <h3 className="text-lg font-bold text-slate-800">Preview Berita Acara</h3>
               <button
                 type="button"
@@ -556,6 +573,7 @@ export default function CreateBAPage() {
             </div>
           </div>
         </div>
+        </>
       )}
     </div>
   );
