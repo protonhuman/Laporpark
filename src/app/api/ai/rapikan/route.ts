@@ -62,7 +62,7 @@ Penyelesaian: ${penyelesaian || "(kosong)"}
 Mitigasi: ${mitigasi || "(kosong)"}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+      model: "gemini-3.8-flash",
       contents: userPrompt,
       config: {
         systemInstruction: SYSTEM_PROMPT,
