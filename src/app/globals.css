@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ================================================================
    Lapor Park — Global Styles & Design System
-   Neumorphism (Soft UI) Light Theme
+   Neumorphism (Soft UI) Dual Theme (Light & Dark)
    ================================================================ */
 
 :root {
@@ -17,6 +19,20 @@
   
   --shadow-light: #ffffff;
   --shadow-dark: #a3b1c6;
+}
+
+.dark {
+  --background: #14181f; /* Sleek modern dark slate */
+  --foreground: #94a3b8; /* Slate 400 */
+  --surface: #1b2029;    /* Dark card surface */
+  --surface-hover: #222834;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #38bdf8;     /* Sky 400 */
+  --accent-hover: #0ea5e9;
+  --accent-muted: rgba(56, 189, 248, 0.15);
+  
+  --shadow-light: #232a36; /* Highlight on top-left */
+  --shadow-dark: #0b0d12;  /* Shadow on bottom-right */
 }
 
 @theme inline {
@@ -63,6 +79,9 @@ body {
   box-shadow: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
   border: none;
 }
+.dark .neo-card {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
 
 .neo-card-hover {
   transition: all 0.2s ease;
@@ -78,6 +97,9 @@ body {
   box-shadow: inset 6px 6px 10px var(--shadow-dark), inset -6px -6px 10px var(--shadow-light);
   border: none;
 }
+.dark .neo-inset {
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
 
 /* Neumorphism button */
 .neo-button {
@@ -91,6 +113,9 @@ body {
   align-items: center;
   justify-content: center;
 }
+.dark .neo-button {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
 
 .neo-button:hover {
   box-shadow: 8px 8px 12px var(--shadow-dark), -8px -8px 12px var(--shadow-light);
@@ -98,6 +123,23 @@ body {
 
 .neo-button:active {
   box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+}
+
+/* Global text color adaptations for Dark Mode */
+.dark h1, .dark h2, .dark h3, .dark h4 {
+  color: #f8fafc;
+}
+.dark .text-slate-800 {
+  color: #f1f5f9;
+}
+.dark .text-slate-700 {
+  color: #e2e8f0;
+}
+.dark .text-slate-600 {
+  color: #cbd5e1;
+}
+.dark .text-slate-500 {
+  color: #94a3b8;
 }
 
 /* Gradient text */

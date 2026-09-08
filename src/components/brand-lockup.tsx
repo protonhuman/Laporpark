@@ -19,10 +19,10 @@ export default function BrandLockup({
         <div className="flex items-center gap-3 w-full px-1">
           <LaporParkLogo size="md" interactive={true} />
           <div className="flex flex-col min-w-0">
-            <h1 className="text-lg font-extrabold text-slate-800 tracking-tight leading-none">
+            <h1 className="text-lg font-extrabold text-slate-800 dark:text-white tracking-tight leading-none">
               Lapor<span className="text-emerald-500">Park</span>
             </h1>
-            <p className="text-[11px] text-slate-500 font-medium truncate mt-1">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate mt-1">
               Berita Acara Digital
             </p>
           </div>
@@ -30,11 +30,11 @@ export default function BrandLockup({
 
         {/* Corporate Identity Lockup: APS & CentrePark - Presisi Frame */}
         <div className="mt-3.5 w-full">
-          <div className="relative group overflow-hidden rounded-2xl bg-white/45 border border-white/70 shadow-[inset_1px_1px_2px_rgba(255,255,255,0.8),1px_2px_6px_rgba(163,177,198,0.2)] backdrop-blur-md p-2 transition-all duration-300 hover:bg-white/60 hover:shadow-md">
+          <div className="relative group overflow-hidden rounded-2xl bg-white/45 dark:bg-white/[0.03] border border-white/70 dark:border-white/[0.08] shadow-[inset_1px_1px_2px_rgba(255,255,255,0.8),1px_2px_6px_rgba(163,177,198,0.2)] dark:shadow-none backdrop-blur-md p-2 transition-all duration-300 hover:bg-white/60 dark:hover:bg-white/[0.06]">
             {/* Exactly Balanced Logos Row */}
             <div className="grid grid-cols-2 items-center gap-2 px-1 py-1">
               {/* Angkasa Pura Supports */}
-              <div className="flex items-center justify-center h-8 px-1.5 rounded-lg bg-white/50 border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] transition-transform duration-200 hover:scale-105">
+              <div className="flex items-center justify-center h-8 px-1.5 rounded-lg bg-white/50 dark:bg-white/90 border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] transition-transform duration-200 hover:scale-105">
                 <img
                   src="/logo-aps.png"
                   alt="Angkasa Pura Supports"
@@ -43,7 +43,7 @@ export default function BrandLockup({
               </div>
 
               {/* Centre Park */}
-              <div className="flex items-center justify-center h-8 px-1.5 rounded-lg bg-white/50 border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] transition-transform duration-200 hover:scale-105">
+              <div className="flex items-center justify-center h-8 px-1.5 rounded-lg bg-white/50 dark:bg-white/90 border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] transition-transform duration-200 hover:scale-105">
                 <img
                   src="/logo-cp.png"
                   alt="Centre Park"

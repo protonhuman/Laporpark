@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import BrandLockup from "@/components/brand-lockup";
 import LaporParkLogo from "@/components/lapor-park-logo";
+import ThemeToggle from "@/components/theme-toggle";
 import { useState } from "react";
 
 interface SidebarProps {
@@ -105,7 +106,7 @@ export default function Sidebar({ user }: SidebarProps) {
               className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 active
                   ? "bg-[#00ffcc]/10 text-[#00ffcc] shadow-sm shadow-[#00ffcc]/10"
-                  : "text-slate-500 hover:text-slate-800 hover:bg-white/[0.04]"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 hover:bg-white/40 dark:hover:bg-white/[0.04]"
               }`}
             >
               <item.icon
@@ -145,12 +146,13 @@ export default function Sidebar({ user }: SidebarProps) {
             </span>
           </div>
         </div>
-        <div className="space-y-0.5">
+        <div className="space-y-1">
+          <ThemeToggle variant="sidebar" className="mb-0.5" />
           <ChangePasswordModal />
           <form action={signOut}>
             <button
               type="submit"
-              className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
             >
               <LogOut className="w-4 h-4 text-slate-400" />
               Keluar
@@ -164,12 +166,12 @@ export default function Sidebar({ user }: SidebarProps) {
   return (
     <>
       {/* Mobile Top Header Bar */}
-      <header className="lg:hidden fixed top-0 inset-x-0 h-14 z-30 flex items-center justify-between px-3 bg-white/80 backdrop-blur-xl border-b border-slate-200/70 shadow-sm print:hidden">
+      <header className="lg:hidden fixed top-0 inset-x-0 h-14 z-30 flex items-center justify-between px-3 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border-b border-slate-200/70 dark:border-white/10 shadow-sm print:hidden">
         <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
-            className="p-2 -ml-1 rounded-xl text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
+            className="p-2 -ml-1 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors cursor-pointer"
             aria-label="Buka Menu"
           >
             <Menu className="w-5 h-5" />
@@ -179,14 +181,15 @@ export default function Sidebar({ user }: SidebarProps) {
             className="flex items-center gap-2"
           >
             <LaporParkLogo size="sm" interactive={false} />
-            <span className="font-extrabold text-base text-slate-800 tracking-tight leading-none">
+            <span className="font-extrabold text-base text-slate-800 dark:text-white tracking-tight leading-none">
               Lapor<span className="text-emerald-500">Park</span>
             </span>
           </Link>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-slate-200/70 text-slate-700 border border-slate-300/60">
+          <ThemeToggle variant="icon" />
+          <span className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-slate-200/70 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300/60 dark:border-white/10">
             {user.role === "superadmin" ? "Semua Bandara" : (user.kode_bandara || "BDJ")}
           </span>
         </div>
@@ -201,13 +204,13 @@ export default function Sidebar({ user }: SidebarProps) {
       )}
 
       {/* Sidebar - Desktop */}
-      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 border-r border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] bg-background neo-card backdrop-blur-xl z-40 print:hidden">
+      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 border-r border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] dark:shadow-[4px_0_20px_rgba(0,0,0,0.6)] dark:border-white/[0.05] bg-background neo-card backdrop-blur-xl z-40 print:hidden">
         {sidebarContent}
       </aside>
 
       {/* Sidebar - Mobile */}
       <aside
-        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 border-r border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] bg-background neo-card backdrop-blur-xl transform transition-transform duration-300 ease-out print:hidden ${
+        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 border-r border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] dark:shadow-[4px_0_20px_rgba(0,0,0,0.6)] dark:border-white/[0.05] bg-background neo-card backdrop-blur-xl transform transition-transform duration-300 ease-out print:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
