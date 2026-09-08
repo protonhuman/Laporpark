@@ -119,7 +119,7 @@ export default async function BeritaAcaraListPage({
       <div className="neo-card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           {userRole === "superadmin" && (
-            <div>
+            <div className="w-full sm:w-[280px] sm:max-w-[280px] shrink-0">
               <BandaraFilter userRole={userRole} />
             </div>
           )}

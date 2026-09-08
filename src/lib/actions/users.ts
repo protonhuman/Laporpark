@@ -30,7 +30,7 @@ export async function createUserAction(payload: CreateUserPayload) {
 
     const { data: profile } = await supabase
       .from("users")
-      .select("role")
+      .select("role, kode_bandara")
       .eq("id", currentUser.id)
       .single();
 
@@ -38,11 +38,17 @@ export async function createUserAction(payload: CreateUserPayload) {
       return { error: "Akses ditolak. Hanya supervisor dan superadmin yang dapat membuat pengguna baru." };
     }
 
-    // 2. Create the user using admin client
+    // 2. Validate kode bandara — supervisor can only create users for their own airport
     const adminClient = createAdminClient();
     const passwordToUse = payload.password || "123123";
     const kodeBandara = extractKodeBandaraFromEmail(payload.email);
     const roleToUse = kodeBandara === "ALL" ? "superadmin" : payload.role;
+
+    if (profile.role === "supervisor" && profile.kode_bandara && kodeBandara !== profile.kode_bandara) {
+      return {
+        error: `Anda hanya dapat membuat akun untuk bandara ${profile.kode_bandara}. Email harus menggunakan domain @laporpark.${profile.kode_bandara.toLowerCase()}.id`,
+      };
+    }
 
     const { data: newUser, error: createError } = await adminClient.auth.admin.createUser({
       email: payload.email,

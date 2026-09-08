@@ -197,7 +197,7 @@ export default function PrintLayout({ ba, checker, approver, previewMode = false
                           </div>
                         )}
                         <span className="font-bold underline text-[11pt] leading-tight">{ba.pembuat?.nama ?? "—"}</span>
-                        <span className="text-[10pt] text-gray-600 leading-tight">Carpark Manager CP</span>
+                        <span className="text-[10pt] text-gray-600 leading-tight">Carpark Manager</span>
                       </div>
                     </td>
                     {/* Mengetahui (Supervisor) */}
@@ -265,7 +265,7 @@ export default function PrintLayout({ ba, checker, approver, previewMode = false
                               </div>
                             )}
                             <span className="font-bold underline text-[11pt] leading-tight">{checker.nama}</span>
-                            <span className="text-[10pt] text-gray-600 leading-tight">Carpark Manager CP</span>
+                            <span className="text-[10pt] text-gray-600 leading-tight">Carpark Manager</span>
                           </>
                         ) : (
                           <span className="text-gray-400 italic text-[10pt] mb-2">Belum Diperiksa</span>

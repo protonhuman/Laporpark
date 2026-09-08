@@ -75,23 +75,22 @@ export default function Sidebar({ user }: SidebarProps) {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Brand & Corporate Lockup */}
-      <div className="px-4 py-4.5 border-b border-slate-300/40 shadow-[0_4px_12px_rgba(163,177,198,0.25)] bg-gradient-to-b from-white/30 to-transparent">
-        <div className="flex items-start justify-between">
-          <Link
-            href={user.role === "carpark_manager" || user.role === "supervisor" ? "/dashboard" : "/berita-acara"}
-            className="flex-1 block group"
-          >
-            <BrandLockup variant="sidebar" />
-          </Link>
-          
-          {/* Close Button for Mobile inside Sidebar */}
-          <button
-            onClick={() => setMobileOpen(false)}
-            className="lg:hidden p-1.5 -mr-1 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/50 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+      <div className="relative px-3 py-4 border-b border-slate-300/40 shadow-[0_4px_12px_rgba(163,177,198,0.25)] bg-gradient-to-b from-white/30 to-transparent">
+        {/* Close Button for Mobile inside Sidebar */}
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="lg:hidden absolute top-3.5 right-3 p-1.5 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/50 transition-colors z-10 cursor-pointer"
+          aria-label="Tutup Menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <Link
+          href={user.role === "carpark_manager" || user.role === "supervisor" ? "/dashboard" : "/berita-acara"}
+          className="block w-full group"
+        >
+          <BrandLockup variant="sidebar" />
+        </Link>
       </div>
 
       {/* Navigation */}
@@ -126,30 +125,38 @@ export default function Sidebar({ user }: SidebarProps) {
       </nav>
 
       {/* User info + Logout */}
-      <div className="px-3 py-4 border-t border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)]">
-        <div className="px-3 py-3 rounded-xl bg-white/[0.03] mb-2 text-center">
-          <p className="text-sm font-medium text-slate-800 truncate">
+      <div className="px-3 py-4 border-t border-slate-300/40 shadow-[0_-4px_10px_rgba(163,177,198,0.2)]">
+        <div className="w-full p-3 rounded-2xl bg-white/45 dark:bg-white/[0.03] border border-white/70 dark:border-white/[0.08] shadow-[inset_1px_1px_2px_rgba(255,255,255,0.8),1px_2px_6px_rgba(163,177,198,0.2)] backdrop-blur-md mb-2 flex flex-col items-center justify-center text-center">
+          <p
+            className="text-sm font-semibold text-slate-800 dark:text-slate-100 text-center leading-snug break-words max-w-full px-1"
+            title={user.nama}
+          >
             {user.nama}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5 mb-1.5 font-medium">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-2 font-medium text-center">
             {ROLE_LABELS[user.role]}
           </p>
-          <div className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-200/50 dark:bg-white/[0.04] text-[10px] font-semibold text-slate-600 border border-slate-300/50 dark:border-white/[0.08]">
-            {user.role === "superadmin" ? "Semua Bandara" : (getBandaraByKode(user.kode_bandara)?.nama || user.kode_bandara || "BDJ")}
+          <div className="flex justify-center w-full">
+            <span
+              className="inline-block max-w-full px-2.5 py-1 rounded-lg bg-slate-200/70 dark:bg-white/[0.06] text-[11px] font-medium text-slate-600 dark:text-slate-300 border border-slate-300/70 dark:border-white/[0.08] text-center leading-tight break-words"
+              title={user.role === "superadmin" ? "Semua Bandara" : (getBandaraByKode(user.kode_bandara)?.nama || user.kode_bandara || "BDJ")}
+            >
+              {user.role === "superadmin" ? "Semua Bandara" : (getBandaraByKode(user.kode_bandara)?.nama || user.kode_bandara || "BDJ")}
+            </span>
           </div>
         </div>
-        <ChangePasswordModal />
-        <form action={signOut}>
-          <button
-            type="submit"
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-500 hover:text-red-400 hover:bg-red-500/5 transition-all duration-200 cursor-pointer"
-          >
-            <LogOut className="w-4 h-4" />
-            Keluar
-          </button>
-        </form>
-
-
+        <div className="space-y-0.5">
+          <ChangePasswordModal />
+          <form action={signOut}>
+            <button
+              type="submit"
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
+            >
+              <LogOut className="w-4 h-4 text-slate-400" />
+              Keluar
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

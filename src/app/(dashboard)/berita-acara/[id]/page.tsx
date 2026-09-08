@@ -67,11 +67,13 @@ export default async function BeritaAcaraDetailPage({
     .single();
 
   const canEdit =
-    (currentProfile?.role === "carpark_manager" ||
+    (currentProfile?.role === "superadmin" ||
+    currentProfile?.role === "carpark_manager" ||
     currentProfile?.role === "supervisor") && 
     (ba.status !== "disetujui" && ba.status !== "selesai");
-  const canDelete = currentProfile?.role === "supervisor";
+  const canDelete = currentProfile?.role === "superadmin" || currentProfile?.role === "supervisor";
   const canManagePhotos =
+    currentProfile?.role === "superadmin" ||
     currentProfile?.role === "supervisor" ||
     currentProfile?.role === "carpark_manager" ||
     ba.dibuat_oleh === authUser!.id;
@@ -148,8 +150,8 @@ export default async function BeritaAcaraDetailPage({
 
       {/* Meta info cards */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="neo-card p-4 col-span-2 sm:col-span-1">
-          <div className="flex items-center gap-2 text-slate-500 mb-1">
+        <div className="neo-card p-4 col-span-2 sm:col-span-1 flex flex-col items-center justify-center text-center">
+          <div className="flex items-center justify-center gap-1.5 text-slate-500 mb-1">
             <Building2 className="w-3.5 h-3.5" />
             <span className="text-xs">Bandara</span>
           </div>
@@ -160,8 +162,8 @@ export default async function BeritaAcaraDetailPage({
             })()}
           </p>
         </div>
-        <div className="neo-card p-4">
-          <div className="flex items-center gap-2 text-slate-500 mb-1">
+        <div className="neo-card p-4 flex flex-col items-center justify-center text-center">
+          <div className="flex items-center justify-center gap-1.5 text-slate-500 mb-1">
             <Calendar className="w-3.5 h-3.5" />
             <span className="text-xs">Tanggal</span>
           </div>
@@ -173,22 +175,22 @@ export default async function BeritaAcaraDetailPage({
             })}
           </p>
         </div>
-        <div className="neo-card p-4">
-          <div className="flex items-center gap-2 text-slate-500 mb-1">
+        <div className="neo-card p-4 flex flex-col items-center justify-center text-center">
+          <div className="flex items-center justify-center gap-1.5 text-slate-500 mb-1">
             <Clock className="w-3.5 h-3.5" />
             <span className="text-xs">Waktu</span>
           </div>
           <p className="text-sm text-slate-800 font-medium">{ba.waktu_kejadian}</p>
         </div>
-        <div className="neo-card p-4">
-          <div className="flex items-center gap-2 text-slate-500 mb-1">
+        <div className="neo-card p-4 flex flex-col items-center justify-center text-center">
+          <div className="flex items-center justify-center gap-1.5 text-slate-500 mb-1">
             <MapPin className="w-3.5 h-3.5" />
             <span className="text-xs">Lokasi</span>
           </div>
           <p className="text-sm text-slate-800 font-medium">{ba.lokasi_zona}</p>
         </div>
-        <div className="neo-card p-4">
-          <div className="flex items-center gap-2 text-slate-500 mb-1">
+        <div className="neo-card p-4 flex flex-col items-center justify-center text-center">
+          <div className="flex items-center justify-center gap-1.5 text-slate-500 mb-1">
             <Tag className="w-3.5 h-3.5" />
             <span className="text-xs">Jenis</span>
           </div>
@@ -265,9 +267,29 @@ export default async function BeritaAcaraDetailPage({
             ))}
           </div>
         ) : (
-          <p className="text-xs text-slate-500 italic py-2">
-            Belum ada foto dokumentasi. Anda dapat menambahkannya melalui tombol &quot;Kelola Lampiran Foto&quot;.
-          </p>
+          <div className="py-6 px-4 rounded-xl border border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center text-center">
+            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center text-slate-400 mb-2">
+              <ImageIcon className="w-5 h-5" />
+            </div>
+            <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              Belum ada foto dokumentasi
+            </p>
+            {canManagePhotos ? (
+              <>
+                <p className="text-xs text-slate-500 max-w-sm mb-4">
+                  Tambahkan foto bukti kerusakan, kondisi lapangan, atau dokumentasi pendukung lainnya.
+                </p>
+                <ManagePhotosModal
+                  baId={ba.id}
+                  initialPhotos={ba.lampiran_foto || []}
+                />
+              </>
+            ) : (
+              <p className="text-xs text-slate-500 max-w-sm">
+                Tidak ada foto yang dilampirkan pada Berita Acara ini.
+              </p>
+            )}
+          </div>
         )}
       </div>
 

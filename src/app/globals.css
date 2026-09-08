@@ -118,6 +118,28 @@ body {
   animation: shimmer 2s ease-in-out infinite;
 }
 
+/* Dropdown slide-in animation */
+@keyframes dropdown-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+    filter: blur(2px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+.animate-dropdown-in {
+  animation: dropdown-in 0.25s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  transform-origin: top center;
+}
+
 /* Focus ring utility */
 .focus-ring {
   outline: none;

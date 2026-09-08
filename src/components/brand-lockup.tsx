@@ -30,7 +30,7 @@ export default function BrandLockup({
 
         {/* Corporate Identity Lockup: APS & CentrePark - Presisi Frame */}
         <div className="mt-3.5 w-full">
-          <div className="relative group overflow-hidden rounded-xl bg-white/40 border border-white/60 shadow-[inset_1px_1px_3px_rgba(255,255,255,0.8),inset_-1px_-1px_3px_rgba(163,177,198,0.3),2px_2px_6px_rgba(163,177,198,0.25)] backdrop-blur-md p-2 transition-all duration-300 hover:bg-white/60 hover:shadow-md">
+          <div className="relative group overflow-hidden rounded-2xl bg-white/45 border border-white/70 shadow-[inset_1px_1px_2px_rgba(255,255,255,0.8),1px_2px_6px_rgba(163,177,198,0.2)] backdrop-blur-md p-2 transition-all duration-300 hover:bg-white/60 hover:shadow-md">
             {/* Exactly Balanced Logos Row */}
             <div className="grid grid-cols-2 items-center gap-2 px-1 py-1">
               {/* Angkasa Pura Supports */}

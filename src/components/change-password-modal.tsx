@@ -61,9 +61,9 @@ export default function ChangePasswordModal() {
       <button
         type="button"
         onClick={handleOpen}
-        className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-500 hover:text-accent hover:bg-white/[0.04] transition-all duration-200 cursor-pointer mb-1"
+        className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-500/10 transition-all duration-200 cursor-pointer"
       >
-        <KeyRound className="w-4 h-4 text-slate-500" />
+        <KeyRound className="w-4 h-4 text-slate-400" />
         Ganti Password
       </button>
 

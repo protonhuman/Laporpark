@@ -210,8 +210,8 @@ export async function deleteBeritaAcara(baId: string) {
     .eq("id", user.id)
     .single();
 
-  if (!profile || profile.role !== "supervisor") {
-    return { error: "Hanya Supervisor yang dapat menghapus BA." };
+  if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
+    return { error: "Hanya Supervisor atau Superadmin yang dapat menghapus BA." };
   }
 
   const { error } = await supabase
@@ -340,8 +340,9 @@ export async function updateLampiranFotoAction(
 
     if (!ba) return { error: "Berita Acara tidak ditemukan." };
 
-    // Allowed if user is supervisor, carpark_manager, or the creator of the BA
+    // Allowed if user is superadmin, supervisor, carpark_manager, or the creator of the BA
     const isAuthorized =
+      profile?.role === "superadmin" ||
       profile?.role === "supervisor" ||
       profile?.role === "carpark_manager" ||
       ba.dibuat_oleh === authUser.id;
