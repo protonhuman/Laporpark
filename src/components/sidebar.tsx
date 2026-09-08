@@ -95,7 +95,7 @@ export default function Sidebar({ user }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
         {navItems.map((item) => {
           const active = isActive(item.href);
           return (
@@ -103,22 +103,29 @@ export default function Sidebar({ user }: SidebarProps) {
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+              className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ease-out active:scale-[0.98] ${
                 active
-                  ? "bg-[#00ffcc]/10 text-[#00ffcc] shadow-sm shadow-[#00ffcc]/10"
-                  : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 hover:bg-white/40 dark:hover:bg-white/[0.04]"
+                  ? "bg-teal-600/10 dark:bg-[#00ffcc]/15 text-teal-700 dark:text-[#00ffcc] shadow-[0_2px_10px_rgba(13,148,136,0.12)] dark:shadow-[0_2px_14px_rgba(0,255,204,0.18)] font-semibold"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/[0.05] hover:translate-x-1"
               }`}
             >
+              {/* Active Indicator Bar */}
+              {active && (
+                <span
+                  className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-5 rounded-full bg-teal-600 dark:bg-[#00ffcc] shadow-[0_0_8px_rgba(13,148,136,0.5)] dark:shadow-[0_0_10px_rgba(0,255,204,0.8)]"
+                  aria-hidden="true"
+                />
+              )}
               <item.icon
-                className={`w-[18px] h-[18px] ${
+                className={`w-[18px] h-[18px] transition-transform duration-200 ${
                   active
-                    ? "text-[#00ffcc]"
-                    : "text-slate-500 group-hover:text-slate-600"
+                    ? "text-teal-600 dark:text-[#00ffcc] scale-105 drop-shadow-[0_0_6px_rgba(0,255,204,0.4)]"
+                    : "text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-200 group-hover:scale-110"
                 }`}
               />
-              {item.label}
+              <span className="transition-colors duration-150">{item.label}</span>
               {active && (
-                <ChevronRight className="w-3.5 h-3.5 ml-auto text-sky-500/50" />
+                <ChevronRight className="w-3.5 h-3.5 ml-auto text-teal-600/70 dark:text-[#00ffcc]/70 transition-transform duration-200 group-hover:translate-x-0.5" />
               )}
             </Link>
           );
