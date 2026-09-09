@@ -15,10 +15,10 @@ export const metadata: Metadata = {
     "Sistem pelaporan insiden parkir digital untuk bandara-bandara di Indonesia. Berita Acara terstruktur dengan alur approval dan audit trail.",
   icons: {
     icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.svg?v=2", type: "image/svg+xml" },
     ],
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    shortcut: "/icon.svg?v=2",
+    apple: "/icon.svg?v=2",
   },
 };
 
