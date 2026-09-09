@@ -245,38 +245,38 @@ export default async function BeritaAcaraListPage({
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] text-center">
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
+              <tr className="border-b border-slate-300/50 dark:border-white/[0.08] text-center">
+                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
                   Nomor BA
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
+                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
                   Judul Masalah
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
+                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
                   Jenis
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
+                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
                   Status
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
+                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
                   Dibuat Oleh
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider text-center">
+                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
                   Tanggal
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04]">
+            <tbody className="divide-y divide-slate-200/40 dark:divide-white/[0.04]">
               {items && items.length > 0 ? (
                 items.map((ba) => (
                   <tr
                     key={ba.id}
-                    className="hover:bg-white/[0.02] transition-colors"
+                    className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
                   >
                     <td className="px-6 py-4 text-center">
                       <Link
                         href={`/berita-acara/${ba.id}`}
-                        className="font-mono text-xs text-sky-400 hover:text-sky-300"
+                        className="font-mono text-xs font-medium text-sky-600 dark:text-sky-400 hover:text-sky-500 hover:underline"
                       >
                         {ba.nomor_ba}
                       </Link>
@@ -284,27 +284,31 @@ export default async function BeritaAcaraListPage({
                     <td className="px-6 py-4 text-center">
                       <Link
                         href={`/berita-acara/${ba.id}`}
-                        className="text-slate-800 font-medium hover:text-sky-300 transition-colors"
+                        className="text-slate-800 dark:text-slate-200 font-medium hover:text-sky-600 dark:hover:text-sky-400 transition-colors line-clamp-1"
                       >
                         {ba.judul_masalah}
                       </Link>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 text-xs text-center">
-                      {
-                        JENIS_INSIDEN_LABELS[
-                          ba.jenis_insiden as keyof typeof JENIS_INSIDEN_LABELS
-                        ]
-                      }
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex items-center justify-center">
+                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-lg text-xs font-medium bg-slate-200/60 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 border border-slate-300/40 dark:border-white/[0.08] whitespace-nowrap shadow-sm">
+                          {
+                            JENIS_INSIDEN_LABELS[
+                              ba.jenis_insiden as keyof typeof JENIS_INSIDEN_LABELS
+                            ]
+                          }
+                        </span>
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <div className="flex justify-center">
+                      <div className="flex items-center justify-center">
                         <StatusBadge status={ba.status} />
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 text-xs text-center">
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-xs text-center whitespace-nowrap">
                       {ba.pembuat?.nama ?? "—"}
                     </td>
-                    <td className="px-6 py-4 text-slate-500 text-xs text-center whitespace-nowrap">
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-xs text-center whitespace-nowrap">
                       {new Date(ba.created_at).toLocaleDateString("id-ID", {
                         day: "numeric",
                         month: "short",
@@ -329,7 +333,7 @@ export default async function BeritaAcaraListPage({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] flex items-center justify-between">
+          <div className="px-6 py-4 border-t border-slate-300/50 dark:border-white/[0.08] flex items-center justify-between">
             <p className="text-xs text-slate-500">
               Halaman {page} dari {totalPages}
             </p>
@@ -337,7 +341,7 @@ export default async function BeritaAcaraListPage({
               {page > 1 && (
                 <Link
                   href={buildUrl({ page: String(page - 1) })}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] hover:bg-white/[0.04] transition-colors"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-200/50 dark:bg-white/[0.05] hover:bg-slate-300/50 dark:hover:bg-white/[0.1] active:scale-95 transition-all"
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
                   Prev
@@ -346,7 +350,7 @@ export default async function BeritaAcaraListPage({
               {page < totalPages && (
                 <Link
                   href={buildUrl({ page: String(page + 1) })}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)] hover:bg-white/[0.04] transition-colors"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-200/50 dark:bg-white/[0.05] hover:bg-slate-300/50 dark:hover:bg-white/[0.1] active:scale-95 transition-all"
                 >
                   Next
                   <ChevronRight className="w-3.5 h-3.5" />
