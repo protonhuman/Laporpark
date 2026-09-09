@@ -108,10 +108,10 @@ export default async function BeritaAcaraListPage({
         </div>
         <Link
           href="/berita-acara/baru"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-slate-800 text-sm font-medium hover:from-sky-400 hover:to-indigo-500 transition-all shadow-lg shadow-sky-500/20"
+          className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-sky-500/15 via-indigo-500/10 to-sky-500/15 dark:from-sky-500/25 dark:via-indigo-500/20 dark:to-sky-500/25 text-sky-700 dark:text-sky-300 border border-sky-500/30 dark:border-sky-400/30 shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)] hover:shadow-[6px_6px_14px_var(--shadow-dark),-6px_-6px_14px_var(--shadow-light)] hover:border-sky-500/50 hover:from-sky-500/25 hover:to-indigo-500/25 active:scale-95 active:shadow-[inset_3px_3px_6px_var(--shadow-dark),inset_-3px_-3px_6px_var(--shadow-light)] transition-all duration-200 cursor-pointer select-none"
         >
-          <FilePlus className="w-4 h-4" />
-          Buat BA Baru
+          <FilePlus className="w-4 h-4 text-sky-600 dark:text-sky-400 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-200" />
+          <span>Buat BA Baru</span>
         </Link>
       </div>
 

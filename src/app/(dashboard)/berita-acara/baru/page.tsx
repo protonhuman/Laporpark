@@ -356,9 +356,9 @@ export default function CreateBAPage() {
                 <button
                   type="button"
                   onClick={handleUndoAi}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-amber-700 bg-amber-500/10 hover:bg-amber-500/20 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 active:scale-95 active:shadow-inner transition-all duration-150 cursor-pointer"
                 >
-                  <Undo2 className="w-4 h-4" />
+                  <Undo2 className="w-3.5 h-3.5" />
                   Undo AI
                 </button>
               )}
@@ -366,14 +366,14 @@ export default function CreateBAPage() {
                 type="button"
                 onClick={handleAiRapikan}
                 disabled={aiLoading}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-500 hover:to-fuchsia-500 disabled:opacity-50 transition-all shadow-[0_4px_15px_rgba(139,92,246,0.3)] cursor-pointer"
+                className="group relative inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-violet-500/15 via-indigo-500/10 to-violet-500/15 dark:from-violet-500/25 dark:via-indigo-500/20 dark:to-violet-500/25 text-violet-700 dark:text-violet-300 border border-violet-500/30 dark:border-violet-400/30 shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)] hover:shadow-[6px_6px_14px_var(--shadow-dark),-6px_-6px_14px_var(--shadow-light)] hover:border-violet-500/50 hover:from-violet-500/25 hover:to-indigo-500/25 active:scale-95 active:shadow-[inset_3px_3px_6px_var(--shadow-dark),inset_-3px_-3px_6px_var(--shadow-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 cursor-pointer select-none"
               >
                 {aiLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin text-violet-600 dark:text-violet-400" />
                 ) : (
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" />
                 )}
-                {aiLoading ? "Merapikan..." : "Minta AI Merapikan"}
+                <span>{aiLoading ? "Merapikan..." : "Minta AI Merapikan"}</span>
               </button>
             </div>
           </div>
@@ -463,10 +463,10 @@ export default function CreateBAPage() {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold hover:from-sky-400 hover:to-indigo-500 transition-all shadow-[0_4px_15px_rgba(14,165,233,0.3)] cursor-pointer"
+            className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500/15 via-indigo-500/10 to-sky-500/15 dark:from-sky-500/25 dark:via-indigo-500/20 dark:to-sky-500/25 text-sky-700 dark:text-sky-300 font-semibold border border-sky-500/30 dark:border-sky-400/30 shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)] hover:shadow-[6px_6px_14px_var(--shadow-dark),-6px_-6px_14px_var(--shadow-light)] hover:border-sky-500/50 hover:from-sky-500/25 hover:to-indigo-500/25 active:scale-95 active:shadow-[inset_3px_3px_6px_var(--shadow-dark),inset_-3px_-3px_6px_var(--shadow-light)] transition-all duration-200 cursor-pointer select-none"
           >
-            <Eye className="w-4 h-4" />
-            Preview Laporan
+            <Eye className="w-4 h-4 text-sky-600 dark:text-sky-400 group-hover:scale-110 transition-transform duration-200" />
+            <span>Preview Laporan</span>
           </button>
         </div>
       </form>
@@ -557,17 +557,17 @@ export default function CreateBAPage() {
                 type="button"
                 onClick={handleConfirmSubmit}
                 disabled={loading}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold hover:from-emerald-400 hover:to-teal-500 disabled:opacity-50 transition-all shadow-md"
+                className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-emerald-500/20 dark:from-emerald-500/30 dark:via-teal-500/20 dark:to-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-500/30 dark:border-emerald-400/30 shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)] hover:shadow-[6px_6px_14px_var(--shadow-dark),-6px_-6px_14px_var(--shadow-light)] hover:border-emerald-500/50 hover:from-emerald-500/30 hover:to-teal-500/25 active:scale-95 active:shadow-[inset_3px_3px_6px_var(--shadow-dark),inset_-3px_-3px_6px_var(--shadow-light)] disabled:opacity-50 transition-all duration-200 cursor-pointer select-none"
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Menyimpan...
+                    <Loader2 className="w-4 h-4 animate-spin text-emerald-600 dark:text-emerald-400" />
+                    <span>Menyimpan...</span>
                   </>
                 ) : (
                   <>
-                    <Send className="w-4 h-4" />
-                    Konfirmasi & Kirim
+                    <Send className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                    <span>Konfirmasi & Kirim</span>
                   </>
                 )}
               </button>

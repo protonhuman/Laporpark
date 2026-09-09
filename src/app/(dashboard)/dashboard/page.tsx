@@ -179,10 +179,10 @@ export default async function DashboardPage({
         {userRole !== "superadmin" && (
           <Link
             href="/berita-acara/baru"
-            className="neo-card neo-card-hover p-6 flex items-center gap-5 group"
+            className="neo-card neo-card-hover p-6 flex items-center gap-5 group active:scale-[0.98] active:shadow-[inset_4px_4px_8px_var(--shadow-dark),inset_-4px_-4px_8px_var(--shadow-light)] transition-all duration-200 cursor-pointer select-none border border-sky-500/10 hover:border-sky-500/30"
           >
-            <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#39ff14]/20 to-[#00ffcc]/20 group-hover:from-[#39ff14]/30 group-hover:to-[#00ffcc]/30 transition-all shadow-[0_0_15px_rgba(57,255,20,0.1)] group-hover:shadow-[0_0_20px_rgba(57,255,20,0.3)]">
-              <FilePlus className="w-7 h-7 text-[#39ff14]" />
+            <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 group-hover:scale-105 group-hover:bg-sky-500/15 transition-all shadow-[2px_2px_6px_var(--shadow-dark),-2px_-2px_6px_var(--shadow-light)]">
+              <FilePlus className="w-7 h-7" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-semibold text-slate-800">
@@ -190,7 +190,7 @@ export default async function DashboardPage({
               </p>
               <p className="text-xs text-slate-500">Laporkan insiden baru</p>
             </div>
-            <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-500 transition-colors" />
+            <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-500 group-hover:translate-x-1 transition-all" />
           </Link>
         )}
 
