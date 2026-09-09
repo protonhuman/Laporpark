@@ -13,6 +13,13 @@ export const metadata: Metadata = {
   title: "Lapor Park — Berita Acara Parkir Digital",
   description:
     "Sistem pelaporan insiden parkir digital untuk bandara-bandara di Indonesia. Berita Acara terstruktur dengan alur approval dan audit trail.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export const viewport: import("next").Viewport = {
