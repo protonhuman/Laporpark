@@ -14,6 +14,7 @@ import {
   Filter,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
 
 const PAGE_SIZE = 10;
@@ -115,60 +116,85 @@ export default async function BeritaAcaraListPage({
         </Link>
       </div>
 
-      {/* Filters */}
-      <div className="neo-card p-4">
-        <div className="flex flex-col sm:flex-row gap-3">
+      {/* Filters & Search */}
+      <div className="neo-card p-4 sm:p-5 space-y-4">
+        {/* Top: Airport Filter (Superadmin) + Search Bar */}
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch">
           {userRole === "superadmin" && (
-            <div className="w-full sm:w-[280px] sm:max-w-[280px] shrink-0">
+            <div className="w-full sm:w-[260px] shrink-0">
               <BandaraFilter userRole={userRole} />
             </div>
           )}
-          {/* Search */}
-          <form className="flex-1 relative" action="/berita-acara" method="GET">
+
+          {/* Search Box */}
+          <form className="flex-1 min-w-0" action="/berita-acara" method="GET">
             {statusFilter && (
               <input type="hidden" name="status" value={statusFilter} />
             )}
             {jenisFilter && (
               <input type="hidden" name="jenis" value={jenisFilter} />
             )}
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <input
-              name="q"
-              type="text"
-              defaultValue={searchQuery}
-              placeholder="Cari judul atau nomor BA..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.04] text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
-            />
+            {bandaraFilter && (
+              <input type="hidden" name="bandara" value={bandaraFilter} />
+            )}
+            <div className="relative w-full flex items-center">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <input
+                name="q"
+                type="text"
+                defaultValue={searchQuery}
+                placeholder="Cari berdasarkan judul masalah atau nomor BA..."
+                className="w-full pl-10 pr-24 py-2.5 rounded-xl neo-inset border border-slate-300/40 dark:border-white/[0.08] bg-transparent text-slate-800 dark:text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
+              />
+              {searchQuery && (
+                <Link
+                  href={buildUrl({ q: undefined, page: "1" })}
+                  className="absolute right-16 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 rounded-md transition-colors"
+                  title="Hapus pencarian"
+                >
+                  <X className="w-4 h-4" />
+                </Link>
+              )}
+              <button
+                type="submit"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/20 text-sky-700 dark:text-sky-300 hover:bg-sky-500/30 active:scale-95 transition-all cursor-pointer"
+              >
+                Cari
+              </button>
+            </div>
           </form>
+        </div>
 
-          {/* Status filter */}
-          <div className="flex gap-2 overflow-x-auto pb-1 w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {/* Bottom: Status filter tabs */}
+        <div className="pt-2 border-t border-slate-200/60 dark:border-white/[0.06] flex items-center gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
+            Status:
+          </span>
+          <Link
+            href={buildUrl({ status: undefined, page: "1" })}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all shrink-0 cursor-pointer ${
+              !statusFilter
+                ? "bg-sky-500/20 text-sky-700 dark:text-sky-300 font-semibold border border-sky-500/30 shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-white/[0.05] border border-transparent shadow-[2px_2px_5px_var(--shadow-dark),-2px_-2px_5px_var(--shadow-light)] dark:shadow-none"
+            }`}
+          >
+            Semua
+          </Link>
+          {(
+            Object.entries(STATUS_LABELS) as [StatusBA, string][]
+          ).map(([value, label]) => (
             <Link
-              href={buildUrl({ status: undefined, page: "1" })}
-              className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                !statusFilter
-                  ? "bg-sky-500/15 text-sky-400 border border-sky-500/20"
-                  : "text-slate-500 hover:bg-white/[0.04] border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)]"
+              key={value}
+              href={buildUrl({ status: value, page: "1" })}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                statusFilter === value
+                  ? "bg-sky-500/20 text-sky-700 dark:text-sky-300 font-semibold border border-sky-500/30 shadow-sm"
+                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-white/[0.05] border border-transparent shadow-[2px_2px_5px_var(--shadow-dark),-2px_-2px_5px_var(--shadow-light)] dark:shadow-none"
               }`}
             >
-              Semua
+              {label}
             </Link>
-            {(
-              Object.entries(STATUS_LABELS) as [StatusBA, string][]
-            ).map(([value, label]) => (
-              <Link
-                key={value}
-                href={buildUrl({ status: value, page: "1" })}
-                className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${
-                  statusFilter === value
-                    ? "bg-sky-500/15 text-sky-400 border border-sky-500/20"
-                    : "text-slate-500 hover:bg-white/[0.04] border border-transparent shadow-[4px_0_10px_rgba(163,177,198,0.5)]"
-                }`}
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
 
