@@ -1,4 +1,4 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/proxy";
 
 /**
@@ -7,7 +7,12 @@ import { updateSession } from "@/lib/supabase/proxy";
  * and enforces authentication redirects.
  */
 export async function proxy(request: NextRequest) {
-  return await updateSession(request);
+  try {
+    return await updateSession(request);
+  } catch (error) {
+    console.error("Proxy execution error:", error);
+    return NextResponse.next();
+  }
 }
 
 export const config = {
