@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { createClient } from "@/lib/supabase/client";
+import { compressImage } from "@/lib/compress-image";
 import { createUserAction, deleteUserAction, updateUserPasswordAction, updateUserAction, type CreateUserPayload } from "@/lib/actions/users";
 import ConfirmDialog from "@/components/confirm-dialog";
 import { UserPlus, Loader2, X, AlertCircle, Trash2, KeyRound, CheckCircle2, Pencil, Upload, Eye, EyeOff, Copy, Check } from "lucide-react";
@@ -29,18 +30,25 @@ export function CreateUserModal() {
     
     if (signatureFile) {
       const supabase = createClient();
-      const ext = signatureFile.name.split(".").pop();
-      const fileName = `signatures/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error: uploadError } = await supabase.storage.from("ba_lampiran").upload(fileName, signatureFile);
-      
-      if (uploadError) {
-        setError("Gagal mengunggah tanda tangan. Silakan coba lagi.");
-        setLoading(false);
-        return;
+      try {
+        const compressed = await compressImage(signatureFile, 800, 0.85);
+        const fileName = `signatures/${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
+        const { error: uploadError } = await supabase.storage.from("ba_lampiran").upload(fileName, compressed, { contentType: "image/jpeg" });
+        if (uploadError) throw uploadError;
+        const { data: { publicUrl } } = supabase.storage.from("ba_lampiran").getPublicUrl(fileName);
+        finalSignatureUrl = publicUrl;
+      } catch {
+        const ext = signatureFile.name.split(".").pop();
+        const fileName = `signatures/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+        const { error: uploadError } = await supabase.storage.from("ba_lampiran").upload(fileName, signatureFile);
+        if (uploadError) {
+          setError("Gagal mengunggah tanda tangan. Silakan coba lagi.");
+          setLoading(false);
+          return;
+        }
+        const { data: { publicUrl } } = supabase.storage.from("ba_lampiran").getPublicUrl(fileName);
+        finalSignatureUrl = publicUrl;
       }
-      
-      const { data: { publicUrl } } = supabase.storage.from("ba_lampiran").getPublicUrl(fileName);
-      finalSignatureUrl = publicUrl;
     }
 
     const result = await createUserAction({
@@ -389,18 +397,25 @@ export function UpdateUserButton({ userId, currentName, currentEmail, currentSig
     
     if (signatureFile) {
       const supabase = createClient();
-      const ext = signatureFile.name.split(".").pop();
-      const fileName = `signatures/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error: uploadError } = await supabase.storage.from("ba_lampiran").upload(fileName, signatureFile);
-      
-      if (uploadError) {
-        setError("Gagal mengunggah tanda tangan. Silakan coba lagi.");
-        setLoading(false);
-        return;
+      try {
+        const compressed = await compressImage(signatureFile, 800, 0.85);
+        const fileName = `signatures/${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
+        const { error: uploadError } = await supabase.storage.from("ba_lampiran").upload(fileName, compressed, { contentType: "image/jpeg" });
+        if (uploadError) throw uploadError;
+        const { data: { publicUrl } } = supabase.storage.from("ba_lampiran").getPublicUrl(fileName);
+        finalSignatureUrl = publicUrl;
+      } catch {
+        const ext = signatureFile.name.split(".").pop();
+        const fileName = `signatures/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+        const { error: uploadError } = await supabase.storage.from("ba_lampiran").upload(fileName, signatureFile);
+        if (uploadError) {
+          setError("Gagal mengunggah tanda tangan. Silakan coba lagi.");
+          setLoading(false);
+          return;
+        }
+        const { data: { publicUrl } } = supabase.storage.from("ba_lampiran").getPublicUrl(fileName);
+        finalSignatureUrl = publicUrl;
       }
-      
-      const { data: { publicUrl } } = supabase.storage.from("ba_lampiran").getPublicUrl(fileName);
-      finalSignatureUrl = publicUrl;
     }
 
     const result = await updateUserAction(userId, newName, newEmail, finalSignatureUrl || undefined);

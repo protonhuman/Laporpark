@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { compressImage } from "@/lib/compress-image";
 import { Upload, X, Image as ImageIcon, Loader2 } from "lucide-react";
 
 interface PhotoUploadProps {
@@ -29,19 +30,38 @@ export default function PhotoUpload({
     for (const file of Array.from(files)) {
       if (newPhotos.length >= maxPhotos) break;
 
-      const ext = file.name.split(".").pop();
-      const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-      const filePath = `ba-photos/${fileName}`;
+      try {
+        // Kompres sebelum upload
+        const compressed = await compressImage(file);
+        const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
+        const filePath = `ba-photos/${fileName}`;
 
-      const { error } = await supabase.storage
-        .from("ba_lampiran")
-        .upload(filePath, file);
+        const { error } = await supabase.storage
+          .from("ba_lampiran")
+          .upload(filePath, compressed, { contentType: "image/jpeg" });
 
-      if (!error) {
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from("ba_lampiran").getPublicUrl(filePath);
-        newPhotos.push(publicUrl);
+        if (!error) {
+          const {
+            data: { publicUrl },
+          } = supabase.storage.from("ba_lampiran").getPublicUrl(filePath);
+          newPhotos.push(publicUrl);
+        }
+      } catch {
+        // Jika kompresi gagal, upload file asli sebagai fallback
+        const ext = file.name.split(".").pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+        const filePath = `ba-photos/${fileName}`;
+
+        const { error } = await supabase.storage
+          .from("ba_lampiran")
+          .upload(filePath, file);
+
+        if (!error) {
+          const {
+            data: { publicUrl },
+          } = supabase.storage.from("ba_lampiran").getPublicUrl(filePath);
+          newPhotos.push(publicUrl);
+        }
       }
     }
 
@@ -58,6 +78,7 @@ export default function PhotoUpload({
     const updated = photos.filter((_, i) => i !== index);
     onChange(updated);
   }
+
 
   return (
     <div className="space-y-3">
