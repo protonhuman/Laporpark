@@ -17,10 +17,17 @@ export default async function DashboardLayout({
 }) {
   const supabase = await createClient();
 
-  // Get authenticated user
-  const {
-    data: { user: authUser },
-  } = await supabase.auth.getUser();
+  // Get authenticated user safely
+  let authUser = null;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (!error && data?.user) {
+      authUser = data.user;
+    }
+  } catch (err) {
+    console.warn("Session retrieval failed, redirecting to login:", err);
+    authUser = null;
+  }
 
   if (!authUser) {
     redirect("/login");

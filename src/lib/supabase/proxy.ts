@@ -37,10 +37,17 @@ export async function updateSession(request: NextRequest) {
   );
 
   // IMPORTANT: Call getUser() to trigger a token refresh if needed.
-  // Do NOT use getSession() alone — it doesn't validate the JWT with the server.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Wrap in try-catch so invalid/revoked legacy cookies redirect cleanly to login instead of 500 error
+  let user = null;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (!error && data?.user) {
+      user = data.user;
+    }
+  } catch (authErr) {
+    console.warn("Auth session error in proxy, redirecting to login:", authErr);
+    user = null;
+  }
 
   // Redirect unauthenticated users to login (skip login/auth/api paths)
   const { pathname } = request.nextUrl;
