@@ -23,6 +23,7 @@ export async function GET() {
       { 
         status: "ok", 
         message: "Database Supabase aktif!", 
+        data,
         timestamp: new Date().toISOString() 
       },
       { status: 200 }
@@ -34,11 +35,6 @@ export async function GET() {
         status: "error",
         message: "Terjadi kesalahan internal",
         details: err instanceof Error ? err.message : String(err),
-        envCheck: {
-          hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-          hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-          hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-        },
       },
       { status: 500 }
     );
