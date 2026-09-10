@@ -15,10 +15,32 @@ const { createClient } = require("@supabase/supabase-js");
 const fs = require("fs");
 const path = require("path");
 
-// ── Konfigurasi ──────────────────────────────────────────────
-const SUPABASE_URL = "https://ouaphnqctltzzutozqih.supabase.co";
-const SERVICE_ROLE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91YXBobnFjdGx0enp1dG96cWloIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzcxOTc4NSwiZXhwIjoyMTAzMjk1Nzg1fQ.FHQ-Nw4YvmS0K0NAtb2M1R234zoHTJ8Tle9wvNKEUzM";
+// ── Baca Konfigurasi dari .env.local atau environment ─────────
+function loadEnv() {
+  const envPath = path.join(__dirname, ".env.local");
+  if (fs.existsSync(envPath)) {
+    const lines = fs.readFileSync(envPath, "utf-8").split("\n");
+    for (const line of lines) {
+      const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+      if (match) {
+        const key = match[1];
+        let val = (match[2] || "").trim();
+        if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+        if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+        if (!process.env[key]) process.env[key] = val;
+      }
+    }
+  }
+}
+loadEnv();
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
+  console.error("❌ Error: NEXT_PUBLIC_SUPABASE_URL atau SUPABASE_SERVICE_ROLE_KEY tidak ditemukan di .env.local");
+  process.exit(1);
+}
 
 // Tabel yang akan di-backup (urutkan dari parent ke child)
 const TABLES = [
