@@ -19,14 +19,16 @@ export default async function EditBAPage({
 
   const { data: profile } = await supabase
     .from("users")
-    .select("role")
+    .select("role, kode_bandara")
     .eq("id", authUser.id)
     .single();
 
-  if (
-    !profile ||
-    (profile.role !== "carpark_manager" && profile.role !== "supervisor")
-  ) {
+  const isAllowedRole =
+    profile?.role === "superadmin" ||
+    profile?.role === "carpark_manager" ||
+    profile?.role === "supervisor";
+
+  if (!profile || !isAllowedRole) {
     // Not authorized — redirect back to detail
     redirect(`/berita-acara/${id}`);
   }
@@ -39,6 +41,11 @@ export default async function EditBAPage({
     .single();
 
   if (!ba) notFound();
+
+  // Isolasi Multi-Cabang: Cegah staf mengedit BA milik bandara lain
+  if (profile.role !== "superadmin" && profile.kode_bandara !== ba.kode_bandara) {
+    redirect(`/berita-acara/${id}`);
+  }
 
   return <EditBAForm ba={ba} userRole={profile.role} />;
 }

@@ -62,9 +62,19 @@ export default async function BeritaAcaraDetailPage({
   } = await supabase.auth.getUser();
   const { data: currentProfile } = await supabase
     .from("users")
-    .select("role")
+    .select("role, kode_bandara")
     .eq("id", authUser!.id)
     .single();
+
+  // Isolasi Multi-Cabang: Hanya superadmin atau staf dari bandara yang sama yang berhak melihat BA ini
+  if (
+    currentProfile &&
+    currentProfile.role !== "superadmin" &&
+    currentProfile.kode_bandara !== ba.kode_bandara
+  ) {
+    notFound();
+  }
+
 
   const canEdit =
     (currentProfile?.role === "superadmin" ||

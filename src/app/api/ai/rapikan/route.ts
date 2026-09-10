@@ -41,6 +41,28 @@ PANDUAN KETAT:
 5. FORMAT OUTPUT:
    - Kembalikan HANYA format JSON valid dengan field: judul_masalah, kronologi, tindakan_dilakukan, penyelesaian, mitigasi.`;
 
+// Simple in-memory rate limiter: max 10 requests per minute per user
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_MAX = 10;
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(userId);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(userId, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+
+  if (record.count >= RATE_LIMIT_MAX) {
+    return false;
+  }
+
+  record.count += 1;
+  return true;
+}
+
 export async function POST(request: Request) {
   try {
     // Verify authentication
@@ -52,6 +74,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Tidak terautentikasi." },
         { status: 401 }
+      );
+    }
+
+    // Check rate limit per user
+    if (!checkRateLimit(user.id)) {
+      return NextResponse.json(
+        { error: "Terlalu banyak permintaan AI. Harap tunggu 1 menit sebelum mencoba kembali." },
+        { status: 429 }
       );
     }
 
@@ -77,6 +107,20 @@ export async function POST(request: Request) {
     if (!kronologi) {
       return NextResponse.json(
         { error: "Kronologi harus diisi." },
+        { status: 400 }
+      );
+    }
+
+    // Input bounds validation (prevent payload injection / excessive token usage)
+    if (
+      (kronologi && kronologi.length > 8000) ||
+      (judul_masalah && judul_masalah.length > 500) ||
+      (tindakan_dilakukan && tindakan_dilakukan.length > 5000) ||
+      (penyelesaian && penyelesaian.length > 5000) ||
+      (mitigasi && mitigasi.length > 5000)
+    ) {
+      return NextResponse.json(
+        { error: "Panjang teks melebihi batas maksimal yang diizinkan." },
         { status: 400 }
       );
     }

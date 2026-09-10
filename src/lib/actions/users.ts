@@ -114,12 +114,25 @@ export async function deleteUserAction(userId: string) {
 
     const { data: profile } = await supabase
       .from("users")
-      .select("role")
+      .select("role, kode_bandara")
       .eq("id", currentUser.id)
       .single();
 
     if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
       return { error: "Akses ditolak. Hanya supervisor dan superadmin yang dapat menghapus pengguna." };
+    }
+
+    // Isolasi Multi-Cabang: Supervisor hanya bisa menghapus user di bandaranya sendiri
+    if (profile.role !== "superadmin") {
+      const { data: targetProfile } = await supabase
+        .from("users")
+        .select("kode_bandara")
+        .eq("id", userId)
+        .single();
+
+      if (!targetProfile || targetProfile.kode_bandara !== profile.kode_bandara) {
+        return { error: "Akses ditolak. Anda hanya dapat menghapus pengguna di bandara Anda sendiri." };
+      }
     }
 
     // 2. Delete the user using admin client
@@ -158,12 +171,25 @@ export async function updateUserPasswordAction(userId: string, newPassword: stri
 
     const { data: profile } = await supabase
       .from("users")
-      .select("role")
+      .select("role, kode_bandara")
       .eq("id", currentUser.id)
       .single();
 
     if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
       return { error: "Akses ditolak. Hanya supervisor dan superadmin yang dapat mengubah password pengguna." };
+    }
+
+    // Isolasi Multi-Cabang: Supervisor hanya bisa mengubah password user di bandaranya sendiri
+    if (profile.role !== "superadmin") {
+      const { data: targetProfile } = await supabase
+        .from("users")
+        .select("kode_bandara")
+        .eq("id", userId)
+        .single();
+
+      if (!targetProfile || targetProfile.kode_bandara !== profile.kode_bandara) {
+        return { error: "Akses ditolak. Anda hanya dapat mengubah password pengguna di bandara Anda sendiri." };
+      }
     }
 
     if (newPassword.length < 6) {
@@ -261,12 +287,25 @@ export async function updateUserAction(userId: string, newName: string, newEmail
 
     const { data: profile } = await supabase
       .from("users")
-      .select("role")
+      .select("role, kode_bandara")
       .eq("id", currentUser.id)
       .single();
 
     if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
       return { error: "Akses ditolak. Hanya supervisor dan superadmin yang dapat mengubah profil pengguna." };
+    }
+
+    // Isolasi Multi-Cabang: Supervisor hanya bisa mengubah profil user di bandaranya sendiri
+    if (profile.role !== "superadmin") {
+      const { data: targetProfile } = await supabase
+        .from("users")
+        .select("kode_bandara")
+        .eq("id", userId)
+        .single();
+
+      if (!targetProfile || targetProfile.kode_bandara !== profile.kode_bandara) {
+        return { error: "Akses ditolak. Anda hanya dapat mengubah profil pengguna di bandara Anda sendiri." };
+      }
     }
 
     if (!newName.trim() || !newEmail.trim()) {

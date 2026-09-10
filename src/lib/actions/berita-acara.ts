@@ -111,14 +111,16 @@ export async function updateBeritaAcara(
   // Verify user role
   const { data: profile } = await supabase
     .from("users")
-    .select("role")
+    .select("role, kode_bandara")
     .eq("id", user.id)
     .single();
 
-  if (
-    !profile ||
-    (profile.role !== "carpark_manager" && profile.role !== "supervisor")
-  ) {
+  const isAllowedRole =
+    profile?.role === "carpark_manager" ||
+    profile?.role === "supervisor" ||
+    profile?.role === "superadmin";
+
+  if (!profile || !isAllowedRole) {
     return { error: "Anda tidak memiliki izin untuk mengedit BA." };
   }
 
@@ -130,6 +132,11 @@ export async function updateBeritaAcara(
     .single();
 
   if (!currentBA) return { error: "Berita Acara tidak ditemukan." };
+
+  // Isolasi Multi-Cabang: Cegah staf mengedit BA dari bandara lain
+  if (profile.role !== "superadmin" && profile.kode_bandara !== currentBA.kode_bandara) {
+    return { error: "Akses ditolak. Anda tidak berhak mengedit BA dari bandara lain." };
+  }
 
   // Determine which fields actually changed
   const auditEntries: {
@@ -206,12 +213,26 @@ export async function deleteBeritaAcara(baId: string) {
   // Verify supervisor role
   const { data: profile } = await supabase
     .from("users")
-    .select("role")
+    .select("role, kode_bandara")
     .eq("id", user.id)
     .single();
 
   if (!profile || (profile.role !== "supervisor" && profile.role !== "superadmin")) {
     return { error: "Hanya Supervisor atau Superadmin yang dapat menghapus BA." };
+  }
+
+  // Get BA to check branch ownership
+  const { data: currentBA } = await supabase
+    .from("berita_acara")
+    .select("kode_bandara")
+    .eq("id", baId)
+    .single();
+
+  if (!currentBA) return { error: "Berita Acara tidak ditemukan." };
+
+  // Isolasi Multi-Cabang: Cegah staf menghapus BA bandara lain
+  if (profile.role !== "superadmin" && profile.kode_bandara !== currentBA.kode_bandara) {
+    return { error: "Akses ditolak. Anda tidak berhak menghapus BA dari bandara lain." };
   }
 
   const { error } = await supabase
@@ -246,33 +267,39 @@ export async function updateStatusBAAction(id: string, newStatus: StatusBA) {
     // Get current profile
     const { data: profile } = await supabase
       .from("users")
-      .select("role")
+      .select("role, kode_bandara")
       .eq("id", authUser.id)
       .single();
 
     if (!profile) return { error: "Profil tidak ditemukan." };
 
     // Verify permissions for status transition
-    if (newStatus === "diperiksa" && profile.role !== "carpark_manager") {
-      return { error: "Hanya Carpark Manager yang dapat menandai telah diperiksa." };
+    if (newStatus === "diperiksa" && profile.role !== "carpark_manager" && profile.role !== "superadmin") {
+      return { error: "Hanya Carpark Manager atau Superadmin yang dapat menandai telah diperiksa." };
     }
 
-    if (newStatus === "disetujui" && profile.role !== "supervisor") {
-      return { error: "Hanya Supervisor yang dapat menyetujui." };
+    if (newStatus === "disetujui" && profile.role !== "supervisor" && profile.role !== "superadmin") {
+      return { error: "Hanya Supervisor atau Superadmin yang dapat menyetujui." };
     }
 
-    if (newStatus === "revisi" && (profile.role === "team_leader" || profile.role === "teknisi" || profile.role === "admin")) {
+    if (newStatus === "revisi" && profile.role !== "carpark_manager" && profile.role !== "supervisor" && profile.role !== "superadmin") {
       return { error: "Anda tidak berhak meminta revisi." };
     }
 
-    // Get old BA to log changes
+    // Get old BA to log changes and verify branch
     const { data: oldBA } = await supabase
       .from("berita_acara")
-      .select("status")
+      .select("status, kode_bandara")
       .eq("id", id)
       .single();
 
     if (!oldBA) return { error: "BA tidak ditemukan." };
+
+    // Isolasi Multi-Cabang: Cegah staf menyetujui/mengubah status BA bandara lain
+    if (profile.role !== "superadmin" && profile.kode_bandara !== oldBA.kode_bandara) {
+      return { error: "Akses ditolak. Anda tidak berhak mengubah status BA dari bandara lain." };
+    }
+
     if (oldBA.status === newStatus) return { success: true }; // No change
 
     // Update the BA
