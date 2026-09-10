@@ -27,10 +27,19 @@ export async function GET() {
       },
       { status: 200 }
     );
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("Ping Error (Catch):", err);
     return NextResponse.json(
-      { status: "error", message: "Terjadi kesalahan internal" },
+      {
+        status: "error",
+        message: "Terjadi kesalahan internal",
+        details: err instanceof Error ? err.message : String(err),
+        envCheck: {
+          hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+          hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+          hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+        },
+      },
       { status: 500 }
     );
   }

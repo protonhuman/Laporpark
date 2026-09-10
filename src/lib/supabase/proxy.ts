@@ -57,9 +57,10 @@ export async function updateSession(request: NextRequest) {
     user = null;
   }
 
-  // Redirect unauthenticated users to login (skip login/auth/api paths)
+  // Redirect unauthenticated users to login (skip root/login/auth/api paths)
   const { pathname } = request.nextUrl;
   const isPublicPath =
+    pathname === "/" ||
     pathname === "/login" ||
     pathname.startsWith("/auth/") ||
     pathname.startsWith("/api/");
