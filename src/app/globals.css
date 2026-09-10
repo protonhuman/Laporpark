@@ -100,10 +100,10 @@ body {
   background: var(--background);
   border-radius: 1rem;
   box-shadow: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
-  border: none;
+  border: 1px solid transparent; /* always 1px to prevent layout shift on theme switch */
 }
 .dark .neo-card {
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 .neo-card-hover {
@@ -118,10 +118,10 @@ body {
   background: var(--background);
   border-radius: 0.75rem;
   box-shadow: inset 6px 6px 10px var(--shadow-dark), inset -6px -6px 10px var(--shadow-light);
-  border: none;
+  border: 1px solid transparent; /* always 1px to prevent layout shift on theme switch */
 }
 .dark .neo-inset {
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.04);
 }
 
 /* Neumorphism button */
@@ -129,15 +129,14 @@ body {
   background: var(--background);
   border-radius: 0.75rem;
   box-shadow: 6px 6px 10px var(--shadow-dark), -6px -6px 10px var(--shadow-light);
-  transition: all 0.2s ease;
-  border: none;
+  border: 1px solid transparent; /* always 1px to prevent layout shift on theme switch */
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 .dark .neo-button {
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .neo-button:hover {
