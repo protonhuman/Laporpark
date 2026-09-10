@@ -48,6 +48,29 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ================================================================
+   Smooth Theme Transition — applied globally when dark class toggles
+   ================================================================ */
+*,
+*::before,
+*::after {
+  transition-property: background, background-color, border-color, color, box-shadow, fill, stroke;
+  transition-duration: 350ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Exclude elements that should NOT be slowed down by the global transition */
+*:where(
+  [class*="animate-"],
+  [class*="anim-"],
+  [class*="water-"],
+  [class*="login-"],
+  svg,
+  svg *
+) {
+  transition-property: none !important;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

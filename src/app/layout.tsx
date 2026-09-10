@@ -57,7 +57,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground transition-colors duration-200">
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
