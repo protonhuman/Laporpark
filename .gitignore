@@ -42,3 +42,6 @@ next-env.d.ts
 
 # markdown
 *.md
+
+# database backups (local only, jangan push ke GitHub)
+/backups/
