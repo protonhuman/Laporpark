@@ -1,9 +1,16 @@
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-/**
- * Root page — simply redirects to /dashboard.
- * The proxy will handle redirecting unauthenticated users to /login.
- */
-export default function Home() {
-  redirect("/dashboard");
+export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect("/dashboard");
+  } else {
+    redirect("/login");
+  }
 }
+

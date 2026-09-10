@@ -57,21 +57,23 @@ export default async function DashboardPage({
 
   // Get current user role
   const { data: { user } } = await supabase.auth.getUser();
-  if (user) {
-    const { data: profile } = await supabase
-      .from("users")
-      .select("role, kode_bandara")
-      .eq("id", user.id)
-      .single();
-    
-    if (profile && (profile.role === "team_leader" || profile.role === "teknisi" || profile.role === "admin")) {
-      redirect("/berita-acara");
-    }
-
-    // Store kode_bandara for filtering
-    var userKodeBandara = profile?.kode_bandara || "BDJ";
-    var userRole = profile?.role || "team_leader";
+  if (!user) {
+    redirect("/login");
   }
+
+  const { data: profile } = await supabase
+    .from("users")
+    .select("role, kode_bandara")
+    .eq("id", user.id)
+    .single();
+  
+  if (profile && (profile.role === "team_leader" || profile.role === "teknisi" || profile.role === "admin")) {
+    redirect("/berita-acara");
+  }
+
+  // Store kode_bandara for filtering
+  const userKodeBandara = profile?.kode_bandara || "BDJ";
+  const userRole = profile?.role || "team_leader";
 
   // Count BA per status
   const statuses: StatusBA[] = [
