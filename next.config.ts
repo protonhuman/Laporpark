@@ -31,8 +31,12 @@ const securityHeaders = [
   },
 ];
 
+// When building on Vercel, disable standalone output to prevent ENOENT nft.json build conflicts.
+// On private VPS / Docker, standalone output is enabled for minimal footprint and memory savings.
+const isVercel = process.env.VERCEL === "1";
+
 const nextConfig: NextConfig = {
-  output: "standalone",
+  ...(isVercel ? {} : { output: "standalone" }),
   compress: true,
   poweredByHeader: false, // Do not leak X-Powered-By: Next.js
   async headers() {
