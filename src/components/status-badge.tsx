@@ -10,10 +10,16 @@ const STATUS_STYLES: Record<StatusBA, string> = {
   selesai: "bg-sky-500/10 text-sky-400 border-sky-500/20 shadow-[0_0_8px_rgba(14,165,233,0.15)]",
 };
 
-export default function StatusBadge({ status }: { status: StatusBA }) {
+export default function StatusBadge({
+  status,
+  className = "",
+}: {
+  status: StatusBA;
+  className?: string;
+}) {
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${STATUS_STYLES[status]}`}
+      className={`inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${STATUS_STYLES[status]} ${className}`}
     >
       {STATUS_LABELS[status]}
     </span>

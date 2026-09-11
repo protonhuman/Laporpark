@@ -243,25 +243,25 @@ export default async function BeritaAcaraListPage({
       {/* Desktop & Tablet Table */}
       <div className="hidden md:block neo-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm table-fixed min-w-[960px]">
             <thead>
-              <tr className="border-b border-slate-300/50 dark:border-white/[0.08] text-center">
-                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
+              <tr className="border-b border-slate-300/50 dark:border-white/[0.08]">
+                <th className="w-[160px] px-4 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">
                   Nomor BA
                 </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
+                <th className="min-w-[240px] px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">
                   Judul Masalah
                 </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
+                <th className="w-[195px] px-4 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">
                   Jenis
                 </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
+                <th className="w-[160px] px-4 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">
                   Status
                 </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
+                <th className="w-[150px] px-4 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">
                   Dibuat Oleh
                 </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase text-center">
+                <th className="w-[130px] px-4 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">
                   Tanggal
                 </th>
               </tr>
@@ -273,25 +273,28 @@ export default async function BeritaAcaraListPage({
                     key={ba.id}
                     className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
                   >
-                    <td className="px-6 py-4 text-center">
+                    <td className="px-4 py-4 text-center whitespace-nowrap">
                       <Link
                         href={`/berita-acara/${ba.id}`}
-                        className="font-mono text-xs font-medium text-sky-600 dark:text-sky-400 hover:text-sky-500 hover:underline"
+                        className="font-mono text-xs font-medium text-sky-600 dark:text-sky-400 hover:text-sky-500 hover:underline inline-block"
                       >
                         {ba.nomor_ba}
                       </Link>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <Link
-                        href={`/berita-acara/${ba.id}`}
-                        className="text-slate-800 dark:text-slate-200 font-medium hover:text-sky-600 dark:hover:text-sky-400 transition-colors line-clamp-1"
-                      >
-                        {ba.judul_masalah}
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-lg text-xs font-medium bg-slate-200/60 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 border border-slate-300/40 dark:border-white/[0.08] whitespace-nowrap shadow-sm">
+                        <Link
+                          href={`/berita-acara/${ba.id}`}
+                          className="text-slate-800 dark:text-slate-200 font-medium hover:text-sky-600 dark:hover:text-sky-400 transition-colors line-clamp-1 text-center max-w-[320px]"
+                          title={ba.judul_masalah}
+                        >
+                          {ba.judul_masalah}
+                        </Link>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 text-center">
+                      <div className="flex items-center justify-center">
+                        <span className="inline-flex items-center justify-center w-[165px] px-3 py-1 rounded-lg text-xs font-medium bg-slate-200/60 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 border border-slate-300/40 dark:border-white/[0.08] shadow-sm text-center truncate">
                           {
                             JENIS_INSIDEN_LABELS[
                               ba.jenis_insiden as keyof typeof JENIS_INSIDEN_LABELS
@@ -300,15 +303,15 @@ export default async function BeritaAcaraListPage({
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-center">
+                    <td className="px-4 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <StatusBadge status={ba.status} />
+                        <StatusBadge status={ba.status} className="w-[125px] justify-center text-center shadow-sm" />
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-xs text-center whitespace-nowrap">
+                    <td className="px-4 py-4 text-slate-600 dark:text-slate-400 text-xs text-center whitespace-nowrap truncate">
                       {ba.pembuat?.nama ?? "—"}
                     </td>
-                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-xs text-center whitespace-nowrap">
+                    <td className="px-4 py-4 text-slate-600 dark:text-slate-400 text-xs text-center whitespace-nowrap">
                       {new Date(ba.created_at).toLocaleDateString("id-ID", {
                         day: "numeric",
                         month: "short",
