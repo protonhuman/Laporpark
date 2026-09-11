@@ -1,0 +1,22 @@
+name: Ping Supabase to Prevent Auto-Pause
+
+on:
+  schedule:
+    # Berjalan 2 kali sehari: Pukul 00:00 UTC (07:00 WIB) dan 12:00 UTC (19:00 WIB)
+    - cron: "0 0,12 * * *"
+  workflow_dispatch: # Memungkinkan kita menjalankan script ini secara manual di menu Actions GitHub
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Melakukan Ping ke API
+        run: |
+          echo "Memulai ping ke server untuk mencegah Supabase tertidur..."
+
+          # PENTING: Ganti URL di bawah ini dengan nama domain .web.id aslimu!
+          # Contoh: curl -i -X GET "https://lapor-park.web.id/api/ping"
+
+          curl -i -X GET "https://lapor-park.web.id/api/ping"
+
+          echo "Ping selesai!"
