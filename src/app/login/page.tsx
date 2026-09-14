@@ -1,21 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/actions/auth";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2, Check } from "lucide-react";
 import WaterDropLoader from "@/components/water-drop-loader";
 import LaporParkLogo from "@/components/lapor-park-logo";
+
+const REMEMBER_EMAIL_KEY = "lapor-park-remember-email";
+const REMEMBER_PASS_KEY = "lapor-park-remember-pass";
 
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  // On mount, check localStorage for remembered credentials
+  useEffect(() => {
+    const savedEmail = localStorage.getItem(REMEMBER_EMAIL_KEY);
+    const savedPass = localStorage.getItem(REMEMBER_PASS_KEY);
+    if (savedEmail && emailRef.current) {
+      emailRef.current.value = savedEmail;
+      setRememberMe(true);
+    }
+    if (savedPass && passwordRef.current) {
+      try {
+        passwordRef.current.value = atob(savedPass);
+      } catch {
+        // ignore corrupted data
+      }
+    }
+  }, []);
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     setError(null);
+
+    // Save or clear remembered credentials
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    if (rememberMe && email) {
+      localStorage.setItem(REMEMBER_EMAIL_KEY, email);
+      localStorage.setItem(REMEMBER_PASS_KEY, btoa(password));
+    } else {
+      localStorage.removeItem(REMEMBER_EMAIL_KEY);
+      localStorage.removeItem(REMEMBER_PASS_KEY);
+    }
+
     const result = await signIn(formData);
     if (result?.error) {
       setError(result.error);
@@ -96,6 +131,7 @@ export default function LoginPage() {
                 Email
               </label>
               <input
+                ref={emailRef}
                 id="email"
                 name="email"
                 type="email"
@@ -115,6 +151,7 @@ export default function LoginPage() {
                 Password
               </label>
               <input
+                ref={passwordRef}
                 id="password"
                 name="password"
                 type="password"
@@ -123,6 +160,42 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 className="neo-inset w-full px-3.5 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-200"
               />
+            </div>
+
+            {/* Remember Me */}
+            <div className="flex items-center gap-2.5 ml-0.5 login-remember">
+              <button
+                type="button"
+                role="checkbox"
+                aria-checked={rememberMe}
+                id="remember-me"
+                onClick={() => setRememberMe(!rememberMe)}
+                className={`
+                  relative w-[18px] h-[18px] rounded-md flex-shrink-0
+                  transition-all duration-300 ease-out
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 focus-visible:ring-offset-1
+                  ${rememberMe
+                    ? "bg-emerald-500 shadow-[0_1px_3px_rgba(16,185,129,0.4),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+                    : "bg-white/70 shadow-[inset_1px_1px_2px_rgba(163,177,198,0.5),inset_-1px_-1px_2px_rgba(255,255,255,0.8)] border border-slate-200/60"
+                  }
+                `}
+              >
+                <Check
+                  className={`
+                    w-3 h-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                    text-white stroke-[3]
+                    transition-all duration-300 ease-out
+                    ${rememberMe ? "opacity-100 scale-100" : "opacity-0 scale-50"}
+                  `}
+                />
+              </button>
+              <label
+                htmlFor="remember-me"
+                onClick={() => setRememberMe(!rememberMe)}
+                className="text-xs font-medium text-slate-500 cursor-pointer select-none hover:text-slate-700 transition-colors duration-200"
+              >
+                Ingat saya
+              </label>
             </div>
 
             {/* Submit */}
@@ -151,3 +224,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
