@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/actions/auth";
 import { AlertCircle, Loader2, Check, Eye, EyeOff } from "lucide-react";
@@ -17,6 +17,32 @@ export default function LoginPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isBlinking, setIsBlinking] = useState(false);
+  const [showRipple, setShowRipple] = useState(false);
+  const [showScanLine, setShowScanLine] = useState(false);
+
+  const handleTogglePassword = useCallback(() => {
+    if (isBlinking) return;
+    setIsBlinking(true);
+    setShowRipple(true);
+    // At the midpoint of the blink, switch visibility and trigger scan
+    setTimeout(() => {
+      setShowPassword(prev => !prev);
+      setShowScanLine(true);
+    }, 150);
+    // End blink
+    setTimeout(() => {
+      setIsBlinking(false);
+    }, 300);
+    // Clear ripple
+    setTimeout(() => {
+      setShowRipple(false);
+    }, 600);
+    // Clear scan line
+    setTimeout(() => {
+      setShowScanLine(false);
+    }, 700);
+  }, [isBlinking]);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -151,7 +177,7 @@ export default function LoginPage() {
               >
                 Password
               </label>
-              <div className="relative">
+              <div className="relative overflow-hidden">
                 <input
                   ref={passwordRef}
                   id="password"
@@ -162,27 +188,46 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   className="neo-inset w-full px-3.5 py-2.5 pr-10 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-200"
                 />
+                {/* Scan line shimmer on reveal */}
+                <div
+                  className={`absolute inset-0 pointer-events-none rounded-xl ${
+                    showScanLine ? "animate-[scanReveal_0.5s_ease-out_forwards]" : ""
+                  }`}
+                  style={{
+                    background: showScanLine
+                      ? "linear-gradient(90deg, transparent 0%, rgba(16,185,129,0.12) 45%, rgba(16,185,129,0.25) 50%, rgba(16,185,129,0.12) 55%, transparent 100%)"
+                      : "none",
+                    opacity: showScanLine ? 1 : 0,
+                  }}
+                />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 transition-all duration-300 ease-out active:scale-90"
+                  onClick={handleTogglePassword}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-slate-400 hover:text-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 transition-colors duration-200"
                   aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                 >
-                  <div className="relative w-4 h-4">
-                    <Eye
-                      className={`w-4 h-4 absolute inset-0 transition-all duration-300 ease-out ${
-                        showPassword
-                          ? "opacity-0 rotate-90 scale-50"
-                          : "opacity-100 rotate-0 scale-100"
-                      }`}
-                    />
-                    <EyeOff
-                      className={`w-4 h-4 absolute inset-0 transition-all duration-300 ease-out ${
-                        showPassword
-                          ? "opacity-100 rotate-0 scale-100"
-                          : "opacity-0 -rotate-90 scale-50"
-                      }`}
-                    />
+                  {/* Ripple ring */}
+                  <span
+                    className={`absolute inset-0 rounded-full transition-all duration-500 ease-out ${
+                      showRipple
+                        ? "scale-[2.2] opacity-0 bg-emerald-400/20"
+                        : "scale-100 opacity-0 bg-emerald-400/30"
+                    }`}
+                    style={{ willChange: showRipple ? "transform, opacity" : "auto" }}
+                  />
+                  {/* Eye icon with blink animation */}
+                  <div
+                    className="relative w-4 h-4 transition-transform ease-in-out"
+                    style={{
+                      transform: isBlinking ? "scaleY(0.1)" : "scaleY(1)",
+                      transitionDuration: isBlinking ? "150ms" : "200ms",
+                    }}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4 text-emerald-500" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </div>
                 </button>
               </div>
@@ -220,7 +265,7 @@ export default function LoginPage() {
                 onClick={() => setRememberMe(!rememberMe)}
                 className="text-xs font-medium text-slate-500 cursor-pointer select-none hover:text-slate-700 transition-colors duration-200"
               >
-                Ingat saya
+                Ingat Saya
               </label>
             </div>
 
