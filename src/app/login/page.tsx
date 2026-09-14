@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/actions/auth";
-import { AlertCircle, Loader2, Check } from "lucide-react";
+import { AlertCircle, Loader2, Check, Eye, EyeOff } from "lucide-react";
 import WaterDropLoader from "@/components/water-drop-loader";
 import LaporParkLogo from "@/components/lapor-park-logo";
 
@@ -16,6 +16,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -150,16 +151,41 @@ export default function LoginPage() {
               >
                 Password
               </label>
-              <input
-                ref={passwordRef}
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                placeholder="••••••••"
-                className="neo-inset w-full px-3.5 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-200"
-              />
+              <div className="relative">
+                <input
+                  ref={passwordRef}
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  placeholder="••••••••"
+                  className="neo-inset w-full px-3.5 py-2.5 pr-10 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-200"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 transition-all duration-300 ease-out active:scale-90"
+                  aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                >
+                  <div className="relative w-4 h-4">
+                    <Eye
+                      className={`w-4 h-4 absolute inset-0 transition-all duration-300 ease-out ${
+                        showPassword
+                          ? "opacity-0 rotate-90 scale-50"
+                          : "opacity-100 rotate-0 scale-100"
+                      }`}
+                    />
+                    <EyeOff
+                      className={`w-4 h-4 absolute inset-0 transition-all duration-300 ease-out ${
+                        showPassword
+                          ? "opacity-100 rotate-0 scale-100"
+                          : "opacity-0 -rotate-90 scale-50"
+                      }`}
+                    />
+                  </div>
+                </button>
+              </div>
             </div>
 
             {/* Remember Me */}
