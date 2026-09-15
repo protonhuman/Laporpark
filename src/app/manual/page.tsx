@@ -673,8 +673,8 @@ export default function ManualBookPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8 w-full">
           <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
-              <div className="w-6 h-6 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                <LogIn className="w-3.5 h-3.5" />
+              <div className="w-6 h-6 rounded-lg bg-emerald-500/15 grid place-items-center text-emerald-600 dark:text-emerald-400 shrink-0 leading-none">
+                <LogIn className="w-3.5 h-3.5 block" />
               </div>
               Langkah Login
             </h3>
@@ -704,8 +704,8 @@ export default function ManualBookPage() {
           </div>
           <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
-              <div className="w-6 h-6 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-600 dark:text-amber-400">
-                <AlertCircle className="w-3.5 h-3.5" />
+              <div className="w-6 h-6 rounded-lg bg-amber-500/15 grid place-items-center text-amber-600 dark:text-amber-400 shrink-0 leading-none">
+                <AlertCircle className="w-3.5 h-3.5 block" />
               </div>
               Hal Penting
             </h3>
