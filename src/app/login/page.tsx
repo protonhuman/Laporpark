@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { signIn } from "@/lib/actions/auth";
-import { AlertCircle, Loader2, Check, Eye, EyeOff } from "lucide-react";
+import { AlertCircle, Loader2, Check, Eye, EyeOff, BookOpen } from "lucide-react";
 import WaterDropLoader from "@/components/water-drop-loader";
 import LaporParkLogo from "@/components/lapor-park-logo";
 
@@ -287,8 +288,17 @@ export default function LoginPage() {
           </form>
         </div>
 
+        {/* Manual Book Link */}
+        <Link
+          href="/manual"
+          className="group flex items-center justify-center gap-2 mx-auto mt-3 px-4 py-2 rounded-xl text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/8 hover:bg-emerald-500/15 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-200 login-footer w-fit"
+        >
+          <BookOpen className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+          Panduan Penggunaan (Manual Book)
+        </Link>
+
         {/* Footer */}
-        <p className="text-center text-xs text-slate-500 font-medium mt-4 login-footer">
+        <p className="text-center text-xs text-slate-500 font-medium mt-3">
           Angkasa Pura Supports — Unit Parkir
         </p>
       </div>

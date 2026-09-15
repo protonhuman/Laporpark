@@ -258,6 +258,28 @@ body {
   .print\:border-b {
     border-bottom: 1px solid #e2e8f0 !important;
   }
+
+  /* ── Manual Book print overrides ── */
+  /* Restore card structure for manual page PDF export */
+  .print\:border .neo-card,
+  .print\:shadow-none.neo-card {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border-radius: 0.5rem !important;
+    padding: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  .print\:shadow-none table {
+    border-collapse: collapse !important;
+  }
+
+  .print\:shadow-none table th,
+  .print\:shadow-none table td {
+    border: 1px solid #e2e8f0 !important;
+    padding: 0.35rem 0.5rem !important;
+  }
 }
 
 /* ================================================================

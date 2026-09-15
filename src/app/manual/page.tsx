@@ -1,0 +1,871 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import LaporParkLogo from "@/components/lapor-park-logo";
+import {
+  ArrowLeft,
+  Download,
+  BookOpen,
+  Shield,
+  Users,
+  ClipboardCheck,
+  Wrench,
+  UserCog,
+  LogIn,
+  LayoutDashboard,
+  FileText,
+  FilePlus,
+  Pencil,
+  Trash2,
+  CheckCircle,
+  RotateCcw,
+  Camera,
+  Printer,
+  KeyRound,
+  Moon,
+  Sun,
+  ChevronDown,
+  ChevronRight,
+  AlertCircle,
+  Building2,
+  ArrowRight,
+  HelpCircle,
+  Info,
+  Eye,
+  Search,
+  Filter,
+} from "lucide-react";
+
+/* ─────────────────────────────────────────────
+   Data / Constants
+   ───────────────────────────────────────────── */
+
+const ROLES = [
+  {
+    key: "admin",
+    label: "Admin",
+    color: "purple",
+    icon: Shield,
+    gradient: "from-purple-500/20 to-purple-600/5",
+    border: "border-purple-500/30",
+    text: "text-purple-600 dark:text-purple-400",
+    bg: "bg-purple-500/10",
+    description: "Pengguna umum dengan akses dasar untuk melihat dan membuat Berita Acara.",
+    dashboard: false,
+    createBA: true,
+    editBA: false,
+    deleteBA: false,
+    checkBA: false,
+    approveBA: false,
+    reviseBA: false,
+    finishBA: false,
+    managePhotos: false,
+    manageUsers: false,
+    initialStatus: "Menunggu Review",
+  },
+  {
+    key: "supervisor",
+    label: "Supervisor",
+    color: "amber",
+    icon: UserCog,
+    gradient: "from-amber-500/20 to-amber-600/5",
+    border: "border-amber-500/30",
+    text: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-500/10",
+    description: "Kepala operasional — akses paling luas di tingkat cabang. Bertanggung jawab atas persetujuan, pengelolaan pengguna, dan seluruh BA.",
+    dashboard: true,
+    createBA: true,
+    editBA: true,
+    deleteBA: true,
+    checkBA: false,
+    approveBA: true,
+    reviseBA: true,
+    finishBA: true,
+    managePhotos: true,
+    manageUsers: true,
+    initialStatus: "Diketahui",
+  },
+  {
+    key: "carpark_manager",
+    label: "Carpark Manager",
+    color: "sky",
+    icon: ClipboardCheck,
+    gradient: "from-sky-500/20 to-sky-600/5",
+    border: "border-sky-500/30",
+    text: "text-sky-600 dark:text-sky-400",
+    bg: "bg-sky-500/10",
+    description: "Manajer operasional — bertanggung jawab memeriksa dan memverifikasi setiap Berita Acara sebelum disetujui Supervisor.",
+    dashboard: true,
+    createBA: true,
+    editBA: true,
+    deleteBA: false,
+    checkBA: true,
+    approveBA: false,
+    reviseBA: true,
+    finishBA: false,
+    managePhotos: true,
+    manageUsers: false,
+    initialStatus: "Diperiksa",
+  },
+  {
+    key: "team_leader",
+    label: "Team Leader",
+    color: "indigo",
+    icon: Users,
+    gradient: "from-indigo-500/20 to-indigo-600/5",
+    border: "border-indigo-500/30",
+    text: "text-indigo-600 dark:text-indigo-400",
+    bg: "bg-indigo-500/10",
+    description: "Pemimpin tim lapangan — pengguna utama pembuat laporan Berita Acara insiden.",
+    dashboard: false,
+    createBA: true,
+    editBA: false,
+    deleteBA: false,
+    checkBA: false,
+    approveBA: false,
+    reviseBA: false,
+    finishBA: false,
+    managePhotos: "own",
+    manageUsers: false,
+    initialStatus: "Menunggu Review",
+  },
+  {
+    key: "teknisi",
+    label: "Teknisi",
+    color: "emerald",
+    icon: Wrench,
+    gradient: "from-emerald-500/20 to-emerald-600/5",
+    border: "border-emerald-500/30",
+    text: "text-emerald-600 dark:text-emerald-400",
+    bg: "bg-emerald-500/10",
+    description: "Staf teknis lapangan — akses sama dengan Team Leader, fokus pada pelaporan insiden teknis.",
+    dashboard: false,
+    createBA: true,
+    editBA: false,
+    deleteBA: false,
+    checkBA: false,
+    approveBA: false,
+    reviseBA: false,
+    finishBA: false,
+    managePhotos: "own",
+    manageUsers: false,
+    initialStatus: "Menunggu Review",
+  },
+] as const;
+
+const JENIS_INSIDEN = [
+  { kode: "kerusakan", label: "Kerusakan", desc: "Kerusakan fasilitas/infrastruktur parkir" },
+  { kode: "kerusakan_kendaraan", label: "Kerusakan Kendaraan", desc: "Kerusakan yang melibatkan kendaraan" },
+  { kode: "komplain", label: "Komplain", desc: "Keluhan dari pengguna jasa parkir" },
+  { kode: "kehilangan", label: "Kehilangan", desc: "Laporan kehilangan barang/kendaraan" },
+  { kode: "gangguan_sistem", label: "Gangguan Sistem", desc: "Gangguan pada sistem IT/perangkat lunak" },
+  { kode: "gangguan_perangkat", label: "Gangguan Perangkat", desc: "Gangguan pada perangkat keras" },
+  { kode: "lainnya", label: "Lainnya", desc: "Insiden lain di luar kategori" },
+];
+
+const BANDARA_LIST = [
+  { kode: "AMQ", nama: "Bandara Pattimura", lokasi: "Ambon" },
+  { kode: "BDJ", nama: "Bandara Intl. Syamsudin Noor", lokasi: "Banjarmasin" },
+  { kode: "BIK", nama: "Bandara Intl. Frans Kaisiepo", lokasi: "Biak" },
+  { kode: "BPN", nama: "Bandara Intl. Sultan Aji Muhammad Sulaiman", lokasi: "Balikpapan" },
+  { kode: "DJJ", nama: "Bandara Intl. Sentani", lokasi: "Jayapura" },
+  { kode: "DPS", nama: "Bandara Intl. I Gusti Ngurah Rai", lokasi: "Denpasar" },
+  { kode: "KOE", nama: "Bandara Intl. El Tari", lokasi: "Kupang" },
+  { kode: "LOP", nama: "Bandara Intl. Zainuddin Abdul Madjid", lokasi: "Lombok" },
+  { kode: "MDC", nama: "Bandara Intl. Sam Ratulangi", lokasi: "Manado" },
+  { kode: "SOC", nama: "Bandara Intl. Adi Soemarmo", lokasi: "Solo" },
+  { kode: "SRG", nama: "Bandara Intl. Jenderal Ahmad Yani", lokasi: "Semarang" },
+  { kode: "SUB", nama: "Bandara Intl. Juanda", lokasi: "Surabaya" },
+  { kode: "UPG", nama: "Bandara Intl. Sultan Hasanuddin", lokasi: "Makassar" },
+  { kode: "YIA", nama: "Bandara Intl. Yogyakarta", lokasi: "Yogyakarta" },
+];
+
+const STATUS_LIST = [
+  { key: "menunggu_review", label: "Menunggu Review", color: "bg-amber-500", desc: "BA baru, menunggu pemeriksaan Carpark Manager" },
+  { key: "diperiksa", label: "Diperiksa", color: "bg-blue-500", desc: "CM sudah memeriksa, menunggu persetujuan Supervisor" },
+  { key: "revisi", label: "Revisi", color: "bg-orange-500", desc: "BA dikembalikan untuk diperbaiki oleh pembuat" },
+  { key: "disetujui", label: "Diketahui", color: "bg-emerald-500", desc: "Supervisor sudah menyetujui BA" },
+  { key: "selesai", label: "Selesai", color: "bg-teal-500", desc: "BA telah selesai dan ditutup" },
+];
+
+const FAQ_ITEMS = [
+  {
+    q: "Saya tidak bisa login, apa yang harus dilakukan?",
+    a: "Pastikan email dan password sudah benar. Email menggunakan format nama@laporpark.{kode_bandara}.id — misalnya budi@laporpark.bdj.id. Jika masih gagal, hubungi Supervisor bandara Anda untuk reset password.",
+  },
+  {
+    q: "Saya tidak bisa melihat Dashboard, kenapa?",
+    a: "Dashboard hanya tersedia untuk Supervisor dan Carpark Manager. Jika Anda adalah Team Leader, Teknisi, atau Admin — Anda langsung diarahkan ke Daftar Berita Acara.",
+  },
+  {
+    q: "Kenapa saya tidak bisa mengedit Berita Acara?",
+    a: "Hanya Carpark Manager dan Supervisor yang dapat mengedit BA. Selain itu, BA yang sudah berstatus \"Diketahui\" atau \"Selesai\" tidak dapat diedit lagi (kecuali foto lampiran).",
+  },
+  {
+    q: "Saya tidak bisa melihat BA dari bandara lain?",
+    a: "Ini adalah fitur Isolasi Multi-Cabang. Setiap pengguna hanya dapat melihat BA dari bandara tempat mereka ditugaskan, sesuai kode bandara di email masing-masing.",
+  },
+  {
+    q: "Tombol persetujuan tidak muncul di halaman detail BA?",
+    a: "Tombol approval hanya tampil sesuai role Anda dan status BA saat ini. Misalnya tombol \"Setujui\" hanya tampil untuk Supervisor saat BA berstatus \"Menunggu Review\" atau \"Diperiksa\".",
+  },
+  {
+    q: "Bagaimana cara menambah foto setelah BA dibuat?",
+    a: "Buka halaman detail BA → klik tombol \"Kelola Foto\" di bagian Lampiran Foto. Anda dapat menambah atau menghapus foto. Fitur ini tetap tersedia meskipun BA sudah berstatus Selesai (untuk pembuat BA, CM, atau Supervisor).",
+  },
+  {
+    q: "Nomor BA tidak berurut, apakah normal?",
+    a: "Ya. Nomor BA digenerate otomatis berdasarkan bulan dan tahun saat BA dibuat. Jika ada BA yang dihapus, nomor tersebut tidak akan dipakai ulang.",
+  },
+  {
+    q: "Bagaimana cara mencetak BA ke PDF?",
+    a: "Buka halaman detail BA → klik tombol \"Print/PDF\" → pada dialog cetak browser, pilih \"Save as PDF\" sebagai tujuan printer → klik Simpan.",
+  },
+];
+
+const FORM_FIELDS = [
+  { label: "Tanggal Kejadian", desc: "Tanggal insiden terjadi", required: true },
+  { label: "Waktu Kejadian", desc: "Jam insiden terjadi", required: true },
+  { label: "Lokasi / Zona", desc: "Area spesifik di parkir bandara", required: true },
+  { label: "Jenis Insiden", desc: "Pilih dari dropdown kategori", required: true },
+  { label: "Pihak Terlibat", desc: "Nama/pihak yang terlibat (jika ada)", required: false },
+  { label: "Judul Masalah", desc: "Ringkasan singkat insiden", required: true },
+  { label: "Kronologi", desc: "Uraian lengkap kejadian", required: true },
+  { label: "Tindakan yang Dilakukan", desc: "Langkah yang sudah diambil", required: true },
+  { label: "Penyelesaian", desc: "Hasil penyelesaian insiden", required: true },
+  { label: "Mitigasi", desc: "Langkah pencegahan ke depan", required: true },
+  { label: "Lampiran Foto", desc: "Upload foto bukti/dokumentasi", required: false },
+];
+
+/* ─────────────────────────────────────────────
+   Helper Components
+   ───────────────────────────────────────────── */
+
+function PermIcon({ val }: { val: boolean | string }) {
+  if (val === true) return <CheckCircle className="w-4 h-4 text-emerald-500" />;
+  if (val === "own") return <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wide">BA sendiri</span>;
+  return <span className="w-4 h-4 rounded-full bg-slate-300/60 dark:bg-white/10 block" />;
+}
+
+function SectionTitle({ id, icon: Icon, title, subtitle }: { id: string; icon: typeof BookOpen; title: string; subtitle: string }) {
+  return (
+    <div id={id} className="pt-6 mb-6 scroll-mt-24 print:pt-2 print:mb-3">
+      <div className="flex items-center gap-3 mb-1">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center shadow-[3px_3px_6px_var(--shadow-dark),-3px_-3px_6px_var(--shadow-light)] print:shadow-none print:border print:border-slate-300">
+          <Icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400 print:text-emerald-700" />
+        </div>
+        <div>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-white print:text-black">{title}</h2>
+          <p className="text-xs text-slate-500 print:text-slate-600">{subtitle}</p>
+        </div>
+      </div>
+      <div className="h-px bg-gradient-to-r from-emerald-500/40 via-teal-500/20 to-transparent mt-3 print:bg-slate-300" />
+    </div>
+  );
+}
+
+function FAQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="neo-card overflow-hidden print:shadow-none print:border print:border-slate-200">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center gap-3 px-5 py-4 text-left cursor-pointer hover:bg-white/30 dark:hover:bg-white/[0.02] transition-colors"
+      >
+        <HelpCircle className="w-4 h-4 text-emerald-500 shrink-0" />
+        <span className="flex-1 text-sm font-medium text-slate-800 dark:text-slate-100 print:text-black">{q}</span>
+        <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="px-5 pb-4 pt-0 pl-12">
+          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed print:text-slate-700">{a}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   TOC Navigation Items
+   ───────────────────────────────────────────── */
+
+const TOC = [
+  { id: "pengenalan", label: "Pengenalan Sistem" },
+  { id: "hierarki", label: "Hierarki Peran" },
+  { id: "login", label: "Login & Autentikasi" },
+  { id: "navigasi", label: "Navigasi & Sidebar" },
+  { id: "panduan-role", label: "Panduan per Role" },
+  { id: "berita-acara", label: "Fitur Berita Acara" },
+  { id: "alur", label: "Alur Persetujuan" },
+  { id: "cetak", label: "Cetak & PDF" },
+  { id: "password", label: "Ganti Password" },
+  { id: "faq", label: "FAQ" },
+];
+
+/* ─────────────────────────────────────────────
+   Main Page Component
+   ───────────────────────────────────────────── */
+
+export default function ManualBookPage() {
+  const [activeRole, setActiveRole] = useState<string>("supervisor");
+  const selectedRole = ROLES.find((r) => r.key === activeRole) || ROLES[1];
+
+  function handleDownloadPDF() {
+    window.print();
+  }
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      {/* ═══ Top Header Bar ═══ */}
+      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-slate-300/40 dark:border-white/[0.06] shadow-[0_4px_12px_var(--shadow-dark)] print:static print:shadow-none print:border-b print:border-slate-300">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="p-2 rounded-xl hover:bg-white/50 dark:hover:bg-white/[0.04] text-slate-500 hover:text-slate-800 dark:hover:text-white transition-all print:hidden"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+            <div className="flex items-center gap-2.5">
+              <div className="print:hidden">
+                <LaporParkLogo size="sm" interactive={false} />
+              </div>
+              <div>
+                <h1 className="text-base sm:text-lg font-extrabold text-slate-800 dark:text-white tracking-tight print:text-black">
+                  Manual Book <span className="text-emerald-500">LaporPark</span>
+                </h1>
+                <p className="text-[10px] text-slate-500 hidden sm:block print:block print:text-slate-600">Sistem Manajemen Berita Acara Parkir — Angkasa Pura Supports</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 print:hidden">
+            <button
+              onClick={handleDownloadPDF}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-emerald-500/15 to-teal-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)] hover:shadow-[6px_6px_14px_var(--shadow-dark),-6px_-6px_14px_var(--shadow-light)] hover:border-emerald-500/50 active:scale-95 active:shadow-[inset_3px_3px_6px_var(--shadow-dark),inset_-3px_-3px_6px_var(--shadow-light)] transition-all duration-200 cursor-pointer select-none"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">Download PDF</span>
+            </button>
+          </div>
+        </div>
+
+        {/* TOC Scrollable Bar — Desktop & Mobile */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-2 print:hidden">
+          <nav className="flex gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-1">
+            {TOC.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 transition-all whitespace-nowrap shrink-0"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      {/* ═══ Main Content ═══ */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 print:py-0 print:max-w-none">
+
+        {/* ─── Corporate Header (Print Only) ─── */}
+        <div className="hidden print:flex items-center justify-between mb-6 pb-4 border-b-2 border-slate-400">
+          <div className="flex items-center gap-4">
+            <img src="/logo-aps.png" alt="APS" className="h-10" />
+            <img src="/logo-cp.png" alt="Centre Park" className="h-8" />
+          </div>
+          <div className="text-right">
+            <h1 className="text-xl font-bold text-black">Manual Book LaporPark</h1>
+            <p className="text-xs text-slate-600">Sistem Manajemen Berita Acara Parkir</p>
+            <p className="text-[10px] text-slate-500 mt-0.5">Angkasa Pura Supports — Unit Parkir</p>
+          </div>
+        </div>
+
+        {/* ═══ 1. PENGENALAN SISTEM ═══ */}
+        <SectionTitle id="pengenalan" icon={BookOpen} title="Pengenalan Sistem" subtitle="Apa itu LaporPark dan untuk apa digunakan" />
+
+        <div className="neo-card p-5 sm:p-6 mb-6 print:shadow-none print:border print:border-slate-200">
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="flex items-center justify-center sm:justify-start shrink-0">
+              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center shadow-[6px_6px_12px_var(--shadow-dark),-6px_-6px_12px_var(--shadow-light)] print:shadow-none print:border print:border-emerald-200">
+                <BookOpen className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
+              </div>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed print:text-slate-800">
+                <strong className="text-slate-800 dark:text-white print:text-black">LaporPark</strong> adalah aplikasi web berbasis <em>Berita Acara</em> yang digunakan untuk mencatat, melacak, dan menyelesaikan insiden yang terjadi di area parkir bandara di bawah naungan <strong>Angkasa Pura Supports</strong> bekerja sama dengan <strong>Centre Park</strong>.
+              </p>
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-2 print:text-slate-800">
+                Setiap insiden dicatat dalam Berita Acara (BA) yang melewati proses verifikasi berjenjang — dari pembuat, pemeriksa, hingga persetujuan — memastikan akuntabilitas dan dokumentasi yang lengkap.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Jenis Insiden */}
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 print:text-black">Jenis Insiden yang Dicatat</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6 print:grid-cols-3">
+          {JENIS_INSIDEN.map((j) => (
+            <div key={j.kode} className="neo-card p-4 flex items-start gap-3 print:shadow-none print:border print:border-slate-200 print:p-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+              <div>
+                <p className="text-sm font-semibold text-slate-800 dark:text-white print:text-black">{j.label}</p>
+                <p className="text-xs text-slate-500 mt-0.5 print:text-slate-600">{j.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bandara */}
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 print:text-black">14 Bandara yang Didukung</h3>
+        <div className="neo-card overflow-hidden mb-8 print:shadow-none print:border print:border-slate-200">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-300/50 dark:border-white/[0.08] print:border-slate-300">
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Kode</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Nama Bandara</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Lokasi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200/40 dark:divide-white/[0.04] print:divide-slate-200">
+                {BANDARA_LIST.map((b) => (
+                  <tr key={b.kode} className="hover:bg-white/30 dark:hover:bg-white/[0.02] print:hover:bg-transparent">
+                    <td className="px-4 py-2.5 font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400 print:text-emerald-700">{b.kode}</td>
+                    <td className="px-4 py-2.5 text-slate-800 dark:text-white font-medium print:text-black">{b.nama}</td>
+                    <td className="px-4 py-2.5 text-slate-500 print:text-slate-600">{b.lokasi}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ═══ 2. HIERARKI PERAN ═══ */}
+        <SectionTitle id="hierarki" icon={Shield} title="Hierarki Peran Pengguna" subtitle="5 tingkatan peran dengan hak akses berjenjang" />
+
+        {/* Role Pyramid Visual */}
+        <div className="neo-card p-5 sm:p-6 mb-6 print:shadow-none print:border print:border-slate-200">
+          <div className="flex flex-col items-center gap-2 py-4">
+            {ROLES.map((r, i) => {
+              const widths = ["w-40", "w-52", "w-64", "w-76", "w-full sm:w-88"];
+              return (
+                <div key={r.key} className={`${widths[i]} max-w-full`}>
+                  <div className={`flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r ${r.gradient} border ${r.border} transition-all`}>
+                    <r.icon className={`w-4 h-4 ${r.text} shrink-0`} />
+                    <span className={`text-sm font-semibold ${r.text}`}>{r.label}</span>
+                  </div>
+                </div>
+              );
+            })}
+            <p className="text-[10px] text-slate-500 mt-2 print:text-slate-600">▲ Tingkatan tertinggi di atas</p>
+          </div>
+        </div>
+
+        {/* Permission Matrix Table */}
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 print:text-black">Tabel Perbandingan Hak Akses</h3>
+        <div className="neo-card overflow-hidden mb-8 print:shadow-none print:border print:border-slate-200">
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs sm:text-sm min-w-[700px]">
+              <thead>
+                <tr className="border-b border-slate-300/50 dark:border-white/[0.08] print:border-slate-300">
+                  <th className="px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Fitur</th>
+                  {ROLES.map((r) => (
+                    <th key={r.key} className={`px-3 py-3 text-xs font-semibold uppercase tracking-wider text-center ${r.text}`}>
+                      {r.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200/40 dark:divide-white/[0.04] print:divide-slate-200">
+                {[
+                  { label: "Dashboard Statistik", field: "dashboard" },
+                  { label: "Daftar BA", field: "createBA" },
+                  { label: "Buat BA Baru", field: "createBA" },
+                  { label: "Edit BA", field: "editBA" },
+                  { label: "Hapus BA", field: "deleteBA" },
+                  { label: "Tandai Diperiksa", field: "checkBA" },
+                  { label: "Setujui BA", field: "approveBA" },
+                  { label: "Minta Revisi", field: "reviseBA" },
+                  { label: "Tandai Selesai", field: "finishBA" },
+                  { label: "Kelola Foto", field: "managePhotos" },
+                  { label: "Kelola Pengguna", field: "manageUsers" },
+                ].map((row) => (
+                  <tr key={row.label} className="hover:bg-white/30 dark:hover:bg-white/[0.02]">
+                    <td className="px-3 py-2.5 font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap print:text-black">{row.label}</td>
+                    {ROLES.map((r) => (
+                      <td key={r.key} className="px-3 py-2.5 text-center">
+                        <div className="flex justify-center">
+                          <PermIcon val={row.field === "dashboard" ? r.dashboard : (r as Record<string, unknown>)[row.field] as boolean | string} />
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ═══ 3. LOGIN ═══ */}
+        <SectionTitle id="login" icon={LogIn} title="Login & Autentikasi" subtitle="Cara masuk ke sistem LaporPark" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+          <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
+              <span className="w-6 h-6 rounded-lg bg-emerald-500/15 flex items-center justify-center text-xs font-bold text-emerald-600">1</span>
+              Langkah Login
+            </h3>
+            <ol className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
+              <li className="flex gap-3">
+                <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</span>
+                <span>Masukkan <strong>Email</strong> — format: <code className="px-1.5 py-0.5 rounded bg-slate-200/60 dark:bg-white/[0.06] text-xs font-mono print:bg-slate-100">nama@laporpark.bdj.id</code></span>
+              </li>
+              <li className="flex gap-3">
+                <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</span>
+                <span>Masukkan <strong>Password</strong> — default: <code className="px-1.5 py-0.5 rounded bg-slate-200/60 dark:bg-white/[0.06] text-xs font-mono print:bg-slate-100">123123</code></span>
+              </li>
+              <li className="flex gap-3">
+                <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">3</span>
+                <span>Centang <strong>&ldquo;Ingat Saya&rdquo;</strong> agar tersimpan (opsional)</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">4</span>
+                <span>Klik tombol <strong>&ldquo;Masuk&rdquo;</strong></span>
+              </li>
+            </ol>
+          </div>
+          <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
+              <span className="w-6 h-6 rounded-lg bg-amber-500/15 flex items-center justify-center text-xs font-bold text-amber-600">!</span>
+              Hal Penting
+            </h3>
+            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
+              <li className="flex gap-3 items-start">
+                <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                <span>Segera ubah password default setelah login pertama kali.</span>
+              </li>
+              <li className="flex gap-3 items-start">
+                <Info className="w-4 h-4 text-sky-500 shrink-0 mt-0.5" />
+                <span>Kode bandara otomatis dikenali dari domain email Anda (misal: bdj untuk Banjarmasin).</span>
+              </li>
+              <li className="flex gap-3 items-start">
+                <ArrowRight className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                <span><strong>Supervisor / CM</strong> diarahkan ke Dashboard. Role lain ke Daftar BA.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* ═══ 4. NAVIGASI ═══ */}
+        <SectionTitle id="navigasi" icon={LayoutDashboard} title="Navigasi & Sidebar" subtitle="Menu yang tersedia berdasarkan role" />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          {[
+            { icon: LayoutDashboard, label: "Dashboard", desc: "Statistik & ringkasan", roles: "Supervisor, CM" },
+            { icon: FileText, label: "Daftar BA", desc: "Semua Berita Acara", roles: "Semua Role" },
+            { icon: FilePlus, label: "Buat BA Baru", desc: "Lapor insiden baru", roles: "Semua Role" },
+            { icon: Users, label: "Manajemen Pengguna", desc: "CRUD akun tim", roles: "Supervisor" },
+          ].map((m) => (
+            <div key={m.label} className="neo-card p-4 flex flex-col items-center text-center gap-2 print:shadow-none print:border print:border-slate-200 print:p-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-sky-500/15 to-indigo-500/15 flex items-center justify-center shadow-[3px_3px_6px_var(--shadow-dark),-3px_-3px_6px_var(--shadow-light)] print:shadow-none print:border print:border-sky-200">
+                <m.icon className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+              </div>
+              <h4 className="text-sm font-semibold text-slate-800 dark:text-white print:text-black">{m.label}</h4>
+              <p className="text-[11px] text-slate-500 print:text-slate-600">{m.desc}</p>
+              <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold border border-emerald-500/20 print:text-emerald-700">{m.roles}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* ═══ 5. PANDUAN PER ROLE ═══ */}
+        <SectionTitle id="panduan-role" icon={Users} title="Panduan per Tingkatan" subtitle="Klik role untuk melihat panduan detail" />
+
+        {/* Role Tabs */}
+        <div className="flex flex-wrap gap-2 mb-4 print:hidden">
+          {ROLES.map((r) => (
+            <button
+              key={r.key}
+              onClick={() => setActiveRole(r.key)}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer select-none ${
+                activeRole === r.key
+                  ? `bg-gradient-to-r ${r.gradient} ${r.text} border ${r.border} shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)]`
+                  : "text-slate-500 hover:text-slate-700 dark:hover:text-white shadow-[3px_3px_6px_var(--shadow-dark),-3px_-3px_6px_var(--shadow-light)] hover:shadow-[5px_5px_10px_var(--shadow-dark),-5px_-5px_10px_var(--shadow-light)] border border-transparent"
+              }`}
+            >
+              <r.icon className="w-4 h-4" />
+              {r.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Active Role Detail Card */}
+        <div className={`neo-card p-5 sm:p-6 border ${selectedRole.border} bg-gradient-to-br ${selectedRole.gradient} mb-8 print:shadow-none print:border print:border-slate-200 print:bg-white`}>
+          <div className="flex items-center gap-3 mb-4">
+            <div className={`w-12 h-12 rounded-2xl ${selectedRole.bg} flex items-center justify-center shadow-[4px_4px_8px_var(--shadow-dark),-4px_-4px_8px_var(--shadow-light)] print:shadow-none print:border print:border-slate-200`}>
+              <selectedRole.icon className={`w-6 h-6 ${selectedRole.text}`} />
+            </div>
+            <div>
+              <h3 className={`text-lg font-bold ${selectedRole.text}`}>{selectedRole.label}</h3>
+              <p className="text-xs text-slate-500 print:text-slate-600">{selectedRole.description}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
+            {[
+              { icon: LayoutDashboard, label: "Dashboard", val: selectedRole.dashboard },
+              { icon: FilePlus, label: "Buat BA", val: selectedRole.createBA },
+              { icon: Pencil, label: "Edit BA", val: selectedRole.editBA },
+              { icon: Trash2, label: "Hapus BA", val: selectedRole.deleteBA },
+              { icon: CheckCircle, label: "Periksa", val: selectedRole.checkBA },
+              { icon: CheckCircle, label: "Setujui", val: selectedRole.approveBA },
+              { icon: RotateCcw, label: "Revisi", val: selectedRole.reviseBA },
+              { icon: Camera, label: "Kelola Foto", val: selectedRole.managePhotos },
+              { icon: Users, label: "Kelola User", val: selectedRole.manageUsers },
+              { icon: CheckCircle, label: "Tandai Selesai", val: selectedRole.finishBA },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/40 dark:bg-white/[0.03] border border-white/60 dark:border-white/[0.06] print:bg-white print:border-slate-200">
+                <item.icon className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="text-xs text-slate-700 dark:text-slate-300 flex-1 print:text-slate-800">{item.label}</span>
+                <PermIcon val={item.val} />
+              </div>
+            ))}
+          </div>
+
+          <div className="p-3 rounded-xl bg-white/50 dark:bg-white/[0.03] border border-white/60 dark:border-white/[0.06] print:bg-slate-50 print:border-slate-200">
+            <p className="text-xs text-slate-600 dark:text-slate-300 print:text-slate-700">
+              <strong className="text-slate-800 dark:text-white print:text-black">Status awal BA saat dibuat:</strong>{" "}
+              <span className={`px-2 py-0.5 rounded-md ${selectedRole.bg} ${selectedRole.text} text-[11px] font-bold border ${selectedRole.border}`}>
+                {selectedRole.initialStatus}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        {/* Print-only: show all roles */}
+        <div className="hidden print:block space-y-4 mb-8">
+          {ROLES.map((r) => (
+            <div key={r.key} className="border border-slate-200 rounded-lg p-4 break-inside-avoid">
+              <h4 className="font-bold text-black mb-1">{r.label}</h4>
+              <p className="text-xs text-slate-600 mb-2">{r.description}</p>
+              <p className="text-xs text-slate-700"><strong>Status awal BA:</strong> {r.initialStatus}</p>
+              <p className="text-xs text-slate-700 mt-1">
+                <strong>Hak akses:</strong>{" "}
+                {r.dashboard && "Dashboard, "}
+                Buat BA,
+                {r.editBA ? " Edit BA," : ""}
+                {r.deleteBA ? " Hapus BA," : ""}
+                {r.checkBA ? " Periksa BA," : ""}
+                {r.approveBA ? " Setujui BA," : ""}
+                {r.reviseBA ? " Minta Revisi," : ""}
+                {r.finishBA ? " Tandai Selesai," : ""}
+                {r.managePhotos ? (r.managePhotos === "own" ? " Foto (BA sendiri)," : " Kelola Foto,") : ""}
+                {r.manageUsers ? " Kelola Pengguna" : ""}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* ═══ 6. FITUR BERITA ACARA ═══ */}
+        <SectionTitle id="berita-acara" icon={FileText} title="Fitur Berita Acara" subtitle="Melihat, membuat, dan mengelola laporan insiden" />
+
+        {/* Daftar BA features */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+          {[
+            { icon: Search, label: "Pencarian", desc: "Cari berdasarkan judul masalah atau nomor BA" },
+            { icon: Filter, label: "Filter Status", desc: "Filter: Menunggu Review, Diperiksa, Revisi, Diketahui, Selesai" },
+            { icon: Eye, label: "Detail Lengkap", desc: "Kronologi, tindakan, penyelesaian, mitigasi, foto lampiran" },
+            { icon: Printer, label: "Cetak / PDF", desc: "Cetak dokumen resmi lengkap dengan tanda tangan digital" },
+          ].map((f) => (
+            <div key={f.label} className="neo-card p-4 flex items-start gap-3 print:shadow-none print:border print:border-slate-200">
+              <div className="w-9 h-9 rounded-xl bg-sky-500/10 flex items-center justify-center shrink-0 shadow-[2px_2px_4px_var(--shadow-dark),-2px_-2px_4px_var(--shadow-light)] print:shadow-none print:border print:border-sky-200">
+                <f.icon className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-800 dark:text-white print:text-black">{f.label}</p>
+                <p className="text-xs text-slate-500 mt-0.5 print:text-slate-600">{f.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Form Fields for Creating BA */}
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 print:text-black">Kolom Formulir Pembuatan BA</h3>
+        <div className="neo-card overflow-hidden mb-6 print:shadow-none print:border print:border-slate-200">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-300/50 dark:border-white/[0.08] print:border-slate-300">
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Kolom</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Deskripsi</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700">Wajib</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200/40 dark:divide-white/[0.04] print:divide-slate-200">
+                {FORM_FIELDS.map((f) => (
+                  <tr key={f.label}>
+                    <td className="px-4 py-2.5 font-medium text-slate-800 dark:text-white whitespace-nowrap print:text-black">{f.label}</td>
+                    <td className="px-4 py-2.5 text-slate-500 print:text-slate-600">{f.desc}</td>
+                    <td className="px-4 py-2.5 text-center">
+                      {f.required ? <CheckCircle className="w-4 h-4 text-emerald-500 mx-auto" /> : <span className="text-[10px] text-slate-400">Opsional</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Status Badge Legend */}
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 print:text-black">Status Berita Acara</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8 print:grid-cols-3">
+          {STATUS_LIST.map((s) => (
+            <div key={s.key} className="neo-card p-4 flex items-start gap-3 print:shadow-none print:border print:border-slate-200 print:p-2">
+              <div className={`w-3 h-3 rounded-full ${s.color} mt-1 shrink-0`} />
+              <div>
+                <p className="text-sm font-semibold text-slate-800 dark:text-white print:text-black">{s.label}</p>
+                <p className="text-xs text-slate-500 mt-0.5 print:text-slate-600">{s.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ═══ 7. ALUR PERSETUJUAN ═══ */}
+        <SectionTitle id="alur" icon={CheckCircle} title="Alur Persetujuan" subtitle="Workflow dari pembuatan hingga penyelesaian BA" />
+
+        {/* Workflow Visual */}
+        <div className="neo-card p-5 sm:p-6 mb-4 print:shadow-none print:border print:border-slate-200">
+          <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-4 print:text-black">Alur Standar</h3>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-0 justify-center flex-wrap">
+            {[
+              { label: "Dibuat TL/Teknisi", color: "bg-indigo-500", textColor: "text-white" },
+              { label: "Menunggu Review", color: "bg-amber-500", textColor: "text-white" },
+              { label: "Diperiksa (CM)", color: "bg-blue-500", textColor: "text-white" },
+              { label: "Diketahui (SPV)", color: "bg-emerald-500", textColor: "text-white" },
+              { label: "Selesai", color: "bg-teal-500", textColor: "text-white" },
+            ].map((step, i) => (
+              <div key={step.label} className="flex items-center gap-0">
+                <div className={`${step.color} ${step.textColor} px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap shadow-md`}>
+                  {step.label}
+                </div>
+                {i < 4 && <ChevronRight className="w-4 h-4 text-slate-400 mx-1 hidden sm:block shrink-0" />}
+                {i < 4 && <ChevronDown className="w-4 h-4 text-slate-400 sm:hidden shrink-0" />}
+              </div>
+            ))}
+          </div>
+
+          {/* Revision branch */}
+          <div className="flex items-center justify-center mt-4 gap-2">
+            <div className="px-3 py-1.5 rounded-lg bg-orange-500/15 border border-orange-500/30 text-orange-600 dark:text-orange-400 text-xs font-semibold">
+              ↩️ Revisi — dikembalikan oleh CM atau SPV untuk diperbaiki
+            </div>
+          </div>
+        </div>
+
+        {/* Initial Status by Creator */}
+        <div className="neo-card p-5 mb-8 print:shadow-none print:border print:border-slate-200">
+          <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 print:text-black">Status Awal Berdasarkan Pembuat</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {[
+              { role: "Team Leader / Teknisi", status: "Menunggu Review", color: "bg-amber-500" },
+              { role: "Carpark Manager", status: "Diperiksa", color: "bg-blue-500", note: "melewati tahap review" },
+              { role: "Supervisor", status: "Diketahui", color: "bg-emerald-500", note: "melewati review & periksa" },
+            ].map((item) => (
+              <div key={item.role} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/40 dark:bg-white/[0.03] border border-white/60 dark:border-white/[0.06] print:bg-white print:border-slate-200">
+                <span className="text-sm text-slate-700 dark:text-slate-200 flex-1 print:text-slate-800">{item.role}</span>
+                <ArrowRight className="w-3 h-3 text-slate-400 shrink-0" />
+                <span className={`${item.color} text-white px-2 py-0.5 rounded-md text-[11px] font-bold`}>{item.status}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ═══ 8. CETAK & PDF ═══ */}
+        <SectionTitle id="cetak" icon={Printer} title="Cetak & Download PDF" subtitle="Cara mencetak Berita Acara sebagai dokumen resmi" />
+
+        <div className="neo-card p-5 sm:p-6 mb-8 print:shadow-none print:border print:border-slate-200">
+          <ol className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
+            <li className="flex gap-3">
+              <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 flex items-center justify-center text-xs font-bold shrink-0">1</span>
+              <span>Buka halaman <strong>Detail Berita Acara</strong></span>
+            </li>
+            <li className="flex gap-3">
+              <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 flex items-center justify-center text-xs font-bold shrink-0">2</span>
+              <span>Klik tombol <strong>&ldquo;Print / PDF&rdquo;</strong> di bagian kanan atas</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 flex items-center justify-center text-xs font-bold shrink-0">3</span>
+              <span>Pada dialog cetak browser, pilih <strong>&ldquo;Save as PDF&rdquo;</strong> sebagai tujuan printer</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 flex items-center justify-center text-xs font-bold shrink-0">4</span>
+              <span>Klik <strong>&ldquo;Simpan&rdquo;</strong> — file PDF akan terunduh</span>
+            </li>
+          </ol>
+          <div className="mt-4 p-3 rounded-xl bg-sky-500/5 border border-sky-500/20">
+            <p className="text-xs text-slate-600 dark:text-slate-300 print:text-slate-700">
+              📄 Layout cetak berisi format dokumen resmi dengan kop surat, nomor BA, seluruh detail insiden, dan tanda tangan digital (jika tersedia) dari Pembuat, Pemeriksa (CM), dan Mengetahui (Supervisor).
+            </p>
+          </div>
+        </div>
+
+        {/* ═══ 9. GANTI PASSWORD ═══ */}
+        <SectionTitle id="password" icon={KeyRound} title="Ganti Password" subtitle="Ubah password akun Anda" />
+
+        <div className="neo-card p-5 sm:p-6 mb-8 print:shadow-none print:border print:border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <h4 className="text-sm font-bold text-slate-800 dark:text-white mb-2 print:text-black">Cara Ganti Password</h4>
+              <ol className="space-y-2 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
+                <li className="flex gap-2"><span className="font-bold text-emerald-600">1.</span> Klik tombol <strong>&ldquo;Ganti Password&rdquo;</strong> (🔑) di sidebar</li>
+                <li className="flex gap-2"><span className="font-bold text-emerald-600">2.</span> Masukkan <strong>Password Baru</strong> (minimal 6 karakter)</li>
+                <li className="flex gap-2"><span className="font-bold text-emerald-600">3.</span> Masukkan <strong>Konfirmasi Password</strong></li>
+                <li className="flex gap-2"><span className="font-bold text-emerald-600">4.</span> Klik <strong>&ldquo;Simpan&rdquo;</strong></li>
+              </ol>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2 print:text-black">
+                <Moon className="w-4 h-4" /> <Sun className="w-4 h-4" /> Dark / Light Mode
+              </h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
+                Klik ikon 🌙/☀️ di sidebar (desktop) atau di header bar (mobile) untuk beralih antara tema gelap dan terang. Perubahan langsung diterapkan tanpa refresh.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ═══ 10. FAQ ═══ */}
+        <SectionTitle id="faq" icon={HelpCircle} title="FAQ & Troubleshooting" subtitle="Pertanyaan yang sering ditanyakan" />
+
+        <div className="space-y-2 mb-8">
+          {FAQ_ITEMS.map((item, i) => (
+            <FAQItem key={i} q={item.q} a={item.a} />
+          ))}
+        </div>
+
+        {/* ═══ Footer ═══ */}
+        <div className="text-center py-8 border-t border-slate-300/40 dark:border-white/[0.06] print:border-slate-300">
+          <p className="text-xs text-slate-500 print:text-slate-600">
+            Manual Book v1.0 — September 2026
+          </p>
+          <p className="text-xs text-slate-400 mt-1 print:text-slate-500">
+            <strong>LaporPark</strong> — Sistem Manajemen Berita Acara Parkir
+          </p>
+          <p className="text-xs text-slate-400 print:text-slate-500">
+            Angkasa Pura Supports × Centre Park
+          </p>
+          <div className="flex items-center justify-center gap-4 mt-4 print:hidden">
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Kembali ke Login
+            </Link>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
