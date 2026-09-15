@@ -830,7 +830,7 @@ export default function ManualBookPage() {
                 {r.approveBA ? " Setujui BA," : ""}
                 {r.reviseBA ? " Minta Revisi," : ""}
                 {r.finishBA ? " Tandai Selesai," : ""}
-                {r.managePhotos ? (r.managePhotos === "own" ? " Foto (BA sendiri)," : " Kelola Foto,") : ""}
+                {r.managePhotos ? " Kelola Foto," : ""}
                 {r.manageUsers ? " Kelola Pengguna" : ""}
               </p>
             </div>
