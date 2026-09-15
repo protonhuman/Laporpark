@@ -672,15 +672,15 @@ export default function ManualBookPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8 w-full">
           <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
-            <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2.5 print:text-black">
               <div className="w-6 h-6 rounded-lg bg-emerald-500/15 grid place-items-center text-emerald-600 dark:text-emerald-400 shrink-0 leading-none">
                 <LogIn className="w-3.5 h-3.5 block" />
               </div>
               Langkah Login
             </h3>
             <ol className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
-              <li className="flex gap-3">
-                <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</span>
+              <li className="flex gap-2.5">
+                <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 dark:text-sky-400 grid place-items-center text-xs font-bold shrink-0 mt-0.5 leading-none">1</span>
                 <div>
                   <p>Masukkan <strong>Email</strong> resmi Anda:</p>
                   <p className="text-xs text-slate-500 mt-1">
@@ -688,38 +688,44 @@ export default function ManualBookPage() {
                   </p>
                 </div>
               </li>
-              <li className="flex gap-3">
-                <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</span>
+              <li className="flex gap-2.5">
+                <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 dark:text-sky-400 grid place-items-center text-xs font-bold shrink-0 mt-0.5 leading-none">2</span>
                 <span>Masukkan <strong>Password</strong> — default akun baru: <code className="px-1.5 py-0.5 rounded bg-slate-200/60 dark:bg-white/[0.06] text-xs font-mono print:bg-slate-100">123123</code></span>
               </li>
-              <li className="flex gap-3">
-                <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">3</span>
+              <li className="flex gap-2.5">
+                <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 dark:text-sky-400 grid place-items-center text-xs font-bold shrink-0 mt-0.5 leading-none">3</span>
                 <span>Centang <strong>&ldquo;Ingat Saya&rdquo;</strong> agar tersimpan (opsional)</span>
               </li>
-              <li className="flex gap-3">
-                <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">4</span>
+              <li className="flex gap-2.5">
+                <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 dark:text-sky-400 grid place-items-center text-xs font-bold shrink-0 mt-0.5 leading-none">4</span>
                 <span>Klik tombol <strong>&ldquo;Masuk&rdquo;</strong></span>
               </li>
             </ol>
           </div>
           <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
-            <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2.5 print:text-black">
               <div className="w-6 h-6 rounded-lg bg-amber-500/15 grid place-items-center text-amber-600 dark:text-amber-400 shrink-0 leading-none">
                 <AlertCircle className="w-3.5 h-3.5 block" />
               </div>
               Hal Penting
             </h3>
             <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
-              <li className="flex gap-3 items-start">
-                <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5 items-start">
+                <div className="w-6 h-6 rounded-lg bg-amber-500/15 grid place-items-center text-amber-600 dark:text-amber-400 shrink-0 leading-none mt-0.5">
+                  <AlertCircle className="w-3.5 h-3.5 block" />
+                </div>
                 <span>Segera ubah password default setelah login pertama kali via menu Ganti Password.</span>
               </li>
-              <li className="flex gap-3 items-start">
-                <Info className="w-4 h-4 text-sky-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5 items-start">
+                <div className="w-6 h-6 rounded-lg bg-sky-500/15 grid place-items-center text-sky-600 dark:text-sky-400 shrink-0 leading-none mt-0.5">
+                  <Info className="w-3.5 h-3.5 block" />
+                </div>
                 <span>Kode bandara otomatis dikenali dari domain email Anda (misal: <code>sub</code> untuk Surabaya Juanda, <code>dps</code> untuk Denpasar Bali).</span>
               </li>
-              <li className="flex gap-3 items-start">
-                <ArrowRight className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5 items-start">
+                <div className="w-6 h-6 rounded-lg bg-emerald-500/15 grid place-items-center text-emerald-600 dark:text-emerald-400 shrink-0 leading-none mt-0.5">
+                  <ArrowRight className="w-3.5 h-3.5 block" />
+                </div>
                 <span><strong>Superadmin, Supervisor & CPM</strong> diarahkan ke Dashboard statistik. <strong>Team Leader, Teknisi & Admin Parkir</strong> diarahkan ke Daftar Berita Acara.</span>
               </li>
             </ul>
