@@ -372,7 +372,7 @@ export default function ManualBookPage() {
     <div className="min-h-screen bg-background text-foreground">
       {/* ═══ Top Header Bar ═══ */}
       <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-slate-300/40 dark:border-white/[0.06] shadow-[0_4px_12px_var(--shadow-dark)] print:static print:shadow-none print:border-b print:border-slate-300">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
               href="/login"
@@ -404,7 +404,7 @@ export default function ManualBookPage() {
         </div>
 
         {/* TOC Scrollable Bar — Desktop & Mobile */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-2 print:hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-2 print:hidden">
           <nav className="flex items-center sm:justify-center gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-1">
             {TOC.map((item) => (
               <a
@@ -420,7 +420,7 @@ export default function ManualBookPage() {
       </header>
 
       {/* ═══ Main Content ═══ */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 print:py-0 print:max-w-none">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 print:py-0 print:max-w-none">
 
         {/* ─── Corporate Header (Print Only) ─── */}
         <div className="hidden print:flex items-center justify-between mb-6 pb-4 border-b-2 border-slate-400">
@@ -438,7 +438,7 @@ export default function ManualBookPage() {
         {/* ═══ 1. PENGENALAN SISTEM ═══ */}
         <SectionTitle id="pengenalan" icon={BookOpen} title="Pengenalan Sistem" subtitle="Apa itu LaporPark dan untuk apa digunakan" />
 
-        <div className="neo-card p-5 sm:p-6 mb-6 max-w-4xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card p-5 sm:p-6 mb-6 w-full print:shadow-none print:border print:border-slate-200">
           <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
             <div className="flex items-center justify-center shrink-0">
               <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center shadow-[6px_6px_12px_var(--shadow-dark),-6px_-6px_12px_var(--shadow-light)] print:shadow-none print:border print:border-emerald-200">
@@ -458,7 +458,7 @@ export default function ManualBookPage() {
 
         {/* Jenis Insiden */}
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 text-center print:text-black">Jenis Insiden yang Dicatat</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6 max-w-4xl mx-auto print:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6 w-full print:grid-cols-3">
           {JENIS_INSIDEN.map((j) => (
             <div key={j.kode} className="neo-card p-4 flex items-start gap-3 print:shadow-none print:border print:border-slate-200 print:p-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
@@ -472,7 +472,7 @@ export default function ManualBookPage() {
 
         {/* Bandara */}
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 text-center print:text-black">14 Bandara yang Didukung</h3>
-        <div className="neo-card overflow-hidden mb-8 max-w-4xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card overflow-hidden mb-8 w-full print:shadow-none print:border print:border-slate-200">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -499,127 +499,121 @@ export default function ManualBookPage() {
         <SectionTitle id="hierarki" icon={Shield} title="Hierarki Peran Pengguna" subtitle="Struktur peran dari Kantor Pusat (Officer HO) hingga Level Operasional Cabang" />
 
         {/* Role Hierarchy Visual Architecture */}
-        <div className="neo-card p-5 sm:p-6 mb-6 max-w-3xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card p-5 sm:p-6 mb-6 w-full print:shadow-none print:border print:border-slate-200">
           <div className="flex flex-col items-center gap-3 py-2">
             {/* Level 1: Superadmin */}
-            <div className="w-full max-w-2xl">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-5 py-3.5 rounded-2xl bg-gradient-to-r from-rose-500/20 via-rose-500/10 to-rose-600/5 border border-rose-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)]">
-                <div className="flex flex-col sm:flex-row items-center gap-3.5 text-center sm:text-left">
-                  <div className="w-10 h-10 rounded-xl bg-rose-500/15 flex items-center justify-center text-rose-600 dark:text-rose-400 font-bold shrink-0">
-                    <Crown className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                      <span className="text-sm font-bold text-rose-600 dark:text-rose-400">Superadmin (Officer HO)</span>
-                      <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold border border-rose-500/20">Tingkat 1 (HO)</span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">Kantor Pusat — Akses Seluruh 14 Bandara (<code>xxxx@laporpark.ho.id</code>)</p>
-                  </div>
+            <div className="w-full px-5 py-4 rounded-2xl bg-gradient-to-r from-rose-500/20 via-rose-500/10 to-rose-600/5 border border-rose-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)] flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+              <div className="flex flex-col sm:flex-row items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/15 flex items-center justify-center text-rose-600 dark:text-rose-400 font-bold shrink-0 shadow-sm">
+                  <Crown className="w-5 h-5" />
                 </div>
-                <div className="shrink-0">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-rose-500/90 bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20">Head Office</span>
+                <div>
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                    <span className="text-sm sm:text-base font-bold text-rose-600 dark:text-rose-400">Superadmin (Officer HO)</span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold border border-rose-500/20">Tingkat 1 (HO)</span>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">Kantor Pusat — Akses Seluruh 14 Bandara (<code>xxxx@laporpark.ho.id</code>)</p>
                 </div>
+              </div>
+              <div className="shrink-0">
+                <span className="text-[11px] uppercase font-bold tracking-wider text-rose-500/90 bg-rose-500/10 px-3 py-1.5 rounded-xl border border-rose-500/20">Head Office</span>
               </div>
             </div>
 
             {/* Down Connector */}
-            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500">
-              <ChevronDown className="w-4 h-4" />
+            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500 my-0.5">
+              <ChevronDown className="w-5 h-5" />
             </div>
 
             {/* Level 2: Supervisor */}
-            <div className="w-full max-w-2xl">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-5 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-amber-600/5 border border-amber-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)]">
-                <div className="flex flex-col sm:flex-row items-center gap-3.5 text-center sm:text-left">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center text-amber-600 dark:text-amber-400 font-bold shrink-0">
-                    <UserCog className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                      <span className="text-sm font-bold text-amber-600 dark:text-amber-400">Supervisor</span>
-                      <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-bold border border-amber-500/20">Tingkat 2</span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">Pimpinan Operasional Cabang — Persetujuan Akhir BA & Pengguna Cabang</p>
-                  </div>
+            <div className="w-full px-5 py-4 rounded-2xl bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-amber-600/5 border border-amber-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)] flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+              <div className="flex flex-col sm:flex-row items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center text-amber-600 dark:text-amber-400 font-bold shrink-0 shadow-sm">
+                  <UserCog className="w-5 h-5" />
                 </div>
-                <div className="shrink-0">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-amber-500/90 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">Cabang</span>
+                <div>
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                    <span className="text-sm sm:text-base font-bold text-amber-600 dark:text-amber-400">Supervisor</span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-bold border border-amber-500/20">Tingkat 2</span>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">Pimpinan Operasional Cabang — Persetujuan Akhir BA & Pengguna Cabang</p>
                 </div>
+              </div>
+              <div className="shrink-0">
+                <span className="text-[11px] uppercase font-bold tracking-wider text-amber-500/90 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20">Cabang</span>
               </div>
             </div>
 
             {/* Down Connector */}
-            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500">
-              <ChevronDown className="w-4 h-4" />
+            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500 my-0.5">
+              <ChevronDown className="w-5 h-5" />
             </div>
 
             {/* Level 3: Carpark Manager */}
-            <div className="w-full max-w-2xl">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-5 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500/20 via-sky-500/10 to-sky-600/5 border border-sky-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)]">
-                <div className="flex flex-col sm:flex-row items-center gap-3.5 text-center sm:text-left">
-                  <div className="w-10 h-10 rounded-xl bg-sky-500/15 flex items-center justify-center text-sky-600 dark:text-sky-400 font-bold shrink-0">
-                    <ClipboardCheck className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                      <span className="text-sm font-bold text-sky-600 dark:text-sky-400">Carpark Manager</span>
-                      <span className="px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 text-[10px] font-bold border border-sky-500/20">Tingkat 3</span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">Manajer Operasional Cabang — Pemeriksaan & Validasi (Status Diperiksa)</p>
-                  </div>
+            <div className="w-full px-5 py-4 rounded-2xl bg-gradient-to-r from-sky-500/20 via-sky-500/10 to-sky-600/5 border border-sky-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)] flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+              <div className="flex flex-col sm:flex-row items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-sky-500/15 flex items-center justify-center text-sky-600 dark:text-sky-400 font-bold shrink-0 shadow-sm">
+                  <ClipboardCheck className="w-5 h-5" />
                 </div>
-                <div className="shrink-0">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-sky-500/90 bg-sky-500/10 px-2.5 py-1 rounded-lg border border-sky-500/20">Cabang</span>
+                <div>
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                    <span className="text-sm sm:text-base font-bold text-sky-600 dark:text-sky-400">Carpark Manager</span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 text-[10px] font-bold border border-sky-500/20">Tingkat 3</span>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">Manajer Operasional Cabang — Pemeriksaan & Validasi (Status Diperiksa)</p>
                 </div>
+              </div>
+              <div className="shrink-0">
+                <span className="text-[11px] uppercase font-bold tracking-wider text-sky-500/90 bg-sky-500/10 px-3 py-1.5 rounded-xl border border-sky-500/20">Cabang</span>
               </div>
             </div>
 
             {/* Down Connector */}
-            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500">
-              <ChevronDown className="w-4 h-4" />
+            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500 my-0.5">
+              <ChevronDown className="w-5 h-5" />
             </div>
 
             {/* Level 4: Equal Operational Level (Team Leader, Teknisi, Admin) */}
-            <div className="w-full max-w-2xl p-4 sm:p-5 rounded-2xl bg-slate-500/5 dark:bg-white/[0.02] border border-slate-300/60 dark:border-white/[0.08] shadow-[inset_2px_2px_5px_var(--shadow-dark),inset_-2px_-2px_5px_var(--shadow-light)]">
-              <div className="text-center mb-3.5">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/25">
+            <div className="w-full p-4 sm:p-6 rounded-2xl bg-slate-500/5 dark:bg-white/[0.02] border border-slate-300/60 dark:border-white/[0.08] shadow-[inset_2px_2px_5px_var(--shadow-dark),inset_-2px_-2px_5px_var(--shadow-light)]">
+              <div className="text-center mb-4">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/25">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   Tingkat 4 — Level Operasional Cabang (Tingkatan Setara / Sama)
                 </span>
-                <p className="text-[11px] text-slate-500 mt-1 max-w-lg mx-auto">
+                <p className="text-xs text-slate-500 mt-1 max-w-2xl mx-auto">
                   Team Leader, Teknisi, dan Admin Parkir memiliki level operasional yang setara: membuat BA baru, memantau daftar BA cabang, dan mencetak dokumen.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* Team Leader */}
-                <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500/15 to-indigo-600/5 border border-indigo-500/25 flex flex-col items-center text-center">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-1.5">
-                    <Users className="w-4 h-4" />
+                <div className="p-4 rounded-xl bg-gradient-to-br from-indigo-500/15 to-indigo-600/5 border border-indigo-500/25 flex flex-col items-center text-center">
+                  <div className="w-9 h-9 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-2">
+                    <Users className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">Team Leader</span>
-                  <p className="text-[10px] text-slate-500 mt-0.5">Pemimpin Regu Lapangan</p>
-                  <code className="text-[9px] text-indigo-500 mt-1">tl@laporpark.xxx.id</code>
+                  <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Team Leader</span>
+                  <p className="text-xs text-slate-500 mt-0.5">Pemimpin Regu Lapangan</p>
+                  <code className="text-[10px] text-indigo-500 mt-1.5 font-mono">tl@laporpark.xxx.id</code>
                 </div>
 
                 {/* Teknisi */}
-                <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500/15 to-emerald-600/5 border border-emerald-500/25 flex flex-col items-center text-center">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-1.5">
-                    <Wrench className="w-4 h-4" />
+                <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/15 to-emerald-600/5 border border-emerald-500/25 flex flex-col items-center text-center">
+                  <div className="w-9 h-9 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-2">
+                    <Wrench className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Teknisi</span>
-                  <p className="text-[10px] text-slate-500 mt-0.5">Pemeliharaan & Alat</p>
-                  <code className="text-[9px] text-emerald-500 mt-1">teknisi@laporpark.xxx.id</code>
+                  <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">Teknisi</span>
+                  <p className="text-xs text-slate-500 mt-0.5">Pemeliharaan & Alat</p>
+                  <code className="text-[10px] text-emerald-500 mt-1.5 font-mono">teknisi@laporpark.xxx.id</code>
                 </div>
 
                 {/* Admin Parkir */}
-                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/15 to-purple-600/5 border border-purple-500/25 flex flex-col items-center text-center">
-                  <div className="w-8 h-8 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-1.5">
-                    <Shield className="w-4 h-4" />
+                <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/15 to-purple-600/5 border border-purple-500/25 flex flex-col items-center text-center">
+                  <div className="w-9 h-9 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-2">
+                    <Shield className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-bold text-purple-600 dark:text-purple-400">Admin Parkir (Cabang)</span>
-                  <p className="text-[10px] text-slate-500 mt-0.5">Administrasi & Pencatatan</p>
-                  <code className="text-[9px] text-purple-500 mt-1">admin@laporpark.xxx.id</code>
+                  <span className="text-sm font-bold text-purple-600 dark:text-purple-400">Admin Parkir (Cabang)</span>
+                  <p className="text-xs text-slate-500 mt-0.5">Administrasi & Pencatatan</p>
+                  <code className="text-[10px] text-purple-500 mt-1.5 font-mono">admin@laporpark.xxx.id</code>
                 </div>
               </div>
             </div>
@@ -627,7 +621,7 @@ export default function ManualBookPage() {
         </div>
 
         {/* Differentiation Callout: Superadmin vs Admin Parkir Cabang */}
-        <div className="neo-card p-5 sm:p-6 mb-8 border border-amber-500/30 bg-amber-500/5 max-w-2xl mx-auto print:shadow-none print:border print:border-amber-300">
+        <div className="neo-card p-5 sm:p-6 mb-8 border border-amber-500/30 bg-amber-500/5 w-full print:shadow-none print:border print:border-amber-300">
           <div className="flex flex-col items-center text-center mb-4">
             <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-2">
               <AlertCircle className="w-5 h-5" />
@@ -670,7 +664,7 @@ export default function ManualBookPage() {
 
         {/* Permission Matrix Table */}
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 text-center print:text-black">Tabel Perbandingan Hak Akses per Role</h3>
-        <div className="neo-card overflow-hidden mb-8 max-w-4xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card overflow-hidden mb-8 w-full print:shadow-none print:border print:border-slate-200">
           <div className="overflow-x-auto">
             <table className="w-full text-xs sm:text-sm min-w-[750px]">
               <thead>
@@ -719,7 +713,7 @@ export default function ManualBookPage() {
         {/* ═══ 3. LOGIN ═══ */}
         <SectionTitle id="login" icon={LogIn} title="Login & Autentikasi" subtitle="Cara masuk ke sistem LaporPark" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8 w-full">
           <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
               <span className="w-6 h-6 rounded-lg bg-emerald-500/15 flex items-center justify-center text-xs font-bold text-emerald-600">1</span>
@@ -774,7 +768,7 @@ export default function ManualBookPage() {
         {/* ═══ 4. NAVIGASI ═══ */}
         <SectionTitle id="navigasi" icon={LayoutDashboard} title="Navigasi & Sidebar" subtitle="Menu yang tersedia berdasarkan role" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8 w-full">
           {[
             { icon: LayoutDashboard, label: "Dashboard", desc: "Statistik & ringkasan", roles: "Supervisor, CM" },
             { icon: FileText, label: "Daftar BA", desc: "Semua Berita Acara", roles: "Semua Role" },
@@ -814,7 +808,7 @@ export default function ManualBookPage() {
         </div>
 
         {/* Active Role Detail Card */}
-        <div className={`neo-card p-5 sm:p-6 border ${selectedRole.border} bg-gradient-to-br ${selectedRole.gradient} mb-8 max-w-3xl mx-auto print:shadow-none print:border print:border-slate-200 print:bg-white`}>
+        <div className={`neo-card p-5 sm:p-6 border ${selectedRole.border} bg-gradient-to-br ${selectedRole.gradient} mb-8 w-full print:shadow-none print:border print:border-slate-200 print:bg-white`}>
           <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3.5 mb-5">
             <div className={`w-12 h-12 rounded-2xl ${selectedRole.bg} flex items-center justify-center shadow-[4px_4px_8px_var(--shadow-dark),-4px_-4px_8px_var(--shadow-light)] print:shadow-none print:border print:border-slate-200 shrink-0`}>
               <selectedRole.icon className={`w-6 h-6 ${selectedRole.text}`} />
@@ -866,7 +860,7 @@ export default function ManualBookPage() {
         </div>
 
         {/* Print-only: show all roles */}
-        <div className="hidden print:block space-y-4 mb-8 max-w-3xl mx-auto">
+        <div className="hidden print:block space-y-4 mb-8 w-full">
           {BRANCH_ROLES.map((r) => (
             <div key={r.key} className="border border-slate-200 rounded-lg p-4 break-inside-avoid">
               <h4 className="font-bold text-black mb-1">{r.label}</h4>
@@ -893,7 +887,7 @@ export default function ManualBookPage() {
         <SectionTitle id="berita-acara" icon={FileText} title="Fitur Berita Acara" subtitle="Melihat, membuat, dan mengelola laporan insiden" />
 
         {/* Daftar BA features */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 w-full">
           {[
             { icon: Search, label: "Pencarian", desc: "Cari berdasarkan judul masalah atau nomor BA" },
             { icon: Filter, label: "Filter Status", desc: "Filter: Menunggu Review, Diperiksa, Revisi, Diketahui, Selesai" },
@@ -914,7 +908,7 @@ export default function ManualBookPage() {
 
         {/* Form Fields for Creating BA */}
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 text-center print:text-black">Kolom Formulir Pembuatan BA</h3>
-        <div className="neo-card overflow-hidden mb-6 max-w-4xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card overflow-hidden mb-6 w-full print:shadow-none print:border print:border-slate-200">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -941,7 +935,7 @@ export default function ManualBookPage() {
 
         {/* Status Badge Legend */}
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 text-center print:text-black">Status Berita Acara</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8 max-w-4xl mx-auto print:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8 w-full print:grid-cols-3">
           {STATUS_LIST.map((s) => (
             <div key={s.key} className="neo-card p-4 flex items-start gap-3 print:shadow-none print:border print:border-slate-200 print:p-2">
               <div className={`w-3 h-3 rounded-full ${s.color} mt-1 shrink-0`} />
@@ -957,7 +951,7 @@ export default function ManualBookPage() {
         <SectionTitle id="alur" icon={CheckCircle} title="Alur Persetujuan" subtitle="Workflow dari pembuatan hingga penyelesaian BA" />
 
         {/* Workflow Visual */}
-        <div className="neo-card p-5 sm:p-6 mb-4 max-w-3xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card p-5 sm:p-6 mb-4 w-full print:shadow-none print:border print:border-slate-200">
           <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-4 text-center print:text-black">Alur Standar</h3>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-0 justify-center flex-wrap">
             {[
@@ -986,7 +980,7 @@ export default function ManualBookPage() {
         </div>
 
         {/* Initial Status by Creator */}
-        <div className="neo-card p-5 mb-8 max-w-3xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card p-5 mb-8 w-full print:shadow-none print:border print:border-slate-200">
           <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 text-center print:text-black">Status Awal Berdasarkan Pembuat</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {[
@@ -1006,7 +1000,7 @@ export default function ManualBookPage() {
         {/* ═══ 8. CETAK & PDF ═══ */}
         <SectionTitle id="cetak" icon={Printer} title="Cetak & Download PDF" subtitle="Cara mencetak Berita Acara sebagai dokumen resmi" />
 
-        <div className="neo-card p-5 sm:p-6 mb-8 max-w-3xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card p-5 sm:p-6 mb-8 w-full print:shadow-none print:border print:border-slate-200">
           <ol className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
             <li className="flex gap-3">
               <span className="w-6 h-6 rounded-lg bg-sky-500/15 text-sky-600 flex items-center justify-center text-xs font-bold shrink-0">1</span>
@@ -1035,7 +1029,7 @@ export default function ManualBookPage() {
         {/* ═══ 9. GANTI PASSWORD ═══ */}
         <SectionTitle id="password" icon={KeyRound} title="Ganti Password" subtitle="Ubah password akun Anda" />
 
-        <div className="neo-card p-5 sm:p-6 mb-8 max-w-3xl mx-auto print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card p-5 sm:p-6 mb-8 w-full print:shadow-none print:border print:border-slate-200">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <h4 className="text-sm font-bold text-slate-800 dark:text-white mb-2 print:text-black">Cara Ganti Password</h4>
@@ -1060,7 +1054,7 @@ export default function ManualBookPage() {
         {/* ═══ 10. FAQ ═══ */}
         <SectionTitle id="faq" icon={HelpCircle} title="FAQ & Troubleshooting" subtitle="Pertanyaan yang sering ditanyakan" />
 
-        <div className="space-y-2 mb-8 max-w-3xl mx-auto">
+        <div className="space-y-2 mb-8 w-full">
           {FAQ_ITEMS.map((item, i) => (
             <FAQItem key={i} q={item.q} a={item.a} />
           ))}
