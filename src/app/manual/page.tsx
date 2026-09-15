@@ -142,7 +142,7 @@ const ROLES = [
     approveBA: false,
     reviseBA: false,
     finishBA: false,
-    managePhotos: "own",
+    managePhotos: true,
     manageUsers: false,
     initialStatus: "Menunggu Review",
   },
@@ -168,7 +168,7 @@ const ROLES = [
     approveBA: false,
     reviseBA: false,
     finishBA: false,
-    managePhotos: "own",
+    managePhotos: true,
     manageUsers: false,
     initialStatus: "Menunggu Review",
   },
@@ -194,7 +194,7 @@ const ROLES = [
     approveBA: false,
     reviseBA: false,
     finishBA: false,
-    managePhotos: false,
+    managePhotos: true,
     manageUsers: false,
     initialStatus: "Menunggu Review",
   },
@@ -295,8 +295,7 @@ const FORM_FIELDS = [
    ───────────────────────────────────────────── */
 
 function PermIcon({ val }: { val: boolean | string }) {
-  if (val === true) return <CheckCircle className="w-4 h-4 text-emerald-500" />;
-  if (val === "own") return <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wide">BA sendiri</span>;
+  if (val === true || val === "own") return <CheckCircle className="w-4 h-4 text-emerald-500" />;
   return <span className="w-4 h-4 rounded-full bg-slate-300/60 dark:bg-white/10 block" />;
 }
 
@@ -614,7 +613,7 @@ export default function ManualBookPage() {
             <table className="w-full text-xs sm:text-sm min-w-[750px]">
               <thead>
                 <tr className="border-b border-slate-300/50 dark:border-white/[0.08] print:border-slate-300">
-                  <th className="px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Fitur</th>
+                  <th className="px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700">Fitur</th>
                   {BRANCH_ROLES.map((r) => (
                     <th key={r.key} className={`px-2.5 py-3 text-[11px] font-bold uppercase tracking-wider text-center ${r.text}`}>
                       <div className="flex flex-col items-center gap-0.5">
@@ -640,7 +639,7 @@ export default function ManualBookPage() {
                   { label: "Kelola Pengguna", field: "manageUsers" },
                 ].map((row) => (
                   <tr key={row.label} className="hover:bg-white/30 dark:hover:bg-white/[0.02]">
-                    <td className="px-3 py-2.5 font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap print:text-black">{row.label}</td>
+                    <td className="px-3 py-2.5 font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap text-center print:text-black">{row.label}</td>
                     {BRANCH_ROLES.map((r) => (
                       <td key={r.key} className="px-2.5 py-2.5 text-center">
                         <div className="flex justify-center">
@@ -929,7 +928,7 @@ export default function ManualBookPage() {
           {/* Revision branch */}
           <div className="flex items-center justify-center mt-4 gap-2">
             <div className="px-3 py-1.5 rounded-lg bg-orange-500/15 border border-orange-500/30 text-orange-600 dark:text-orange-400 text-xs font-semibold">
-              ↩️ Revisi — dikembalikan oleh CM atau SPV untuk diperbaiki
+              ↩️ Revisi — dikembalikan oleh CPM atau SPV untuk diperbaiki
             </div>
           </div>
         </div>
