@@ -291,10 +291,10 @@ export default function LoginPage() {
         {/* Manual Book Link */}
         <Link
           href="/manual"
-          className="group flex items-center justify-center gap-2 mx-auto mt-3 px-4 py-2 rounded-xl text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/8 hover:bg-emerald-500/15 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-200 login-footer w-fit"
+          className="relative z-20 group flex items-center justify-center gap-2 mx-auto mt-4 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 border border-emerald-500/25 hover:border-emerald-500/50 shadow-sm transition-all duration-200 cursor-pointer w-fit"
         >
-          <BookOpen className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
-          Panduan Penggunaan (Manual Book)
+          <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
+          <span>Panduan Penggunaan (Manual Book)</span>
         </Link>
 
         {/* Footer */}
