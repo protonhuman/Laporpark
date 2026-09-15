@@ -918,7 +918,7 @@ export default function ManualBookPage() {
         <SectionTitle id="alur" icon={CheckCircle} title="Alur Persetujuan" subtitle="Workflow dari pembuatan hingga penyelesaian BA" />
 
         {/* Workflow Visual */}
-        <div className="neo-card p-5 sm:p-6 mb-4 w-full print:shadow-none print:border print:border-slate-200">
+        <div className="neo-card p-5 sm:p-6 mb-8 w-full print:shadow-none print:border print:border-slate-200">
           <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-4 text-center print:text-black">Alur Standar</h3>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-0 justify-center flex-wrap">
             {[
@@ -943,24 +943,6 @@ export default function ManualBookPage() {
             <div className="px-3 py-1.5 rounded-lg bg-orange-500/15 border border-orange-500/30 text-orange-600 dark:text-orange-400 text-xs font-semibold">
               ↩️ Revisi — dikembalikan oleh CM atau SPV untuk diperbaiki
             </div>
-          </div>
-        </div>
-
-        {/* Initial Status by Creator */}
-        <div className="neo-card p-5 mb-8 w-full print:shadow-none print:border print:border-slate-200">
-          <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 text-center print:text-black">Status Awal Berdasarkan Pembuat</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {[
-              { role: "Team Leader / Teknisi / Admin", status: "Menunggu Review", color: "bg-amber-500" },
-              { role: "Carpark Manager", status: "Diperiksa", color: "bg-blue-500", note: "melewati tahap review" },
-              { role: "Supervisor", status: "Diketahui", color: "bg-emerald-500", note: "melewati review & periksa" },
-            ].map((item) => (
-              <div key={item.role} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/40 dark:bg-white/[0.03] border border-white/60 dark:border-white/[0.06] print:bg-white print:border-slate-200">
-                <span className="text-sm text-slate-700 dark:text-slate-200 flex-1 print:text-slate-800">{item.role}</span>
-                <ArrowRight className="w-3 h-3 text-slate-400 shrink-0" />
-                <span className={`${item.color} text-white px-2 py-0.5 rounded-md text-[11px] font-bold`}>{item.status}</span>
-              </div>
-            ))}
           </div>
         </div>
 
