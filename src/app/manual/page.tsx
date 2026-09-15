@@ -201,6 +201,8 @@ const ROLES = [
   },
 ] as const;
 
+const BRANCH_ROLES = ROLES.filter((r) => r.key !== "superadmin");
+
 const JENIS_INSIDEN = [
   { kode: "kerusakan", label: "Kerusakan", desc: "Kerusakan fasilitas/infrastruktur parkir" },
   { kode: "kerusakan_kendaraan", label: "Kerusakan Kendaraan", desc: "Kerusakan yang melibatkan kendaraan" },
@@ -213,24 +215,24 @@ const JENIS_INSIDEN = [
 
 const BANDARA_LIST = [
   { kode: "AMQ", nama: "Bandara Pattimura", lokasi: "Ambon" },
-  { kode: "BDJ", nama: "Bandara Intl. Syamsudin Noor", lokasi: "Banjarmasin" },
-  { kode: "BIK", nama: "Bandara Intl. Frans Kaisiepo", lokasi: "Biak" },
-  { kode: "BPN", nama: "Bandara Intl. Sultan Aji Muhammad Sulaiman", lokasi: "Balikpapan" },
-  { kode: "DJJ", nama: "Bandara Intl. Sentani", lokasi: "Jayapura" },
-  { kode: "DPS", nama: "Bandara Intl. I Gusti Ngurah Rai", lokasi: "Denpasar" },
-  { kode: "KOE", nama: "Bandara Intl. El Tari", lokasi: "Kupang" },
-  { kode: "LOP", nama: "Bandara Intl. Zainuddin Abdul Madjid", lokasi: "Lombok" },
-  { kode: "MDC", nama: "Bandara Intl. Sam Ratulangi", lokasi: "Manado" },
-  { kode: "SOC", nama: "Bandara Intl. Adi Soemarmo", lokasi: "Solo" },
-  { kode: "SRG", nama: "Bandara Intl. Jenderal Ahmad Yani", lokasi: "Semarang" },
-  { kode: "SUB", nama: "Bandara Intl. Juanda", lokasi: "Surabaya" },
-  { kode: "UPG", nama: "Bandara Intl. Sultan Hasanuddin", lokasi: "Makassar" },
-  { kode: "YIA", nama: "Bandara Intl. Yogyakarta", lokasi: "Yogyakarta" },
+  { kode: "BDJ", nama: "Bandara Internasional Syamsudin Noor", lokasi: "Banjarmasin" },
+  { kode: "BIK", nama: "Bandara Internasional Frans Kaisiepo", lokasi: "Biak" },
+  { kode: "BPN", nama: "Bandara Internasional Sultan Aji Muhammad Sulaiman", lokasi: "Balikpapan" },
+  { kode: "DJJ", nama: "Bandara Internasional Sentani", lokasi: "Jayapura" },
+  { kode: "DPS", nama: "Bandara Internasional I Gusti Ngurah Rai", lokasi: "Denpasar" },
+  { kode: "KOE", nama: "Bandara Internasional El Tari", lokasi: "Kupang" },
+  { kode: "LOP", nama: "Bandara Internasional Zainuddin Abdul Madjid", lokasi: "Lombok" },
+  { kode: "MDC", nama: "Bandara Internasional Sam Ratulangi", lokasi: "Manado" },
+  { kode: "SOC", nama: "Bandara Internasional Adi Soemarmo", lokasi: "Solo" },
+  { kode: "SRG", nama: "Bandara Internasional Jenderal Ahmad Yani", lokasi: "Semarang" },
+  { kode: "SUB", nama: "Bandara Internasional Juanda", lokasi: "Surabaya" },
+  { kode: "UPG", nama: "Bandara Internasional Sultan Hasanuddin", lokasi: "Makassar" },
+  { kode: "YIA", nama: "Bandara Internasional Yogyakarta", lokasi: "Yogyakarta" },
 ];
 
 const STATUS_LIST = [
   { key: "menunggu_review", label: "Menunggu Review", color: "bg-amber-500", desc: "BA baru, menunggu pemeriksaan Carpark Manager" },
-  { key: "diperiksa", label: "Diperiksa", color: "bg-blue-500", desc: "CM sudah memeriksa, menunggu persetujuan Supervisor" },
+  { key: "diperiksa", label: "Diperiksa", color: "bg-blue-500", desc: "CPM sudah memeriksa, menunggu persetujuan Supervisor" },
   { key: "revisi", label: "Revisi", color: "bg-orange-500", desc: "BA dikembalikan untuk diperbaiki oleh pembuat" },
   { key: "disetujui", label: "Diketahui", color: "bg-emerald-500", desc: "Supervisor sudah menyetujui BA" },
   { key: "selesai", label: "Selesai", color: "bg-teal-500", desc: "BA telah selesai dan ditutup" },
@@ -239,11 +241,11 @@ const STATUS_LIST = [
 const FAQ_ITEMS = [
   {
     q: "Saya tidak bisa login, apa yang harus dilakukan?",
-    a: "Pastikan format email sesuai: Untuk akun staf cabang gunakan format xxxx@laporpark.{kode_bandara}.id (contoh: admin@laporpark.sub.id, spv@laporpark.dps.id, cpm@laporpark.upg.id). Untuk Officer HO / Superadmin gunakan xxxx@laporpark.id. Pastikan password sudah benar (default akun baru: 123123). Jika masih gagal, hubungi Supervisor bandara Anda.",
+    a: "Pastikan format email sesuai: Untuk akun staf cabang gunakan format xxxx@laporpark.{kode_bandara}.id (contoh: admin@laporpark.sub.id, supervisor@laporpark.dps.id, cpm@laporpark.upg.id). Pastikan password sudah benar (default akun baru: 123123). Jika masih gagal, hubungi Supervisor bandara Anda.",
   },
   {
     q: "Apa perbedaan Superadmin (Officer HO) dengan Admin Parkir Cabang?",
-    a: "Superadmin (Officer HO) berada di Kantor Pusat dan memonitor seluruh 14 bandara (kode: ALL) dengan email @laporpark.id. Sedangkan Admin Parkir Cabang adalah staf administrasi di cabang bandara tertentu dengan level setara Team Leader dan Teknisi, hanya mengelola data di bandara cabangnya sendiri dengan domain email @laporpark.{kode_bandara}.id.",
+    a: "Superadmin (Officer HO) berada di Kantor Pusat dan memonitor seluruh 14 bandara (kode: ALL) dengan email @laporpark.ho.id. Sedangkan Admin Parkir Cabang adalah staf administrasi di cabang bandara tertentu dengan level setara Team Leader dan Teknisi, hanya mengelola data di bandara cabangnya sendiri dengan domain email @laporpark.{kode_bandara}.id.",
   },
   {
     q: "Saya tidak bisa melihat Dashboard, kenapa?",
@@ -360,7 +362,7 @@ const TOC = [
 
 export default function ManualBookPage() {
   const [activeRole, setActiveRole] = useState<string>("supervisor");
-  const selectedRole = ROLES.find((r) => r.key === activeRole) || ROLES[1];
+  const selectedRole = BRANCH_ROLES.find((r) => r.key === activeRole) || BRANCH_ROLES[0];
 
   function handleDownloadPDF() {
     window.print();
@@ -511,7 +513,7 @@ export default function ManualBookPage() {
                       <span className="text-sm font-bold text-rose-600 dark:text-rose-400">Superadmin (Officer HO)</span>
                       <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold border border-rose-500/20">Tingkat 1 (HO)</span>
                     </div>
-                    <p className="text-[11px] text-slate-500">Kantor Pusat — Akses Seluruh 14 Bandara (<code>xxxx@laporpark.id</code>)</p>
+                    <p className="text-[11px] text-slate-500">Kantor Pusat — Akses Seluruh 14 Bandara (<code>xxxx@laporpark.ho.id</code>)</p>
                   </div>
                 </div>
               </div>
@@ -666,7 +668,7 @@ export default function ManualBookPage() {
               <thead>
                 <tr className="border-b border-slate-300/50 dark:border-white/[0.08] print:border-slate-300">
                   <th className="px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Fitur</th>
-                  {ROLES.map((r) => (
+                  {BRANCH_ROLES.map((r) => (
                     <th key={r.key} className={`px-2.5 py-3 text-[11px] font-bold uppercase tracking-wider text-center ${r.text}`}>
                       <div className="flex flex-col items-center gap-0.5">
                         <r.icon className="w-3.5 h-3.5 mb-0.5" />
@@ -692,7 +694,7 @@ export default function ManualBookPage() {
                 ].map((row) => (
                   <tr key={row.label} className="hover:bg-white/30 dark:hover:bg-white/[0.02]">
                     <td className="px-3 py-2.5 font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap print:text-black">{row.label}</td>
-                    {ROLES.map((r) => (
+                    {BRANCH_ROLES.map((r) => (
                       <td key={r.key} className="px-2.5 py-2.5 text-center">
                         <div className="flex justify-center">
                           <PermIcon val={row.field === "dashboard" ? r.dashboard : (r as Record<string, unknown>)[row.field] as boolean | string} />
@@ -721,10 +723,7 @@ export default function ManualBookPage() {
                 <div>
                   <p>Masukkan <strong>Email</strong> resmi Anda:</p>
                   <p className="text-xs text-slate-500 mt-1">
-                    • <strong>Pengguna Cabang:</strong> format <code>xxxx@laporpark.xxx.id</code> (contoh: <code>admin@laporpark.sub.id</code>, <code>spv@laporpark.dps.id</code>, <code>tl@laporpark.bpn.id</code>, <code>teknisi@laporpark.yia.id</code>)
-                  </p>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    • <strong>Officer HO (Superadmin):</strong> format <code>xxxx@laporpark.id</code> (contoh: <code>officer@laporpark.id</code>)
+                    • <strong>Pengguna Cabang:</strong> format <code>xxxx@laporpark.xxx.id</code> (contoh: <code>admin@laporpark.sub.id</code>, <code>supervisor@laporpark.dps.id</code>, <code>tl@laporpark.bpn.id</code>, <code>teknisi@laporpark.yia.id</code>)
                   </p>
                 </div>
               </li>
@@ -758,7 +757,7 @@ export default function ManualBookPage() {
               </li>
               <li className="flex gap-3 items-start">
                 <ArrowRight className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>Superadmin, Supervisor & CM</strong> diarahkan ke Dashboard statistik. <strong>Team Leader, Teknisi & Admin Parkir</strong> diarahkan ke Daftar Berita Acara.</span>
+                <span><strong>Superadmin, Supervisor & CPM</strong> diarahkan ke Dashboard statistik. <strong>Team Leader, Teknisi & Admin Parkir</strong> diarahkan ke Daftar Berita Acara.</span>
               </li>
             </ul>
           </div>
@@ -790,7 +789,7 @@ export default function ManualBookPage() {
 
         {/* Role Tabs */}
         <div className="flex flex-wrap gap-2 mb-4 print:hidden">
-          {ROLES.map((r) => (
+          {BRANCH_ROLES.map((r) => (
             <button
               key={r.key}
               onClick={() => setActiveRole(r.key)}
@@ -860,7 +859,7 @@ export default function ManualBookPage() {
 
         {/* Print-only: show all roles */}
         <div className="hidden print:block space-y-4 mb-8">
-          {ROLES.map((r) => (
+          {BRANCH_ROLES.map((r) => (
             <div key={r.key} className="border border-slate-200 rounded-lg p-4 break-inside-avoid">
               <h4 className="font-bold text-black mb-1">{r.label}</h4>
               <p className="text-xs text-slate-600 mb-2">{r.description}</p>
@@ -954,9 +953,9 @@ export default function ManualBookPage() {
           <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-4 print:text-black">Alur Standar</h3>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-0 justify-center flex-wrap">
             {[
-              { label: "Dibuat TL/Teknisi", color: "bg-indigo-500", textColor: "text-white" },
+              { label: "Dibuat TL/Teknisi/Admin", color: "bg-indigo-500", textColor: "text-white" },
               { label: "Menunggu Review", color: "bg-amber-500", textColor: "text-white" },
-              { label: "Diperiksa (CM)", color: "bg-blue-500", textColor: "text-white" },
+              { label: "Diperiksa (CPM)", color: "bg-blue-500", textColor: "text-white" },
               { label: "Diketahui (SPV)", color: "bg-emerald-500", textColor: "text-white" },
               { label: "Selesai", color: "bg-teal-500", textColor: "text-white" },
             ].map((step, i) => (
@@ -983,7 +982,7 @@ export default function ManualBookPage() {
           <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 print:text-black">Status Awal Berdasarkan Pembuat</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {[
-              { role: "Team Leader / Teknisi", status: "Menunggu Review", color: "bg-amber-500" },
+              { role: "Team Leader / Teknisi / Admin", status: "Menunggu Review", color: "bg-amber-500" },
               { role: "Carpark Manager", status: "Diperiksa", color: "bg-blue-500", note: "melewati tahap review" },
               { role: "Supervisor", status: "Diketahui", color: "bg-emerald-500", note: "melewati review & periksa" },
             ].map((item) => (
@@ -1020,7 +1019,7 @@ export default function ManualBookPage() {
           </ol>
           <div className="mt-4 p-3 rounded-xl bg-sky-500/5 border border-sky-500/20">
             <p className="text-xs text-slate-600 dark:text-slate-300 print:text-slate-700">
-              📄 Layout cetak berisi format dokumen resmi dengan kop surat, nomor BA, seluruh detail insiden, dan tanda tangan digital (jika tersedia) dari Pembuat, Pemeriksa (CM), dan Mengetahui (Supervisor).
+              📄 Layout cetak berisi format dokumen resmi dengan kop surat, nomor BA, seluruh detail insiden, dan tanda tangan digital (jika tersedia) dari Pembuat, Pemeriksa (CPM), dan Mengetahui (Supervisor).
             </p>
           </div>
         </div>

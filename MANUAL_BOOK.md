@@ -1,5 +1,7 @@
 # 📖 Manual Book — LaporPark
+
 ### Sistem Manajemen Berita Acara Parkir
+
 **Angkasa Pura Supports — Unit Parkir**
 
 ---
@@ -32,38 +34,38 @@
 
 ## 1. Pengenalan Sistem
 
-**LaporPark** adalah aplikasi web berbasis *Berita Acara* yang digunakan untuk mencatat, melacak, dan menyelesaikan insiden yang terjadi di area parkir bandara di bawah naungan **Angkasa Pura Supports** bekerja sama dengan **Centre Park**.
+**LaporPark** adalah aplikasi web berbasis _Berita Acara_ yang digunakan untuk mencatat, melacak, dan menyelesaikan insiden yang terjadi di area parkir bandara di bawah naungan **Angkasa Pura Supports** bekerja sama dengan **Centre Park**.
 
 ### Jenis Insiden yang Dicatat:
 
-| Kode | Label | Deskripsi |
-|------|-------|-----------|
-| `kerusakan` | Kerusakan | Kerusakan fasilitas/infrastruktur parkir |
-| `kerusakan_kendaraan` | Kerusakan Kendaraan | Kerusakan yang melibatkan kendaraan |
-| `komplain` | Komplain | Keluhan dari pengguna jasa parkir |
-| `kehilangan` | Kehilangan | Laporan kehilangan barang/kendaraan |
-| `gangguan_sistem` | Gangguan Sistem | Gangguan pada sistem IT/perangkat lunak |
-| `gangguan_perangkat` | Gangguan Perangkat | Gangguan pada perangkat keras |
-| `lainnya` | Lainnya | Insiden yang tidak termasuk kategori di atas |
+| Kode                  | Label               | Deskripsi                                    |
+| --------------------- | ------------------- | -------------------------------------------- |
+| `kerusakan`           | Kerusakan           | Kerusakan fasilitas/infrastruktur parkir     |
+| `kerusakan_kendaraan` | Kerusakan Kendaraan | Kerusakan yang melibatkan kendaraan          |
+| `komplain`            | Komplain            | Keluhan dari pengguna jasa parkir            |
+| `kehilangan`          | Kehilangan          | Laporan kehilangan barang/kendaraan          |
+| `gangguan_sistem`     | Gangguan Sistem     | Gangguan pada sistem IT/perangkat lunak      |
+| `gangguan_perangkat`  | Gangguan Perangkat  | Gangguan pada perangkat keras                |
+| `lainnya`             | Lainnya             | Insiden yang tidak termasuk kategori di atas |
 
 ### Bandara yang Didukung:
 
-| Kode | Nama Bandara | Lokasi |
-|------|-------------|--------|
-| AMQ | Bandara Pattimura | Ambon |
-| BDJ | Bandara Intl. Syamsudin Noor | Banjarmasin |
-| BIK | Bandara Intl. Frans Kaisiepo | Biak |
-| BPN | Bandara Intl. Sultan Aji Muhammad Sulaiman | Balikpapan |
-| DJJ | Bandara Intl. Sentani | Jayapura |
-| DPS | Bandara Intl. I Gusti Ngurah Rai | Denpasar |
-| KOE | Bandara Intl. El Tari | Kupang |
-| LOP | Bandara Intl. Zainuddin Abdul Madjid | Lombok |
-| MDC | Bandara Intl. Sam Ratulangi | Manado |
-| SOC | Bandara Intl. Adi Soemarmo | Solo |
-| SRG | Bandara Intl. Jenderal Ahmad Yani | Semarang |
-| SUB | Bandara Intl. Juanda | Surabaya |
-| UPG | Bandara Intl. Sultan Hasanuddin | Makassar |
-| YIA | Bandara Intl. Yogyakarta | Yogyakarta |
+| Kode | Nama Bandara                                       | Lokasi      |
+| ---- | -------------------------------------------------- | ----------- |
+| AMQ  | Bandara Pattimura                                  | Ambon       |
+| BDJ  | Bandara Internasional Syamsudin Noor               | Banjarmasin |
+| BIK  | Bandara Internasional Frans Kaisiepo               | Biak        |
+| BPN  | Bandara Internasional Sultan Aji Muhammad Sulaiman | Balikpapan  |
+| DJJ  | Bandara Internasional Sentani                      | Jayapura    |
+| DPS  | Bandara Internasional I Gusti Ngurah Rai           | Denpasar    |
+| KOE  | Bandara Internasional El Tari                      | Kupang      |
+| LOP  | Bandara Internasional Zainuddin Abdul Madjid       | Lombok      |
+| MDC  | Bandara Internasional Sam Ratulangi                | Manado      |
+| SOC  | Bandara Internasional Adi Soemarmo                 | Solo        |
+| SRG  | Bandara Internasional Jenderal Ahmad Yani          | Semarang    |
+| SUB  | Bandara Internasional Juanda                       | Surabaya    |
+| UPG  | Bandara Internasional Sultan Hasanuddin            | Makassar    |
+| YIA  | Bandara Internasional Yogyakarta                   | Yogyakarta  |
 
 ---
 
@@ -73,12 +75,12 @@ Sistem **LaporPark** memiliki struktur peran berjenjang yang membedakan kewenang
 
 ### Struktur Tingkatan:
 
-1. **👑 Superadmin (Officer HO)** — *Tingkat Tertinggi / Kantor Pusat*  
+1. **👑 Superadmin (Officer HO)** — _Tingkat Tertinggi / Kantor Pusat_  
    Memegang kewenangan penuh atas sistem dan memonitor seluruh 14 bandara (`kode_bandara: ALL`). Menggunakan email domain `@laporpark.id` (tanpa kode bandara).
-2. **🛡️ Supervisor** — *Tingkat Pimpinan Cabang*  
-   Kepala operasional tertinggi di bandara cabang. Memegang hak persetujuan akhir Berita Acara (*Diketahui* dan *Selesai*), mengembalikan revisi, serta manajemen pengguna (CRUD staf) di cabangnya.
-3. **📋 Carpark Manager** — *Tingkat Manajerial Cabang*  
-   Manajer parkir cabang yang bertanggung jawab memvalidasi dan menandai BA telah *Diperiksa* sebelum disetujui Supervisor.
+2. **🛡️ Supervisor** — _Tingkat Pimpinan Cabang_  
+   Kepala operasional tertinggi di bandara cabang. Memegang hak persetujuan akhir Berita Acara (_Diketahui_ dan _Selesai_), mengembalikan revisi, serta manajemen pengguna (CRUD staf) di cabangnya.
+3. **📋 Carpark Manager** — _Tingkat Manajerial Cabang_  
+   Manajer parkir cabang yang bertanggung jawab memvalidasi dan menandai BA telah _Diperiksa_ sebelum disetujui Supervisor.
 4. **👥 🔧 📝 Level Operasional Cabang (Tingkatan Setara / Sama)**:  
    Tiga peran berikut memiliki **level operasional yang setara** di lapangan:
    - **Team Leader**: Pemimpin regu lapangan yang membuat laporan Berita Acara insiden operasional.
@@ -94,7 +96,7 @@ graph TD
     subgraph CABANG["✈️ Tingkat Cabang Bandara"]
         SPV["🛡️ Supervisor<br/><small>Pimpinan Operasional Cabang (Approval & User)</small><br/><code>spv@laporpark.{kode}.id</code>"]
         CPM["📋 Carpark Manager<br/><small>Pemeriksaan & Validasi Lapangan (Diperiksa)</small><br/><code>cpm@laporpark.{kode}.id</code>"]
-        
+
         subgraph OPR["Level Operasional Cabang (Tingkatan Setara)"]
             TL["👥 Team Leader<br/><small>Regu Lapangan</small><br/><code>tl@laporpark.{kode}.id</code>"]
             TEK["🔧 Teknisi<br/><small>Pemeliharaan Alat</small><br/><code>teknisi@laporpark.{kode}.id</code>"]
@@ -121,36 +123,36 @@ graph TD
 
 Sangat penting untuk membedakan antara **Superadmin** di Kantor Pusat dengan **Admin Parkir** di cabang bandara:
 
-| Aspek | 👑 Superadmin (Officer HO) | 📝 Admin Parkir (Admin Cabang) |
-|-------|----------------------------|--------------------------------|
-| **Kedudukan** | Kantor Pusat (Head Office / HO) | Kantor Cabang Bandara |
-| **Cakupan Akses Data** | Seluruh 14 Bandara di Indonesia (`ALL`) | Hanya 1 Bandara tempat bertugas |
-| **Format Domain Email** | `xxxx@laporpark.id` *(tanpa kode bandara)* | `xxxx@laporpark.{kode_bandara}.id` |
-| **Contoh Email** | `officer@laporpark.id` / `superadmin@laporpark.id` | `admin@laporpark.sub.id`, `admin@laporpark.dps.id` |
-| **Tingkatan Hak Akses** | Tingkat 1 (Akses Tertinggi Global) | Tingkat 4 (Setara Team Leader & Teknisi) |
-| **Fungsi Utama** | Monitoring nasional, master data, filter lintas bandara | Input BA, pencatatan administrasi insiden cabang |
+| Aspek                   | 👑 Superadmin (Officer HO)                              | 📝 Admin Parkir (Admin Cabang)                     |
+| ----------------------- | ------------------------------------------------------- | -------------------------------------------------- |
+| **Kedudukan**           | Kantor Pusat (Head Office / HO)                         | Kantor Cabang Bandara                              |
+| **Cakupan Akses Data**  | Seluruh 14 Bandara di Indonesia (`ALL`)                 | Hanya 1 Bandara tempat bertugas                    |
+| **Format Domain Email** | `xxxx@laporpark.id` _(tanpa kode bandara)_              | `xxxx@laporpark.{kode_bandara}.id`                 |
+| **Contoh Email**        | `officer@laporpark.id` / `superadmin@laporpark.id`      | `admin@laporpark.sub.id`, `admin@laporpark.dps.id` |
+| **Tingkatan Hak Akses** | Tingkat 1 (Akses Tertinggi Global)                      | Tingkat 4 (Setara Team Leader & Teknisi)           |
+| **Fungsi Utama**        | Monitoring nasional, master data, filter lintas bandara | Input BA, pencatatan administrasi insiden cabang   |
 
 ---
 
-### 2.1 Ringkasan Hak Akses per Role
+### 2.1 Ringkasan Hak Akses per Role (Tingkat Cabang)
 
-| Fitur | Superadmin (Officer HO) | Supervisor (Cabang) | Carpark Manager (Cabang) | Team Leader (Operasional) | Teknisi (Operasional) | Admin Parkir (Operasional) |
-|-------|:-----------------------:|:-------------------:|:------------------------:|:-------------------------:|:---------------------:|:--------------------------:|
-| **Cakupan Bandara** | Seluruh 14 Bandara | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri |
-| **Dashboard Statistik** | ✅ (Semua Bandara) | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Daftar Berita Acara** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Buat BA Baru** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Status Awal BA Baru** | Mengetahui | Diketahui | Diperiksa | Menunggu Review | Menunggu Review | Menunggu Review |
-| **Edit BA** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Hapus BA** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Tandai "Diperiksa"** | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Setujui BA ("Diketahui")** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Kembalikan ke Revisi** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Tandai "Selesai"** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Kelola Foto Lampiran** | ✅ | ✅ | ✅ | ✅* | ✅* | ❌ |
-| **Manajemen Pengguna** | ✅ (Semua Bandara) | ✅ (Cabang Saja) | ❌ | ❌ | ❌ | ❌ |
-| **Cetak / PDF** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Ganti Password Sendiri** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Fitur | Supervisor (Cabang) | Carpark Manager (Cabang) | Team Leader (Operasional) | Teknisi (Operasional) | Admin Parkir (Operasional) |
+|-------|:-------------------:|:------------------------:|:-------------------------:|:---------------------:|:--------------------------:|
+| **Cakupan Bandara** | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri |
+| **Dashboard Statistik** | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Daftar Berita Acara** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Buat BA Baru** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Status Awal BA Baru** | Diketahui | Diperiksa | Menunggu Review | Menunggu Review | Menunggu Review |
+| **Edit BA** | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Hapus BA** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Tandai "Diperiksa"** | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Setujui BA ("Diketahui")** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Kembalikan ke Revisi** | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Tandai "Selesai"** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Kelola Foto Lampiran** | ✅ | ✅ | ✅* | ✅* | ❌ |
+| **Manajemen Pengguna** | ✅ (Cabang Saja) | ❌ | ❌ | ❌ | ❌ |
+| **Cetak / PDF** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Ganti Password Sendiri** | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 > *\*Team Leader & Teknisi hanya dapat mengelola foto pada BA yang mereka buat sendiri.*  
 > *\*Team Leader, Teknisi, dan Admin Parkir berada di level operasional yang sama di cabang.*
@@ -169,7 +171,7 @@ Buka aplikasi LaporPark melalui browser (`http://localhost:3000/login` atau URL 
    - **Untuk Pengguna Cabang (Supervisor, CM, TL, Teknisi, Admin Parkir):**  
      Format email wajib menggunakan domain bandara masing-masing:  
      👉 `xxxx@laporpark.{kode_bandara}.id` (atau pola umum: `xxxx@laporpark.xxx.id`)
-     
+
      **Contoh sesuai bandara penugasan:**
      - `admin@laporpark.sub.id` — Admin Parkir Bandara Juanda (Surabaya)
      - `spv@laporpark.dps.id` — Supervisor Bandara I Gusti Ngurah Rai (Denpasar)
@@ -177,7 +179,7 @@ Buka aplikasi LaporPark melalui browser (`http://localhost:3000/login` atau URL 
      - `tl@laporpark.bpn.id` — Team Leader Bandara SAMS Sepinggan (Balikpapan)
      - `teknisi@laporpark.yia.id` — Teknisi Bandara Yogyakarta (YIA)
      - `budi@laporpark.bdj.id` — Petugas Bandara Syamsudin Noor (Banjarmasin)
-     - *(Menyesuaikan 14 kode bandara resmi: AMQ, BDJ, BIK, BPN, DJJ, DPS, KOE, LOP, MDC, SOC, SRG, SUB, UPG, YIA)*
+     - _(Menyesuaikan 14 kode bandara resmi: AMQ, BDJ, BIK, BPN, DJJ, DPS, KOE, LOP, MDC, SOC, SRG, SUB, UPG, YIA)_
 
    - **Untuk Superadmin (Officer HO - Kantor Pusat):**  
      Menggunakan domain kantor pusat tanpa kode bandara:  
@@ -187,7 +189,7 @@ Buka aplikasi LaporPark melalui browser (`http://localhost:3000/login` atau URL 
    - Password default saat akun dibuat: `123123`
    - Anda dapat mengklik ikon 👁️ mata untuk menampilkan/menyembunyikan password.
 
-3. *(Opsional)* Centang **"Ingat Saya"** agar email dan password tersimpan di browser untuk login berikutnya.
+3. _(Opsional)_ Centang **"Ingat Saya"** agar email dan password tersimpan di browser untuk login berikutnya.
 
 4. Klik tombol **"Masuk"**.
 
@@ -197,6 +199,7 @@ Buka aplikasi LaporPark melalui browser (`http://localhost:3000/login` atau URL 
 ### 3.2 Setelah Login Berhasil
 
 Setelah login berhasil, animasi transisi akan muncul dan Anda akan diarahkan ke:
+
 - **Dashboard** — jika role Anda adalah **Supervisor**, **Carpark Manager**, atau **Superadmin**
 - **Daftar Berita Acara** — jika role Anda berada di level operasional (**Team Leader**, **Teknisi**, atau **Admin Parkir Cabang**)
 
@@ -208,14 +211,15 @@ Sidebar adalah panel navigasi utama yang terletak di sisi kiri layar (desktop) a
 
 ### Menu yang Tampil Berdasarkan Role:
 
-| Menu | Icon | Superadmin (HO) | Supervisor (Cabang) | Carpark Manager | Team Leader | Teknisi | Admin Parkir Cabang |
-|------|------|:---------------:|:-------------------:|:---------------:|:-----------:|:-------:|:-------------------:|
-| Dashboard | 📊 | ✅ *(Semua Bandara)* | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Daftar Berita Acara | 📄 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Buat BA Baru | ➕ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Manajemen Pengguna | 👥 | ✅ *(Semua Bandara)* | ✅ *(Cabang Saja)* | ❌ | ❌ | ❌ | ❌ |
+| Menu                | Icon |   Superadmin (HO)    | Supervisor (Cabang) | Carpark Manager | Team Leader | Teknisi | Admin Parkir Cabang |
+| ------------------- | ---- | :------------------: | :-----------------: | :-------------: | :---------: | :-----: | :-----------------: |
+| Dashboard           | 📊   | ✅ _(Semua Bandara)_ |         ✅          |       ✅        |     ❌      |   ❌    |         ❌          |
+| Daftar Berita Acara | 📄   |          ✅          |         ✅          |       ✅        |     ✅      |   ✅    |         ✅          |
+| Buat BA Baru        | ➕   |          ✅          |         ✅          |       ✅        |     ✅      |   ✅    |         ✅          |
+| Manajemen Pengguna  | 👥   | ✅ _(Semua Bandara)_ | ✅ _(Cabang Saja)_  |       ❌        |     ❌      |   ❌    |         ❌          |
 
 ### Informasi di Sidebar:
+
 - **Nama Pengguna** — nama lengkap yang terdaftar
 - **Role** — tingkatan/jabatan Anda di sistem
 - **Bandara** — lokasi bandara tempat Anda bertugas (atau "Semua Bandara" untuk Superadmin)
@@ -228,6 +232,7 @@ Sidebar adalah panel navigasi utama yang terletak di sisi kiri layar (desktop) a
 ## 5. Panduan per Tingkatan
 
 Sesuai hierarki operasional:
+
 1. **Supervisor** (Pimpinan Operasional Cabang)
 2. **Carpark Manager** (Manajer Operasional Cabang)
 3. **Level Operasional Cabang — Tingkatan Setara**: **Team Leader**, **Teknisi**, dan **Admin Parkir Cabang**
@@ -238,18 +243,18 @@ Sesuai hierarki operasional:
 
 > **Tingkatan:** Kepala operasional bandara — memiliki akses paling luas di tingkat cabang (di bawah Superadmin HO)
 
-| Akses | Keterangan |
-|-------|------------|
-| Dashboard | ✅ Statistik lengkap bandara sendiri |
-| Daftar BA | ✅ Melihat semua BA di bandara sendiri |
-| Buat BA Baru | ✅ BA langsung berstatus **"Diketahui"** |
-| Edit BA | ✅ Dapat mengedit BA (selama belum Diketahui/Selesai) |
-| Hapus BA | ✅ Dapat menghapus BA |
-| Setujui BA | ✅ Menandai BA sebagai **"Diketahui"** |
-| Tandai Selesai | ✅ Menandai BA sebagai **"Selesai"** |
-| Revisi | ✅ Mengembalikan BA untuk diperbaiki |
-| Kelola Foto | ✅ Menambah/menghapus foto lampiran |
-| Manajemen Pengguna | ✅ CRUD pengguna di bandara sendiri |
+| Akses              | Keterangan                                            |
+| ------------------ | ----------------------------------------------------- |
+| Dashboard          | ✅ Statistik lengkap bandara sendiri                  |
+| Daftar BA          | ✅ Melihat semua BA di bandara sendiri                |
+| Buat BA Baru       | ✅ BA langsung berstatus **"Diketahui"**              |
+| Edit BA            | ✅ Dapat mengedit BA (selama belum Diketahui/Selesai) |
+| Hapus BA           | ✅ Dapat menghapus BA                                 |
+| Setujui BA         | ✅ Menandai BA sebagai **"Diketahui"**                |
+| Tandai Selesai     | ✅ Menandai BA sebagai **"Selesai"**                  |
+| Revisi             | ✅ Mengembalikan BA untuk diperbaiki                  |
+| Kelola Foto        | ✅ Menambah/menghapus foto lampiran                   |
+| Manajemen Pengguna | ✅ CRUD pengguna di bandara sendiri                   |
 
 **Halaman Utama setelah Login:** Dashboard
 
@@ -273,20 +278,21 @@ Dashboard menampilkan ringkasan statistik berikut:
 
 Pada halaman detail BA, Supervisor memiliki panel tindakan berikut:
 
-| Status BA Saat Ini | Tindakan yang Tersedia |
-|---------------------|----------------------|
-| Menunggu Review | ✅ Setujui BA · ✅ Kembalikan untuk Revisi |
-| Diperiksa | ✅ Setujui BA · ✅ Kembalikan untuk Revisi |
-| Revisi | ✅ Setujui BA |
-| Diketahui | ✅ Tandai Selesai |
-| Selesai | *(tidak ada tindakan)* |
+| Status BA Saat Ini | Tindakan yang Tersedia                     |
+| ------------------ | ------------------------------------------ |
+| Menunggu Review    | ✅ Setujui BA · ✅ Kembalikan untuk Revisi |
+| Diperiksa          | ✅ Setujui BA · ✅ Kembalikan untuk Revisi |
+| Revisi             | ✅ Setujui BA                              |
+| Diketahui          | ✅ Tandai Selesai                          |
+| Selesai            | _(tidak ada tindakan)_                     |
 
 **Cara Menyetujui BA:**
+
 1. Buka halaman **Daftar Berita Acara**.
 2. Klik nomor BA atau judul untuk membuka detail.
 3. Pada panel **"Tindakan"** di bagian atas, klik tombol yang sesuai:
-   - 🟢 **"Setujui Berita Acara"** — Mengubah status menjadi *Diketahui*
-   - 🔵 **"Tandai Selesai"** — Mengubah status menjadi *Selesai* (hanya jika sudah Diketahui)
+   - 🟢 **"Setujui Berita Acara"** — Mengubah status menjadi _Diketahui_
+   - 🔵 **"Tandai Selesai"** — Mengubah status menjadi _Selesai_ (hanya jika sudah Diketahui)
    - 🔴 **"Kembalikan untuk Revisi"** — Mengembalikan BA ke pembuat untuk diperbaiki
 
 #### 5.2.3 Edit Berita Acara
@@ -316,15 +322,16 @@ Supervisor dapat mengelola akun pengguna di bandara mereka.
 
 **Fitur yang Tersedia:**
 
-| Fitur | Deskripsi |
-|-------|-----------|
+| Fitur                    | Deskripsi                                 |
+| ------------------------ | ----------------------------------------- |
 | 👀 Lihat Daftar Pengguna | Melihat semua pengguna di bandara sendiri |
-| ➕ Buat Pengguna Baru | Membuat akun baru untuk anggota tim |
-| ✏️ Edit Profil Pengguna | Mengubah nama, email, dan tanda tangan |
-| 🔑 Reset Password | Mengubah password pengguna lain |
-| 🗑️ Hapus Pengguna | Menghapus akun pengguna |
+| ➕ Buat Pengguna Baru    | Membuat akun baru untuk anggota tim       |
+| ✏️ Edit Profil Pengguna  | Mengubah nama, email, dan tanda tangan    |
+| 🔑 Reset Password        | Mengubah password pengguna lain           |
+| 🗑️ Hapus Pengguna        | Menghapus akun pengguna                   |
 
 **Cara Membuat Pengguna Baru:**
+
 1. Klik tombol **"Buat Pengguna Baru"**.
 2. Isi form yang muncul:
    - **Nama Lengkap** — nama pengguna baru
@@ -343,17 +350,17 @@ Supervisor dapat mengelola akun pengguna di bandara mereka.
 
 > **Tingkatan:** Manajer operasional cabang — bertanggung jawab memeriksa dan memverifikasi BA sebelum diajukan ke Supervisor
 
-| Akses | Keterangan |
-|-------|------------|
-| Dashboard | ✅ Statistik bandara sendiri |
-| Daftar BA | ✅ Melihat semua BA di bandara sendiri |
-| Buat BA Baru | ✅ BA langsung berstatus **"Diperiksa"** |
-| Edit BA | ✅ Dapat mengedit BA (selama belum Diketahui/Selesai) |
-| Hapus BA | ❌ Tidak tersedia |
-| Tandai Diperiksa | ✅ Menandai BA telah diperiksa |
-| Revisi | ✅ Mengembalikan BA untuk diperbaiki |
-| Kelola Foto | ✅ Menambah/menghapus foto lampiran |
-| Manajemen Pengguna | ❌ Tidak tersedia |
+| Akses              | Keterangan                                            |
+| ------------------ | ----------------------------------------------------- |
+| Dashboard          | ✅ Statistik bandara sendiri                          |
+| Daftar BA          | ✅ Melihat semua BA di bandara sendiri                |
+| Buat BA Baru       | ✅ BA langsung berstatus **"Diperiksa"**              |
+| Edit BA            | ✅ Dapat mengedit BA (selama belum Diketahui/Selesai) |
+| Hapus BA           | ❌ Tidak tersedia                                     |
+| Tandai Diperiksa   | ✅ Menandai BA telah diperiksa                        |
+| Revisi             | ✅ Mengembalikan BA untuk diperbaiki                  |
+| Kelola Foto        | ✅ Menambah/menghapus foto lampiran                   |
+| Manajemen Pengguna | ❌ Tidak tersedia                                     |
 
 **Halaman Utama setelah Login:** Dashboard
 
@@ -361,13 +368,14 @@ Supervisor dapat mengelola akun pengguna di bandara mereka.
 
 Pada halaman detail BA, Carpark Manager memiliki panel tindakan berikut:
 
-| Status BA Saat Ini | Tindakan yang Tersedia |
-|---------------------|----------------------|
-| Menunggu Review | ✅ Tandai Telah Diperiksa · ✅ Kembalikan untuk Revisi |
-| Revisi | ✅ Tandai Telah Diperiksa |
-| Diperiksa / Diketahui / Selesai | *(tidak ada tindakan tambahan)* |
+| Status BA Saat Ini              | Tindakan yang Tersedia                                 |
+| ------------------------------- | ------------------------------------------------------ |
+| Menunggu Review                 | ✅ Tandai Telah Diperiksa · ✅ Kembalikan untuk Revisi |
+| Revisi                          | ✅ Tandai Telah Diperiksa                              |
+| Diperiksa / Diketahui / Selesai | _(tidak ada tindakan tambahan)_                        |
 
 **Cara Menandai BA Telah Diperiksa:**
+
 1. Buka halaman detail BA yang berstatus **"Menunggu Review"** atau **"Revisi"**.
 2. Pada panel **"Tindakan"**, klik tombol 🔵 **"Tandai Telah Diperiksa"**.
 3. Status BA akan berubah menjadi **"Diperiksa"** dan menunggu persetujuan Supervisor.
@@ -382,16 +390,16 @@ Ketika Carpark Manager **membuat BA baru**, status awal BA akan otomatis menjadi
 
 > **Tingkatan:** Level Operasional Cabang (setara dengan Teknisi dan Admin Parkir) — pembuat laporan BA insiden lapangan
 
-| Akses | Keterangan |
-|-------|------------|
-| Dashboard | ❌ Tidak tersedia |
-| Daftar BA | ✅ Melihat semua BA di bandara sendiri |
-| Buat BA Baru | ✅ BA berstatus **"Menunggu Review"** |
-| Edit BA | ❌ Tidak tersedia |
-| Hapus BA | ❌ Tidak tersedia |
-| Approval | ❌ Tidak tersedia |
-| Kelola Foto | ✅ Hanya pada BA yang dibuat sendiri |
-| Manajemen Pengguna | ❌ Tidak tersedia |
+| Akses              | Keterangan                             |
+| ------------------ | -------------------------------------- |
+| Dashboard          | ❌ Tidak tersedia                      |
+| Daftar BA          | ✅ Melihat semua BA di bandara sendiri |
+| Buat BA Baru       | ✅ BA berstatus **"Menunggu Review"**  |
+| Edit BA            | ❌ Tidak tersedia                      |
+| Hapus BA           | ❌ Tidak tersedia                      |
+| Approval           | ❌ Tidak tersedia                      |
+| Kelola Foto        | ✅ Hanya pada BA yang dibuat sendiri   |
+| Manajemen Pengguna | ❌ Tidak tersedia                      |
 
 **Halaman Utama setelah Login:** Daftar Berita Acara
 
@@ -400,27 +408,28 @@ Ketika Carpark Manager **membuat BA baru**, status awal BA akan otomatis menjadi
 Ini adalah tugas utama Team Leader — melaporkan insiden yang terjadi di lapangan.
 
 **Langkah-langkah:**
+
 1. Klik menu **"Buat BA Baru"** di sidebar, atau tombol **"Buat BA Baru"** di halaman Daftar BA.
 2. Isi form berikut:
 
-| Field | Deskripsi | Wajib |
-|-------|-----------|:-----:|
-| Tanggal Kejadian | Tanggal insiden terjadi | ✅ |
-| Waktu Kejadian | Jam insiden terjadi | ✅ |
-| Lokasi / Zona | Area spesifik di parkir bandara | ✅ |
-| Jenis Insiden | Pilih dari dropdown kategori | ✅ |
-| Pihak Terlibat | Nama/pihak yang terlibat (jika ada) | ❌ |
-| Judul Masalah | Ringkasan singkat insiden | ✅ |
-| Kronologi | Uraian lengkap kejadian | ✅ |
-| Tindakan yang Dilakukan | Langkah yang sudah diambil | ✅ |
-| Penyelesaian | Hasil penyelesaian insiden | ✅ |
-| Mitigasi | Langkah pencegahan ke depan | ✅ |
-| Lampiran Foto | Upload foto bukti/dokumentasi | ❌ |
+| Field                   | Deskripsi                           | Wajib |
+| ----------------------- | ----------------------------------- | :---: |
+| Tanggal Kejadian        | Tanggal insiden terjadi             |  ✅   |
+| Waktu Kejadian          | Jam insiden terjadi                 |  ✅   |
+| Lokasi / Zona           | Area spesifik di parkir bandara     |  ✅   |
+| Jenis Insiden           | Pilih dari dropdown kategori        |  ✅   |
+| Pihak Terlibat          | Nama/pihak yang terlibat (jika ada) |  ❌   |
+| Judul Masalah           | Ringkasan singkat insiden           |  ✅   |
+| Kronologi               | Uraian lengkap kejadian             |  ✅   |
+| Tindakan yang Dilakukan | Langkah yang sudah diambil          |  ✅   |
+| Penyelesaian            | Hasil penyelesaian insiden          |  ✅   |
+| Mitigasi                | Langkah pencegahan ke depan         |  ✅   |
+| Lampiran Foto           | Upload foto bukti/dokumentasi       |  ❌   |
 
-3. *(Opsional)* Klik tombol **✨ AI Cleanup** untuk merapikan teks kronologi, tindakan, penyelesaian, dan mitigasi secara otomatis menggunakan AI.
+3. _(Opsional)_ Klik tombol **✨ AI Cleanup** untuk merapikan teks kronologi, tindakan, penyelesaian, dan mitigasi secara otomatis menggunakan AI.
    - Setelah AI menerapkan perubahan, tombol **↩️ Undo** akan muncul untuk mengembalikan teks asli.
 
-4. *(Opsional)* Klik tombol **👁️ Preview** untuk melihat tampilan BA sebelum dikirim.
+4. _(Opsional)_ Klik tombol **👁️ Preview** untuk melihat tampilan BA sebelum dikirim.
 
 5. Klik tombol **"Kirim Berita Acara"** untuk mengirim.
 
@@ -447,20 +456,20 @@ Ini adalah tugas utama Team Leader — melaporkan insiden yang terjadi di lapang
 
 > **Tingkatan:** Level Operasional Cabang (setara dengan Team Leader dan Admin Parkir) — pelapor insiden teknis dan peralatan
 
-| Akses | Keterangan |
-|-------|------------|
-| Dashboard | ❌ Tidak tersedia |
-| Daftar BA | ✅ Melihat semua BA di bandara sendiri |
-| Buat BA Baru | ✅ BA berstatus **"Menunggu Review"** |
-| Edit BA | ❌ Tidak tersedia |
-| Hapus BA | ❌ Tidak tersedia |
-| Approval | ❌ Tidak tersedia |
-| Kelola Foto | ✅ Hanya pada BA yang dibuat sendiri |
-| Manajemen Pengguna | ❌ Tidak tersedia |
+| Akses              | Keterangan                             |
+| ------------------ | -------------------------------------- |
+| Dashboard          | ❌ Tidak tersedia                      |
+| Daftar BA          | ✅ Melihat semua BA di bandara sendiri |
+| Buat BA Baru       | ✅ BA berstatus **"Menunggu Review"**  |
+| Edit BA            | ❌ Tidak tersedia                      |
+| Hapus BA           | ❌ Tidak tersedia                      |
+| Approval           | ❌ Tidak tersedia                      |
+| Kelola Foto        | ✅ Hanya pada BA yang dibuat sendiri   |
+| Manajemen Pengguna | ❌ Tidak tersedia                      |
 
 **Halaman Utama setelah Login:** Daftar Berita Acara
 
-Panduan penggunaan Teknisi **identik dengan Team Leader** (lihat [Bagian 5.3](#53-team-leader)). Fokus Teknisi umumnya pada kategori insiden *Gangguan Perangkat*, *Gangguan Sistem*, atau *Kerusakan Fasilitas*.
+Panduan penggunaan Teknisi **identik dengan Team Leader** (lihat [Bagian 5.3](#53-team-leader)). Fokus Teknisi umumnya pada kategori insiden _Gangguan Perangkat_, _Gangguan Sistem_, atau _Kerusakan Fasilitas_.
 
 ---
 
@@ -468,20 +477,21 @@ Panduan penggunaan Teknisi **identik dengan Team Leader** (lihat [Bagian 5.3](#5
 
 > **Tingkatan:** Level Operasional Cabang (setara dengan Team Leader dan Teknisi) — staf administrasi dan pencatatan laporan BA cabang
 
-| Akses | Keterangan |
-|-------|------------|
-| Dashboard | ❌ Tidak tersedia |
-| Daftar BA | ✅ Melihat semua BA di bandara sendiri |
-| Buat BA Baru | ✅ BA berstatus **"Menunggu Review"** |
-| Edit BA | ❌ Tidak tersedia |
-| Hapus BA | ❌ Tidak tersedia |
-| Approval | ❌ Tidak tersedia |
-| Kelola Foto | ❌ Tidak tersedia |
-| Manajemen Pengguna | ❌ Tidak tersedia |
+| Akses              | Keterangan                             |
+| ------------------ | -------------------------------------- |
+| Dashboard          | ❌ Tidak tersedia                      |
+| Daftar BA          | ✅ Melihat semua BA di bandara sendiri |
+| Buat BA Baru       | ✅ BA berstatus **"Menunggu Review"**  |
+| Edit BA            | ❌ Tidak tersedia                      |
+| Hapus BA           | ❌ Tidak tersedia                      |
+| Approval           | ❌ Tidak tersedia                      |
+| Kelola Foto        | ❌ Tidak tersedia                      |
+| Manajemen Pengguna | ❌ Tidak tersedia                      |
 
 **Halaman Utama setelah Login:** Daftar Berita Acara
 
 **Panduan Penggunaan Admin Parkir Cabang:**
+
 1. Membantu menginput dan merapikan Berita Acara insiden administratif di bandara cabang.
 2. Mencetak laporan Berita Acara resmi (format PDF) untuk keperluan arsip fisik atau lampiran rapat operasional cabang.
 3. Memantau progres status BA di bandara cabang apakah sudah diperiksa oleh Carpark Manager atau disetujui oleh Supervisor.
@@ -534,14 +544,14 @@ Klik pada **Nomor BA** atau **Judul Masalah** dari daftar untuk membuka halaman 
 
 Setiap BA memiliki status yang menunjukkan posisinya dalam alur persetujuan:
 
-| Status | Warna Badge | Deskripsi |
-|--------|:-----------:|-----------|
-| Draft | ⬜ Abu-abu | BA masih dalam draft (belum digunakan secara aktif) |
-| Menunggu Review | 🟡 Kuning | BA baru dibuat, menunggu pemeriksaan CM |
-| Diperiksa | 🔵 Biru | CM sudah memeriksa, menunggu persetujuan Supervisor |
-| Revisi | 🟠 Oranye | BA dikembalikan untuk diperbaiki oleh pembuat |
-| Diketahui | 🟢 Hijau | Supervisor sudah menyetujui BA |
-| Selesai | ✅ Teal | BA telah selesai dan ditutup |
+| Status          | Warna Badge | Deskripsi                                           |
+| --------------- | :---------: | --------------------------------------------------- |
+| Draft           | ⬜ Abu-abu  | BA masih dalam draft (belum digunakan secara aktif) |
+| Menunggu Review |  🟡 Kuning  | BA baru dibuat, menunggu pemeriksaan CM             |
+| Diperiksa       |   🔵 Biru   | CM sudah memeriksa, menunggu persetujuan Supervisor |
+| Revisi          |  🟠 Oranye  | BA dikembalikan untuk diperbaiki oleh pembuat       |
+| Diketahui       |  🟢 Hijau   | Supervisor sudah menyetujui BA                      |
+| Selesai         |   ✅ Teal   | BA telah selesai dan ditutup                        |
 
 ---
 
@@ -555,7 +565,7 @@ graph LR
     B --> C["✅ Diperiksa oleh CM"]
     C --> D["📋 Diketahui oleh SPV"]
     D --> E["🏁 Selesai"]
-    
+
     B --> F["🔄 Revisi"]
     C --> F
     F --> B
@@ -581,12 +591,12 @@ graph LR
 
 ### Alur Khusus:
 
-| Pembuat BA | Status Awal |
-|------------|-------------|
-| Team Leader | Menunggu Review |
-| Teknisi | Menunggu Review |
-| Carpark Manager | Diperiksa (melewati tahap review) |
-| Supervisor | Diketahui (melewati tahap review dan periksa) |
+| Pembuat BA      | Status Awal                                   |
+| --------------- | --------------------------------------------- |
+| Team Leader     | Menunggu Review                               |
+| Teknisi         | Menunggu Review                               |
+| Carpark Manager | Diperiksa (melewati tahap review)             |
+| Supervisor      | Diketahui (melewati tahap review dan periksa) |
 
 ---
 
@@ -595,12 +605,14 @@ graph LR
 Semua pengguna dapat mencetak BA dalam format dokumen resmi.
 
 **Cara Mencetak:**
+
 1. Buka halaman **Detail Berita Acara**.
 2. Klik tombol **"Print/PDF"** di bagian kanan atas.
 3. Jendela cetak browser akan terbuka.
 4. Pilih **printer** atau pilih **"Save as PDF"** untuk menyimpan sebagai file PDF.
 
 **Layout cetak** akan menampilkan format dokumen resmi lengkap dengan:
+
 - Kop surat Angkasa Pura Supports & Centre Park
 - Nomor BA
 - Seluruh detail insiden
@@ -616,6 +628,7 @@ Semua pengguna dapat mencetak BA dalam format dokumen resmi.
 Semua pengguna dapat mengubah password mereka sendiri.
 
 **Cara Ganti Password:**
+
 1. Pada sidebar, klik tombol **"Ganti Password"** (ikon 🔑).
 2. Modal akan muncul dengan form:
    - **Password Baru** — minimal 6 karakter
@@ -668,6 +681,7 @@ Tombol approval hanya tampil sesuai role dan status BA saat ini. Lihat [Bagian 7
 ### ❓ Saya ingin menambahkan foto tapi tombol "Kelola Foto" tidak muncul
 
 Tombol ini muncul jika:
+
 - Anda adalah **Supervisor**, **Carpark Manager**, atau
 - Anda adalah **pembuat BA tersebut** (Team Leader/Teknisi)
 
