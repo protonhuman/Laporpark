@@ -619,49 +619,6 @@ export default function ManualBookPage() {
             </div>
           </div>
         </div>
-
-        {/* Differentiation Callout: Superadmin vs Admin Parkir Cabang */}
-        <div className="neo-card p-5 sm:p-6 mb-8 border border-amber-500/30 bg-amber-500/5 w-full print:shadow-none print:border print:border-amber-300">
-          <div className="flex flex-col items-center text-center mb-4">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-2">
-              <AlertCircle className="w-5 h-5" />
-            </div>
-            <h4 className="text-sm sm:text-base font-bold text-slate-800 dark:text-white print:text-black">
-              Pembeda Penting: Superadmin (Officer HO) vs Admin Parkir Cabang
-            </h4>
-            <p className="text-xs text-slate-500 mt-0.5">Perhatikan perbedaan wewenang, cakupan wilayah, dan format email</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <div className="p-3 rounded-xl bg-white/50 dark:bg-white/[0.03] border border-rose-500/25">
-              <div className="flex items-center gap-1.5 font-bold text-rose-600 dark:text-rose-400 mb-1">
-                <Crown className="w-3.5 h-3.5" />
-                <span>👑 Superadmin (Officer HO)</span>
-              </div>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-[11px]">
-                <li>• <strong>Kedudukan:</strong> Kantor Pusat (Head Office)</li>
-                <li>• <strong>Cakupan:</strong> Seluruh 14 Bandara di Indonesia</li>
-                <li>• <strong>Format Email:</strong> <code>xxxx@laporpark.ho.id</code> <em>(tanpa kode bandara)</em></li>
-                <li>• <strong>Contoh:</strong> <code>officer@laporpark.ho.id</code></li>
-                <li>• <strong>Tingkat:</strong> Paling Atas (Otoritas Penuh Sistem)</li>
-              </ul>
-            </div>
-
-            <div className="p-3 rounded-xl bg-white/50 dark:bg-white/[0.03] border border-purple-500/25">
-              <div className="flex items-center gap-1.5 font-bold text-purple-600 dark:text-purple-400 mb-1">
-                <Shield className="w-3.5 h-3.5" />
-                <span>📝 Admin Parkir (Cabang)</span>
-              </div>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-[11px]">
-                <li>• <strong>Kedudukan:</strong> Unit Operasional Bandara Cabang</li>
-                <li>• <strong>Cakupan:</strong> Hanya 1 Bandara tempat bertugas</li>
-                <li>• <strong>Format Email:</strong> <code>xxxx@laporpark.xxx.id</code> <em>(dengan kode bandara)</em></li>
-                <li>• <strong>Contoh:</strong> <code>admin@laporpark.sub.id</code> (Surabaya)</li>
-                <li>• <strong>Tingkat:</strong> Level Operasional (Setara Team Leader & Teknisi)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
         {/* Permission Matrix Table */}
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 text-center print:text-black">Tabel Perbandingan Hak Akses per Role</h3>
         <div className="neo-card overflow-hidden mb-8 w-full print:shadow-none print:border print:border-slate-200">
