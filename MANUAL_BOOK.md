@@ -538,9 +538,22 @@ Klik pada **Nomor BA** atau **Judul Masalah** dari daftar untuk membuka halaman 
   - Dibuat oleh (nama + role + tanggal)
   - Diperiksa oleh (Carpark Manager + tanggal)
   - Mengetahui (Supervisor + tanggal)
-- **Riwayat Perubahan** — log audit setiap perubahan pada BA
+### 6.3 Format Penomoran Berita Acara
 
-### 6.3 Status Berita Acara
+Nomor Berita Acara diterbitkan otomatis oleh sistem saat Berita Acara disimpan dengan format resmi:
+
+$$\text{BA/PARKIR/\{KODE\_BANDARA\}/\{YYYY\}/\{MM\}/\{NOMOR\_URUT\}}$$
+
+- **`BA`**: Berita Acara
+- **`PARKIR`**: Unit Pengelolaan Operasional Parkir
+- **`{KODE_BANDARA}`**: Kode 3 huruf bandara lokasi kejadian (contoh: `SUB`, `DPS`, `BDJ`, `UPG`, `YIA`)
+- **`{YYYY}`**: Tahun kejadian (4 digit, contoh: `2026`)
+- **`{MM}`**: Bulan kejadian (2 digit, contoh: `09`)
+- **`{NOMOR_URUT}`**: Urutan nomor berkas dalam bulan dan bandara bersangkutan (4 digit berurutan, contoh: `0001`, `0002`)
+
+> **Contoh Resmi:** `BA/PARKIR/SUB/2026/09/0001` (Berita Acara nomor urut 1 pada bulan September 2026 di Bandara Juanda Surabaya).
+
+### 6.4 Status Berita Acara
 
 Setiap BA memiliki status yang menunjukkan posisinya dalam alur persetujuan:
 

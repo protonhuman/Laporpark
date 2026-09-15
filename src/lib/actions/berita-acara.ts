@@ -13,9 +13,10 @@ async function generateNomorBA(kodeBandara: string): Promise<string> {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
-  const prefix = `BA/PARKIR/${kodeBandara}/${year}/${month}/`;
+  const cleanKode = (kodeBandara || "BDJ").trim().toUpperCase();
+  const prefix = `BA/PARKIR/${cleanKode}/${year}/${month}/`;
 
-  // Find the latest BA number for this month
+  // Find the latest BA number for this month and location
   const { data } = await supabase
     .from("berita_acara")
     .select("nomor_ba")
@@ -47,11 +48,12 @@ export async function createBeritaAcara(payload: CreateBAPayload) {
 
   const { data: profile } = await supabase
     .from("users")
-    .select("role")
+    .select("role, kode_bandara")
     .eq("id", user.id)
     .single();
 
-  const nomorBA = await generateNomorBA(payload.kode_bandara);
+  const targetBandara = (payload.kode_bandara || profile?.kode_bandara || "BDJ").trim().toUpperCase();
+  const nomorBA = await generateNomorBA(targetBandara);
 
   // Set initial status based on role
   let initialStatus: StatusBA = "menunggu_review";
@@ -67,7 +69,7 @@ export async function createBeritaAcara(payload: CreateBAPayload) {
       nomor_ba: nomorBA,
       tanggal_kejadian: payload.tanggal_kejadian,
       waktu_kejadian: payload.waktu_kejadian,
-      kode_bandara: payload.kode_bandara,
+      kode_bandara: targetBandara,
       lokasi_zona: payload.lokasi_zona,
       jenis_insiden: payload.jenis_insiden,
       pihak_terlibat: payload.pihak_terlibat || null,

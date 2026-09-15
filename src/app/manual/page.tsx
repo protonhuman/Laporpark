@@ -267,8 +267,8 @@ const FAQ_ITEMS = [
     a: "Buka halaman detail BA → klik tombol \"Kelola Foto\" di bagian Lampiran Foto. Anda dapat menambah atau menghapus foto. Fitur ini tetap tersedia meskipun BA sudah berstatus Selesai (untuk pembuat BA, CM, atau Supervisor).",
   },
   {
-    q: "Nomor BA tidak berurut, apakah normal?",
-    a: "Ya. Nomor BA digenerate otomatis berdasarkan bulan dan tahun saat BA dibuat. Jika ada BA yang dihapus, nomor tersebut tidak akan dipakai ulang.",
+    q: "Bagaimana format nomor Berita Acara dan apakah nomor yang tidak berurut itu normal?",
+    a: "Nomor BA diterbitkan otomatis oleh sistem dengan format resmi BA/PARKIR/{KODE_BANDARA}/{TAHUN}/{BULAN}/{NOMOR_URUT} (contoh: BA/PARKIR/SUB/2026/09/0001 untuk Bandara Juanda Surabaya). Nomor urut 4 digit digenerate otomatis per bandara setiap bulannya. Jika ada BA yang dihapus, nomor tersebut tidak akan dipakai ulang sehingga wajar jika ada nomor yang terlewati.",
   },
   {
     q: "Bagaimana cara mencetak BA ke PDF?",

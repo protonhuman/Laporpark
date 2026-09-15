@@ -514,10 +514,10 @@ export default function CreateBAPage() {
                 approver={null} 
                 ba={{
                   id: "draft",
-                  nomor_ba: "BA/DRAFT/" + new Date().getFullYear(),
+                  nomor_ba: `BA/PARKIR/${(previewData.kode_bandara || userKodeBandara || "BDJ").toUpperCase()}/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, "0")}/DRAFT`,
                   tanggal_kejadian: previewData.tanggal_kejadian,
                   waktu_kejadian: previewData.waktu_kejadian,
-                  kode_bandara: previewData.kode_bandara || userKodeBandara,
+                  kode_bandara: (previewData.kode_bandara || userKodeBandara || "BDJ").toUpperCase(),
                   lokasi_zona: previewData.lokasi_zona,
                   jenis_insiden: previewData.jenis_insiden,
                   pihak_terlibat: previewData.pihak_terlibat || null,
