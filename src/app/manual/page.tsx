@@ -368,25 +368,26 @@ export default function ManualBookPage() {
       {/* ═══ Top Header Bar ═══ */}
       <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-slate-300/40 dark:border-white/[0.06] shadow-[0_4px_12px_var(--shadow-dark)] print:static print:shadow-none print:border-b print:border-slate-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="print:hidden">
+              <LaporParkLogo size="sm" interactive={false} />
+            </div>
+            <div>
+              <h1 className="text-base sm:text-lg font-extrabold text-slate-800 dark:text-white tracking-tight print:text-black">
+                Manual Book <span className="text-emerald-500">LaporPark</span>
+              </h1>
+              <p className="text-[10px] text-slate-500 hidden sm:block print:block print:text-slate-600">Sistem Manajemen Berita Acara Parkir — Angkasa Pura Supports</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 print:hidden">
             <Link
               href="/login"
-              className="p-2 rounded-xl hover:bg-white/50 dark:hover:bg-white/[0.04] text-slate-500 hover:text-slate-800 dark:hover:text-white transition-all print:hidden"
-              title="Kembali ke Halaman Login"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-emerald-500/15 to-teal-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)] hover:shadow-[5px_5px_12px_var(--shadow-dark),-5px_-5px_12px_var(--shadow-light)] hover:border-emerald-500/50 active:scale-95 transition-all duration-200 cursor-pointer select-none"
             >
               <ArrowLeft className="w-4 h-4" />
+              <span>Kembali ke Login</span>
             </Link>
-            <div className="flex items-center gap-2.5">
-              <div className="print:hidden">
-                <LaporParkLogo size="sm" interactive={false} />
-              </div>
-              <div>
-                <h1 className="text-base sm:text-lg font-extrabold text-slate-800 dark:text-white tracking-tight print:text-black">
-                  Manual Book <span className="text-emerald-500">LaporPark</span>
-                </h1>
-                <p className="text-[10px] text-slate-500 hidden sm:block print:block print:text-slate-600">Sistem Manajemen Berita Acara Parkir — Angkasa Pura Supports</p>
-              </div>
-            </div>
           </div>
         </div>
 
