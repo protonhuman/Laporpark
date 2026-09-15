@@ -388,7 +388,6 @@ export default function ManualBookPage() {
               </div>
             </div>
           </div>
-          </div>
         </div>
 
         {/* TOC Scrollable Bar — Desktop & Mobile */}
