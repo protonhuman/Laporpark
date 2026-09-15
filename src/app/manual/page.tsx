@@ -8,6 +8,7 @@ import {
   Download,
   BookOpen,
   Shield,
+  Crown,
   Users,
   ClipboardCheck,
   Wrench,
@@ -43,37 +44,45 @@ import {
 
 const ROLES = [
   {
-    key: "admin",
-    label: "Admin",
-    color: "purple",
-    icon: Shield,
-    gradient: "from-purple-500/20 to-purple-600/5",
-    border: "border-purple-500/30",
-    text: "text-purple-600 dark:text-purple-400",
-    bg: "bg-purple-500/10",
-    description: "Pengguna umum dengan akses dasar untuk melihat dan membuat Berita Acara.",
-    dashboard: false,
+    key: "superadmin",
+    label: "Superadmin (Officer HO)",
+    shortLabel: "Superadmin",
+    levelBadge: "Tingkat 1 — Kantor Pusat",
+    color: "rose",
+    icon: Crown,
+    gradient: "from-rose-500/20 to-rose-600/5",
+    border: "border-rose-500/30",
+    text: "text-rose-600 dark:text-rose-400",
+    bg: "bg-rose-500/10",
+    description: "Kantor Pusat (Head Office) — Memegang kewenangan tertinggi atas sistem LaporPark, memonitor seluruh 14 bandara, mengelola master data, filter lintas bandara, dan kontrol sistem penuh.",
+    scope: "Lintas 14 Bandara (kode: ALL)",
+    emailFormat: "xxxx@laporpark.id",
+    dashboard: true,
     createBA: true,
-    editBA: false,
-    deleteBA: false,
-    checkBA: false,
-    approveBA: false,
-    reviseBA: false,
-    finishBA: false,
-    managePhotos: false,
-    manageUsers: false,
-    initialStatus: "Menunggu Review",
+    editBA: true,
+    deleteBA: true,
+    checkBA: true,
+    approveBA: true,
+    reviseBA: true,
+    finishBA: true,
+    managePhotos: true,
+    manageUsers: true,
+    initialStatus: "Mengetahui",
   },
   {
     key: "supervisor",
     label: "Supervisor",
+    shortLabel: "Supervisor",
+    levelBadge: "Tingkat 2 — Pimpinan Cabang",
     color: "amber",
     icon: UserCog,
     gradient: "from-amber-500/20 to-amber-600/5",
     border: "border-amber-500/30",
     text: "text-amber-600 dark:text-amber-400",
     bg: "bg-amber-500/10",
-    description: "Kepala operasional — akses paling luas di tingkat cabang. Bertanggung jawab atas persetujuan, pengelolaan pengguna, dan seluruh BA.",
+    description: "Kepala operasional cabang bandara — akses paling luas di tingkat cabang. Bertanggung jawab atas persetujuan akhir BA (status Diketahui & Selesai), pengembalian revisi, dan manajemen pengguna cabang.",
+    scope: "Bandara Cabang Sendiri",
+    emailFormat: "spv@laporpark.{kode}.id",
     dashboard: true,
     createBA: true,
     editBA: true,
@@ -89,13 +98,17 @@ const ROLES = [
   {
     key: "carpark_manager",
     label: "Carpark Manager",
+    shortLabel: "Carpark Manager",
+    levelBadge: "Tingkat 3 — Manajerial Cabang",
     color: "sky",
     icon: ClipboardCheck,
     gradient: "from-sky-500/20 to-sky-600/5",
     border: "border-sky-500/30",
     text: "text-sky-600 dark:text-sky-400",
     bg: "bg-sky-500/10",
-    description: "Manajer operasional — bertanggung jawab memeriksa dan memverifikasi setiap Berita Acara sebelum disetujui Supervisor.",
+    description: "Manajer operasional cabang — bertanggung jawab memeriksa dan memverifikasi setiap Berita Acara (status Diperiksa) sebelum disetujui Supervisor.",
+    scope: "Bandara Cabang Sendiri",
+    emailFormat: "cpm@laporpark.{kode}.id",
     dashboard: true,
     createBA: true,
     editBA: true,
@@ -111,13 +124,17 @@ const ROLES = [
   {
     key: "team_leader",
     label: "Team Leader",
+    shortLabel: "Team Leader",
+    levelBadge: "Tingkat 4 — Level Operasional Cabang (Setara)",
     color: "indigo",
     icon: Users,
     gradient: "from-indigo-500/20 to-indigo-600/5",
     border: "border-indigo-500/30",
     text: "text-indigo-600 dark:text-indigo-400",
     bg: "bg-indigo-500/10",
-    description: "Pemimpin tim lapangan — pengguna utama pembuat laporan Berita Acara insiden.",
+    description: "Pemimpin regu lapangan — berada di level operasional yang setara dengan Teknisi dan Admin Parkir. Bertugas membuat laporan Berita Acara insiden di lapangan.",
+    scope: "Bandara Cabang Sendiri",
+    emailFormat: "tl@laporpark.{kode}.id",
     dashboard: false,
     createBA: true,
     editBA: false,
@@ -133,13 +150,17 @@ const ROLES = [
   {
     key: "teknisi",
     label: "Teknisi",
+    shortLabel: "Teknisi",
+    levelBadge: "Tingkat 4 — Level Operasional Cabang (Setara)",
     color: "emerald",
     icon: Wrench,
     gradient: "from-emerald-500/20 to-emerald-600/5",
     border: "border-emerald-500/30",
     text: "text-emerald-600 dark:text-emerald-400",
     bg: "bg-emerald-500/10",
-    description: "Staf teknis lapangan — akses sama dengan Team Leader, fokus pada pelaporan insiden teknis.",
+    description: "Staf teknis lapangan — berada di level operasional yang setara dengan Team Leader dan Admin Parkir. Bertugas melaporkan insiden kerusakan teknis dan pemeliharaan alat.",
+    scope: "Bandara Cabang Sendiri",
+    emailFormat: "teknisi@laporpark.{kode}.id",
     dashboard: false,
     createBA: true,
     editBA: false,
@@ -149,6 +170,32 @@ const ROLES = [
     reviseBA: false,
     finishBA: false,
     managePhotos: "own",
+    manageUsers: false,
+    initialStatus: "Menunggu Review",
+  },
+  {
+    key: "admin",
+    label: "Admin Parkir (Cabang)",
+    shortLabel: "Admin Parkir",
+    levelBadge: "Tingkat 4 — Level Operasional Cabang (Setara)",
+    color: "purple",
+    icon: Shield,
+    gradient: "from-purple-500/20 to-purple-600/5",
+    border: "border-purple-500/30",
+    text: "text-purple-600 dark:text-purple-400",
+    bg: "bg-purple-500/10",
+    description: "Staf administrasi cabang — berada di level operasional yang setara dengan Team Leader dan Teknisi. Bertugas menginput dan merekap Berita Acara di cabang serta mencetak arsip.",
+    scope: "Bandara Cabang Sendiri",
+    emailFormat: "admin@laporpark.{kode}.id",
+    dashboard: false,
+    createBA: true,
+    editBA: false,
+    deleteBA: false,
+    checkBA: false,
+    approveBA: false,
+    reviseBA: false,
+    finishBA: false,
+    managePhotos: false,
     manageUsers: false,
     initialStatus: "Menunggu Review",
   },
@@ -192,11 +239,15 @@ const STATUS_LIST = [
 const FAQ_ITEMS = [
   {
     q: "Saya tidak bisa login, apa yang harus dilakukan?",
-    a: "Pastikan email dan password sudah benar. Email menggunakan format nama@laporpark.{kode_bandara}.id — misalnya budi@laporpark.bdj.id. Jika masih gagal, hubungi Supervisor bandara Anda untuk reset password.",
+    a: "Pastikan format email sesuai: Untuk akun staf cabang gunakan format xxxx@laporpark.{kode_bandara}.id (contoh: admin@laporpark.sub.id, spv@laporpark.dps.id, cpm@laporpark.upg.id). Untuk Officer HO / Superadmin gunakan xxxx@laporpark.id. Pastikan password sudah benar (default akun baru: 123123). Jika masih gagal, hubungi Supervisor bandara Anda.",
+  },
+  {
+    q: "Apa perbedaan Superadmin (Officer HO) dengan Admin Parkir Cabang?",
+    a: "Superadmin (Officer HO) berada di Kantor Pusat dan memonitor seluruh 14 bandara (kode: ALL) dengan email @laporpark.id. Sedangkan Admin Parkir Cabang adalah staf administrasi di cabang bandara tertentu dengan level setara Team Leader dan Teknisi, hanya mengelola data di bandara cabangnya sendiri dengan domain email @laporpark.{kode_bandara}.id.",
   },
   {
     q: "Saya tidak bisa melihat Dashboard, kenapa?",
-    a: "Dashboard hanya tersedia untuk Supervisor dan Carpark Manager. Jika Anda adalah Team Leader, Teknisi, atau Admin — Anda langsung diarahkan ke Daftar Berita Acara.",
+    a: "Dashboard statistik hanya tersedia untuk Superadmin, Supervisor, dan Carpark Manager. Jika Anda adalah Team Leader, Teknisi, atau Admin Parkir Cabang — Anda langsung diarahkan ke menu Daftar Berita Acara.",
   },
   {
     q: "Kenapa saya tidak bisa mengedit Berita Acara?",
@@ -443,37 +494,184 @@ export default function ManualBookPage() {
         </div>
 
         {/* ═══ 2. HIERARKI PERAN ═══ */}
-        <SectionTitle id="hierarki" icon={Shield} title="Hierarki Peran Pengguna" subtitle="5 tingkatan peran dengan hak akses berjenjang" />
+        <SectionTitle id="hierarki" icon={Shield} title="Hierarki Peran Pengguna" subtitle="Struktur peran dari Kantor Pusat (Officer HO) hingga Level Operasional Cabang" />
 
-        {/* Role Pyramid Visual */}
+        {/* Role Hierarchy Visual Architecture */}
         <div className="neo-card p-5 sm:p-6 mb-6 print:shadow-none print:border print:border-slate-200">
-          <div className="flex flex-col items-center gap-2 py-4">
-            {ROLES.map((r, i) => {
-              const widths = ["w-40", "w-52", "w-64", "w-76", "w-full sm:w-88"];
-              return (
-                <div key={r.key} className={`${widths[i]} max-w-full`}>
-                  <div className={`flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r ${r.gradient} border ${r.border} transition-all`}>
-                    <r.icon className={`w-4 h-4 ${r.text} shrink-0`} />
-                    <span className={`text-sm font-semibold ${r.text}`}>{r.label}</span>
+          <div className="flex flex-col items-center gap-3 py-2">
+            {/* Level 1: Superadmin */}
+            <div className="w-full max-w-md">
+              <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-gradient-to-r from-rose-500/20 to-rose-600/5 border border-rose-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-rose-500/15 flex items-center justify-center text-rose-600 dark:text-rose-400 font-bold shrink-0">
+                    <Crown className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-rose-600 dark:text-rose-400">Superadmin (Officer HO)</span>
+                      <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold border border-rose-500/20">Tingkat 1 (HO)</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500">Kantor Pusat — Akses Seluruh 14 Bandara (<code>xxxx@laporpark.id</code>)</p>
                   </div>
                 </div>
-              );
-            })}
-            <p className="text-[10px] text-slate-500 mt-2 print:text-slate-600">▲ Tingkatan tertinggi di atas</p>
+              </div>
+            </div>
+
+            {/* Down Connector */}
+            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500">
+              <ChevronDown className="w-4 h-4" />
+            </div>
+
+            {/* Level 2: Supervisor */}
+            <div className="w-full max-w-lg">
+              <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-500/20 to-amber-600/5 border border-amber-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/15 flex items-center justify-center text-amber-600 dark:text-amber-400 font-bold shrink-0">
+                    <UserCog className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-amber-600 dark:text-amber-400">Supervisor</span>
+                      <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-bold border border-amber-500/20">Tingkat 2</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500">Pimpinan Operasional Cabang — Persetujuan Akhir BA & Pengguna Cabang</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Down Connector */}
+            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500">
+              <ChevronDown className="w-4 h-4" />
+            </div>
+
+            {/* Level 3: Carpark Manager */}
+            <div className="w-full max-w-xl">
+              <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-gradient-to-r from-sky-500/20 to-sky-600/5 border border-sky-500/30 shadow-[3px_3px_8px_var(--shadow-dark),-3px_-3px_8px_var(--shadow-light)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-sky-500/15 flex items-center justify-center text-sky-600 dark:text-sky-400 font-bold shrink-0">
+                    <ClipboardCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-sky-600 dark:text-sky-400">Carpark Manager</span>
+                      <span className="px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 text-[10px] font-bold border border-sky-500/20">Tingkat 3</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500">Manajer Operasional Cabang — Pemeriksaan & Validasi (Status Diperiksa)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Down Connector */}
+            <div className="flex items-center justify-center text-slate-400 dark:text-slate-500">
+              <ChevronDown className="w-4 h-4" />
+            </div>
+
+            {/* Level 4: Equal Operational Level (Team Leader, Teknisi, Admin) */}
+            <div className="w-full max-w-2xl p-3.5 sm:p-4 rounded-2xl bg-slate-500/5 dark:bg-white/[0.02] border border-slate-300/60 dark:border-white/[0.08] shadow-[inset_2px_2px_5px_var(--shadow-dark),inset_-2px_-2px_5px_var(--shadow-light)]">
+              <div className="text-center mb-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/25">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  Tingkat 4 — Level Operasional Cabang (Tingkatan Setara / Sama)
+                </span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Team Leader, Teknisi, dan Admin Parkir memiliki level operasional yang setara: membuat BA baru, memantau daftar BA cabang, dan mencetak dokumen.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {/* Team Leader */}
+                <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500/15 to-indigo-600/5 border border-indigo-500/25 flex flex-col items-center text-center">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-1.5">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">Team Leader</span>
+                  <p className="text-[10px] text-slate-500 mt-0.5">Pemimpin Regu Lapangan</p>
+                  <code className="text-[9px] text-indigo-500 mt-1">tl@laporpark.xxx.id</code>
+                </div>
+
+                {/* Teknisi */}
+                <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500/15 to-emerald-600/5 border border-emerald-500/25 flex flex-col items-center text-center">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-1.5">
+                    <Wrench className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Teknisi</span>
+                  <p className="text-[10px] text-slate-500 mt-0.5">Pemeliharaan & Alat</p>
+                  <code className="text-[9px] text-emerald-500 mt-1">teknisi@laporpark.xxx.id</code>
+                </div>
+
+                {/* Admin Parkir */}
+                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/15 to-purple-600/5 border border-purple-500/25 flex flex-col items-center text-center">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-1.5">
+                    <Shield className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs font-bold text-purple-600 dark:text-purple-400">Admin Parkir (Cabang)</span>
+                  <p className="text-[10px] text-slate-500 mt-0.5">Administrasi & Pencatatan</p>
+                  <code className="text-[9px] text-purple-500 mt-1">admin@laporpark.xxx.id</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Differentiation Callout: Superadmin vs Admin Parkir Cabang */}
+        <div className="neo-card p-5 sm:p-6 mb-8 border border-amber-500/30 bg-amber-500/5 print:shadow-none print:border print:border-amber-300">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+              <AlertCircle className="w-5 h-5" />
+            </div>
+            <div className="w-full">
+              <h4 className="text-sm font-bold text-slate-800 dark:text-white mb-2 print:text-black">
+                Pembeda Penting: Superadmin (Officer HO) vs Admin Parkir Cabang
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="p-3 rounded-xl bg-white/50 dark:bg-white/[0.03] border border-rose-500/25">
+                  <div className="flex items-center gap-1.5 font-bold text-rose-600 dark:text-rose-400 mb-1">
+                    <Crown className="w-3.5 h-3.5" />
+                    <span>👑 Superadmin (Officer HO)</span>
+                  </div>
+                  <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-[11px]">
+                    <li>• <strong>Kedudukan:</strong> Kantor Pusat (Head Office)</li>
+                    <li>• <strong>Cakupan:</strong> Seluruh 14 Bandara di Indonesia</li>
+                    <li>• <strong>Format Email:</strong> <code>xxxx@laporpark.id</code> <em>(tanpa kode bandara)</em></li>
+                    <li>• <strong>Contoh:</strong> <code>officer@laporpark.id</code></li>
+                    <li>• <strong>Tingkat:</strong> Paling Atas (Otoritas Penuh Sistem)</li>
+                  </ul>
+                </div>
+
+                <div className="p-3 rounded-xl bg-white/50 dark:bg-white/[0.03] border border-purple-500/25">
+                  <div className="flex items-center gap-1.5 font-bold text-purple-600 dark:text-purple-400 mb-1">
+                    <Shield className="w-3.5 h-3.5" />
+                    <span>📝 Admin Parkir (Cabang)</span>
+                  </div>
+                  <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-[11px]">
+                    <li>• <strong>Kedudukan:</strong> Unit Operasional Bandara Cabang</li>
+                    <li>• <strong>Cakupan:</strong> Hanya 1 Bandara tempat bertugas</li>
+                    <li>• <strong>Format Email:</strong> <code>xxxx@laporpark.xxx.id</code> <em>(dengan kode bandara)</em></li>
+                    <li>• <strong>Contoh:</strong> <code>admin@laporpark.sub.id</code> (Surabaya)</li>
+                    <li>• <strong>Tingkat:</strong> Level Operasional (Setara Team Leader & Teknisi)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Permission Matrix Table */}
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 print:text-black">Tabel Perbandingan Hak Akses</h3>
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 print:text-black">Tabel Perbandingan Hak Akses per Role</h3>
         <div className="neo-card overflow-hidden mb-8 print:shadow-none print:border print:border-slate-200">
           <div className="overflow-x-auto">
-            <table className="w-full text-xs sm:text-sm min-w-[700px]">
+            <table className="w-full text-xs sm:text-sm min-w-[750px]">
               <thead>
                 <tr className="border-b border-slate-300/50 dark:border-white/[0.08] print:border-slate-300">
                   <th className="px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Fitur</th>
                   {ROLES.map((r) => (
-                    <th key={r.key} className={`px-3 py-3 text-xs font-semibold uppercase tracking-wider text-center ${r.text}`}>
-                      {r.label}
+                    <th key={r.key} className={`px-2.5 py-3 text-[11px] font-bold uppercase tracking-wider text-center ${r.text}`}>
+                      <div className="flex flex-col items-center gap-0.5">
+                        <r.icon className="w-3.5 h-3.5 mb-0.5" />
+                        <span>{r.shortLabel}</span>
+                      </div>
                     </th>
                   ))}
                 </tr>
@@ -495,7 +693,7 @@ export default function ManualBookPage() {
                   <tr key={row.label} className="hover:bg-white/30 dark:hover:bg-white/[0.02]">
                     <td className="px-3 py-2.5 font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap print:text-black">{row.label}</td>
                     {ROLES.map((r) => (
-                      <td key={r.key} className="px-3 py-2.5 text-center">
+                      <td key={r.key} className="px-2.5 py-2.5 text-center">
                         <div className="flex justify-center">
                           <PermIcon val={row.field === "dashboard" ? r.dashboard : (r as Record<string, unknown>)[row.field] as boolean | string} />
                         </div>
@@ -520,11 +718,19 @@ export default function ManualBookPage() {
             <ol className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
               <li className="flex gap-3">
                 <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</span>
-                <span>Masukkan <strong>Email</strong> — format: <code className="px-1.5 py-0.5 rounded bg-slate-200/60 dark:bg-white/[0.06] text-xs font-mono print:bg-slate-100">nama@laporpark.bdj.id</code></span>
+                <div>
+                  <p>Masukkan <strong>Email</strong> resmi Anda:</p>
+                  <p className="text-xs text-slate-500 mt-1">
+                    • <strong>Pengguna Cabang:</strong> format <code>xxxx@laporpark.xxx.id</code> (contoh: <code>admin@laporpark.sub.id</code>, <code>spv@laporpark.dps.id</code>, <code>tl@laporpark.bpn.id</code>, <code>teknisi@laporpark.yia.id</code>)
+                  </p>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    • <strong>Officer HO (Superadmin):</strong> format <code>xxxx@laporpark.id</code> (contoh: <code>officer@laporpark.id</code>)
+                  </p>
+                </div>
               </li>
               <li className="flex gap-3">
                 <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</span>
-                <span>Masukkan <strong>Password</strong> — default: <code className="px-1.5 py-0.5 rounded bg-slate-200/60 dark:bg-white/[0.06] text-xs font-mono print:bg-slate-100">123123</code></span>
+                <span>Masukkan <strong>Password</strong> — default akun baru: <code className="px-1.5 py-0.5 rounded bg-slate-200/60 dark:bg-white/[0.06] text-xs font-mono print:bg-slate-100">123123</code></span>
               </li>
               <li className="flex gap-3">
                 <span className="w-5 h-5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">3</span>
@@ -544,15 +750,15 @@ export default function ManualBookPage() {
             <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
               <li className="flex gap-3 items-start">
                 <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                <span>Segera ubah password default setelah login pertama kali.</span>
+                <span>Segera ubah password default setelah login pertama kali via menu Ganti Password.</span>
               </li>
               <li className="flex gap-3 items-start">
                 <Info className="w-4 h-4 text-sky-500 shrink-0 mt-0.5" />
-                <span>Kode bandara otomatis dikenali dari domain email Anda (misal: bdj untuk Banjarmasin).</span>
+                <span>Kode bandara otomatis dikenali dari domain email Anda (misal: <code>sub</code> untuk Surabaya Juanda, <code>dps</code> untuk Denpasar Bali).</span>
               </li>
               <li className="flex gap-3 items-start">
                 <ArrowRight className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>Supervisor / CM</strong> diarahkan ke Dashboard. Role lain ke Daftar BA.</span>
+                <span><strong>Superadmin, Supervisor & CM</strong> diarahkan ke Dashboard statistik. <strong>Team Leader, Teknisi & Admin Parkir</strong> diarahkan ke Daftar Berita Acara.</span>
               </li>
             </ul>
           </div>
@@ -602,13 +808,22 @@ export default function ManualBookPage() {
 
         {/* Active Role Detail Card */}
         <div className={`neo-card p-5 sm:p-6 border ${selectedRole.border} bg-gradient-to-br ${selectedRole.gradient} mb-8 print:shadow-none print:border print:border-slate-200 print:bg-white`}>
-          <div className="flex items-center gap-3 mb-4">
-            <div className={`w-12 h-12 rounded-2xl ${selectedRole.bg} flex items-center justify-center shadow-[4px_4px_8px_var(--shadow-dark),-4px_-4px_8px_var(--shadow-light)] print:shadow-none print:border print:border-slate-200`}>
+          <div className="flex items-start sm:items-center gap-3 mb-4">
+            <div className={`w-12 h-12 rounded-2xl ${selectedRole.bg} flex items-center justify-center shadow-[4px_4px_8px_var(--shadow-dark),-4px_-4px_8px_var(--shadow-light)] print:shadow-none print:border print:border-slate-200 shrink-0`}>
               <selectedRole.icon className={`w-6 h-6 ${selectedRole.text}`} />
             </div>
             <div>
-              <h3 className={`text-lg font-bold ${selectedRole.text}`}>{selectedRole.label}</h3>
-              <p className="text-xs text-slate-500 print:text-slate-600">{selectedRole.description}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className={`text-lg font-bold ${selectedRole.text}`}>{selectedRole.label}</h3>
+                <span className={`px-2 py-0.5 rounded-full ${selectedRole.bg} ${selectedRole.text} text-[10px] font-bold border ${selectedRole.border}`}>
+                  {selectedRole.levelBadge}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 print:text-slate-600 mt-0.5">{selectedRole.description}</p>
+              <div className="flex flex-wrap items-center gap-3 mt-1.5 text-[11px] text-slate-500">
+                <span>📍 Cakupan: <strong className="text-slate-700 dark:text-slate-300">{selectedRole.scope}</strong></span>
+                <span>✉️ Email: <code className="px-1.5 py-0.5 rounded bg-white/60 dark:bg-white/[0.06] font-mono text-[10px] text-emerald-600 dark:text-emerald-400 border border-white/60 dark:border-white/[0.08]">{selectedRole.emailFormat}</code></span>
+              </div>
             </div>
           </div>
 

@@ -69,41 +69,91 @@
 
 ## 2. Hierarki Peran Pengguna
 
-Sistem menggunakan **6 tingkatan peran** (role) dengan hak akses berjenjang. Manual ini mencakup 5 peran berikut (kecuali Superadmin):
+Sistem **LaporPark** memiliki struktur peran berjenjang yang membedakan kewenangan antara **Kantor Pusat (Head Office / HO)** dan **Kantor Cabang Bandara**.
+
+### Struktur Tingkatan:
+
+1. **👑 Superadmin (Officer HO)** — *Tingkat Tertinggi / Kantor Pusat*  
+   Memegang kewenangan penuh atas sistem dan memonitor seluruh 14 bandara (`kode_bandara: ALL`). Menggunakan email domain `@laporpark.id` (tanpa kode bandara).
+2. **🛡️ Supervisor** — *Tingkat Pimpinan Cabang*  
+   Kepala operasional tertinggi di bandara cabang. Memegang hak persetujuan akhir Berita Acara (*Diketahui* dan *Selesai*), mengembalikan revisi, serta manajemen pengguna (CRUD staf) di cabangnya.
+3. **📋 Carpark Manager** — *Tingkat Manajerial Cabang*  
+   Manajer parkir cabang yang bertanggung jawab memvalidasi dan menandai BA telah *Diperiksa* sebelum disetujui Supervisor.
+4. **👥 🔧 📝 Level Operasional Cabang (Tingkatan Setara / Sama)**:  
+   Tiga peran berikut memiliki **level operasional yang setara** di lapangan:
+   - **Team Leader**: Pemimpin regu lapangan yang membuat laporan Berita Acara insiden operasional.
+   - **Teknisi**: Staf teknis pemeliharaan fasilitas dan peralatan parkir yang melaporkan insiden teknis.
+   - **Admin Parkir (Admin Cabang)**: Staf administrasi operasional cabang yang mencatat dan merekap laporan Berita Acara.
 
 ```mermaid
 graph TD
-    A["🔐 Admin"] --> B["🛡️ Supervisor"]
-    B --> C["📋 Carpark Manager"]
-    C --> D["👥 Team Leader"]
-    D --> E["🔧 Teknisi"]
+    subgraph HO["🏢 Tingkat Kantor Pusat (Head Office)"]
+        SA["👑 Superadmin (Officer HO)<br/><small>Akses Lintas 14 Bandara (kode: ALL)</small><br/><code>xxxx@laporpark.id</code>"]
+    end
 
-    style A fill:#9333ea,color:#fff,stroke:#7c3aed
-    style B fill:#f59e0b,color:#fff,stroke:#d97706
-    style C fill:#0ea5e9,color:#fff,stroke:#0284c7
-    style D fill:#6366f1,color:#fff,stroke:#4f46e5
-    style E fill:#10b981,color:#fff,stroke:#059669
+    subgraph CABANG["✈️ Tingkat Cabang Bandara"]
+        SPV["🛡️ Supervisor<br/><small>Pimpinan Operasional Cabang (Approval & User)</small><br/><code>spv@laporpark.{kode}.id</code>"]
+        CPM["📋 Carpark Manager<br/><small>Pemeriksaan & Validasi Lapangan (Diperiksa)</small><br/><code>cpm@laporpark.{kode}.id</code>"]
+        
+        subgraph OPR["Level Operasional Cabang (Tingkatan Setara)"]
+            TL["👥 Team Leader<br/><small>Regu Lapangan</small><br/><code>tl@laporpark.{kode}.id</code>"]
+            TEK["🔧 Teknisi<br/><small>Pemeliharaan Alat</small><br/><code>teknisi@laporpark.{kode}.id</code>"]
+            ADM["📝 Admin Parkir<br/><small>Administrasi Cabang</small><br/><code>admin@laporpark.{kode}.id</code>"]
+        end
+    end
+
+    SA --> SPV
+    SPV --> CPM
+    CPM --> OPR
+
+    style SA fill:#e11d48,color:#fff,stroke:#be123c
+    style SPV fill:#f59e0b,color:#fff,stroke:#d97706
+    style CPM fill:#0ea5e9,color:#fff,stroke:#0284c7
+    style TL fill:#6366f1,color:#fff,stroke:#4f46e5
+    style TEK fill:#10b981,color:#fff,stroke:#059669
+    style ADM fill:#8b5cf6,color:#fff,stroke:#7c3aed
+    style OPR fill:#f8fafc,stroke:#94a3b8,stroke-dasharray: 5 5
+    style HO fill:#fff1f2,stroke:#f43f5e
+    style CABANG fill:#f0fdf4,stroke:#22c55e
 ```
 
-### Ringkasan Hak Akses per Role
+### ⚠️ Perbedaan Penting: Superadmin (Officer HO) vs Admin Parkir Cabang
 
-| Fitur | Admin | Supervisor | Carpark Manager | Team Leader | Teknisi |
-|-------|:-----:|:----------:|:---------------:|:-----------:|:-------:|
-| **Dashboard Statistik** | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Daftar Berita Acara** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Buat BA Baru** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Edit BA** | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Hapus BA** | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Tandai "Diperiksa"** | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Setujui BA** | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Kembalikan ke Revisi** | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Tandai "Selesai"** | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Kelola Foto Lampiran** | ❌ | ✅ | ✅ | ✅* | ✅* |
-| **Manajemen Pengguna** | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Cetak / PDF** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Ganti Password Sendiri** | ✅ | ✅ | ✅ | ✅ | ✅ |
+Sangat penting untuk membedakan antara **Superadmin** di Kantor Pusat dengan **Admin Parkir** di cabang bandara:
 
-> *\*Team Leader & Teknisi hanya dapat mengelola foto pada BA yang mereka buat sendiri.*
+| Aspek | 👑 Superadmin (Officer HO) | 📝 Admin Parkir (Admin Cabang) |
+|-------|----------------------------|--------------------------------|
+| **Kedudukan** | Kantor Pusat (Head Office / HO) | Kantor Cabang Bandara |
+| **Cakupan Akses Data** | Seluruh 14 Bandara di Indonesia (`ALL`) | Hanya 1 Bandara tempat bertugas |
+| **Format Domain Email** | `xxxx@laporpark.id` *(tanpa kode bandara)* | `xxxx@laporpark.{kode_bandara}.id` |
+| **Contoh Email** | `officer@laporpark.id` / `superadmin@laporpark.id` | `admin@laporpark.sub.id`, `admin@laporpark.dps.id` |
+| **Tingkatan Hak Akses** | Tingkat 1 (Akses Tertinggi Global) | Tingkat 4 (Setara Team Leader & Teknisi) |
+| **Fungsi Utama** | Monitoring nasional, master data, filter lintas bandara | Input BA, pencatatan administrasi insiden cabang |
+
+---
+
+### 2.1 Ringkasan Hak Akses per Role
+
+| Fitur | Superadmin (Officer HO) | Supervisor (Cabang) | Carpark Manager (Cabang) | Team Leader (Operasional) | Teknisi (Operasional) | Admin Parkir (Operasional) |
+|-------|:-----------------------:|:-------------------:|:------------------------:|:-------------------------:|:---------------------:|:--------------------------:|
+| **Cakupan Bandara** | Seluruh 14 Bandara | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri | Cabang Sendiri |
+| **Dashboard Statistik** | ✅ (Semua Bandara) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Daftar Berita Acara** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Buat BA Baru** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Status Awal BA Baru** | Mengetahui | Diketahui | Diperiksa | Menunggu Review | Menunggu Review | Menunggu Review |
+| **Edit BA** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Hapus BA** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Tandai "Diperiksa"** | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Setujui BA ("Diketahui")** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Kembalikan ke Revisi** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Tandai "Selesai"** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Kelola Foto Lampiran** | ✅ | ✅ | ✅ | ✅* | ✅* | ❌ |
+| **Manajemen Pengguna** | ✅ (Semua Bandara) | ✅ (Cabang Saja) | ❌ | ❌ | ❌ | ❌ |
+| **Cetak / PDF** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Ganti Password Sendiri** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+> *\*Team Leader & Teknisi hanya dapat mengelola foto pada BA yang mereka buat sendiri.*  
+> *\*Team Leader, Teknisi, dan Admin Parkir berada di level operasional yang sama di cabang.*
 
 ---
 
@@ -111,16 +161,30 @@ graph TD
 
 ### 3.1 Halaman Login
 
-Buka aplikasi LaporPark melalui browser. Anda akan disambut dengan halaman login.
+Buka aplikasi LaporPark melalui browser (`http://localhost:3000/login` atau URL domain produksi).
 
 **Langkah-langkah:**
 
-1. Masukkan **Email** yang telah didaftarkan oleh Supervisor Anda.
-   - Format email: `nama@laporpark.{kode_bandara}.id`
-   - Contoh: `budi@laporpark.bdj.id` (Bandara Banjarmasin)
+1. Masukkan **Email**:
+   - **Untuk Pengguna Cabang (Supervisor, CM, TL, Teknisi, Admin Parkir):**  
+     Format email wajib menggunakan domain bandara masing-masing:  
+     👉 `xxxx@laporpark.{kode_bandara}.id` (atau pola umum: `xxxx@laporpark.xxx.id`)
+     
+     **Contoh sesuai bandara penugasan:**
+     - `admin@laporpark.sub.id` — Admin Parkir Bandara Juanda (Surabaya)
+     - `spv@laporpark.dps.id` — Supervisor Bandara I Gusti Ngurah Rai (Denpasar)
+     - `cpm@laporpark.upg.id` — Carpark Manager Bandara Sultan Hasanuddin (Makassar)
+     - `tl@laporpark.bpn.id` — Team Leader Bandara SAMS Sepinggan (Balikpapan)
+     - `teknisi@laporpark.yia.id` — Teknisi Bandara Yogyakarta (YIA)
+     - `budi@laporpark.bdj.id` — Petugas Bandara Syamsudin Noor (Banjarmasin)
+     - *(Menyesuaikan 14 kode bandara resmi: AMQ, BDJ, BIK, BPN, DJJ, DPS, KOE, LOP, MDC, SOC, SRG, SUB, UPG, YIA)*
+
+   - **Untuk Superadmin (Officer HO - Kantor Pusat):**  
+     Menggunakan domain kantor pusat tanpa kode bandara:  
+     👉 `xxxx@laporpark.id` (contoh: `officer@laporpark.id` atau `superadmin@laporpark.id`)
 
 2. Masukkan **Password** Anda.
-   - Password default yang diberikan saat pembuatan akun: `123123`
+   - Password default saat akun dibuat: `123123`
    - Anda dapat mengklik ikon 👁️ mata untuk menampilkan/menyembunyikan password.
 
 3. *(Opsional)* Centang **"Ingat Saya"** agar email dan password tersimpan di browser untuk login berikutnya.
@@ -133,8 +197,8 @@ Buka aplikasi LaporPark melalui browser. Anda akan disambut dengan halaman login
 ### 3.2 Setelah Login Berhasil
 
 Setelah login berhasil, animasi transisi akan muncul dan Anda akan diarahkan ke:
-- **Dashboard** — jika role Anda adalah **Supervisor** atau **Carpark Manager**
-- **Daftar Berita Acara** — jika role Anda adalah **Admin**, **Team Leader**, atau **Teknisi**
+- **Dashboard** — jika role Anda adalah **Supervisor**, **Carpark Manager**, atau **Superadmin**
+- **Daftar Berita Acara** — jika role Anda berada di level operasional (**Team Leader**, **Teknisi**, atau **Admin Parkir Cabang**)
 
 ---
 
@@ -144,17 +208,17 @@ Sidebar adalah panel navigasi utama yang terletak di sisi kiri layar (desktop) a
 
 ### Menu yang Tampil Berdasarkan Role:
 
-| Menu | Icon | Admin | Supervisor | Carpark Manager | Team Leader | Teknisi |
-|------|------|:-----:|:----------:|:---------------:|:-----------:|:-------:|
-| Dashboard | 📊 | ❌ | ✅ | ✅ | ❌ | ❌ |
-| Daftar Berita Acara | 📄 | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Buat BA Baru | ➕ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Manajemen Pengguna | 👥 | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Menu | Icon | Superadmin (HO) | Supervisor (Cabang) | Carpark Manager | Team Leader | Teknisi | Admin Parkir Cabang |
+|------|------|:---------------:|:-------------------:|:---------------:|:-----------:|:-------:|:-------------------:|
+| Dashboard | 📊 | ✅ *(Semua Bandara)* | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Daftar Berita Acara | 📄 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Buat BA Baru | ➕ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Manajemen Pengguna | 👥 | ✅ *(Semua Bandara)* | ✅ *(Cabang Saja)* | ❌ | ❌ | ❌ | ❌ |
 
 ### Informasi di Sidebar:
 - **Nama Pengguna** — nama lengkap yang terdaftar
 - **Role** — tingkatan/jabatan Anda di sistem
-- **Bandara** — lokasi bandara tempat Anda bertugas
+- **Bandara** — lokasi bandara tempat Anda bertugas (atau "Semua Bandara" untuk Superadmin)
 - **Tombol Ganti Password** — untuk mengubah password
 - **Tombol Theme** — beralih antara mode terang dan gelap
 - **Tombol Keluar** — logout dari sistem
@@ -163,35 +227,16 @@ Sidebar adalah panel navigasi utama yang terletak di sisi kiri layar (desktop) a
 
 ## 5. Panduan per Tingkatan
 
----
-
-### 5.1 Admin
-
-> **Tingkatan:** Paling tinggi dalam manual ini (di bawah Superadmin)
-
-| Akses | Keterangan |
-|-------|------------|
-| Dashboard | ❌ Tidak tersedia |
-| Daftar BA | ✅ Melihat semua BA di bandara sendiri |
-| Buat BA Baru | ✅ Dapat membuat laporan insiden |
-| Edit BA | ❌ Tidak tersedia |
-| Hapus BA | ❌ Tidak tersedia |
-| Approval | ❌ Tidak tersedia |
-| Manajemen Pengguna | ❌ Tidak tersedia |
-
-**Halaman Utama setelah Login:** Daftar Berita Acara
-
-**Panduan Penggunaan:**
-1. Gunakan menu **Daftar Berita Acara** untuk melihat seluruh laporan BA di bandara Anda.
-2. Gunakan menu **Buat BA Baru** untuk membuat laporan insiden baru.
-3. Lihat detail setiap BA dengan mengklik nomor BA atau judul masalah.
-4. Cetak BA menggunakan tombol **Print/PDF** pada halaman detail.
+Sesuai hierarki operasional:
+1. **Supervisor** (Pimpinan Operasional Cabang)
+2. **Carpark Manager** (Manajer Operasional Cabang)
+3. **Level Operasional Cabang — Tingkatan Setara**: **Team Leader**, **Teknisi**, dan **Admin Parkir Cabang**
 
 ---
 
-### 5.2 Supervisor
+### 5.1 Supervisor
 
-> **Tingkatan:** Kepala operasional bandara — memiliki akses paling luas di tingkat cabang
+> **Tingkatan:** Kepala operasional bandara — memiliki akses paling luas di tingkat cabang (di bawah Superadmin HO)
 
 | Akses | Keterangan |
 |-------|------------|
@@ -294,9 +339,9 @@ Supervisor dapat mengelola akun pengguna di bandara mereka.
 
 ---
 
-### 5.3 Carpark Manager
+### 5.2 Carpark Manager
 
-> **Tingkatan:** Manajer operasional — bertanggung jawab memeriksa dan memverifikasi BA
+> **Tingkatan:** Manajer operasional cabang — bertanggung jawab memeriksa dan memverifikasi BA sebelum diajukan ke Supervisor
 
 | Akses | Keterangan |
 |-------|------------|
@@ -312,7 +357,7 @@ Supervisor dapat mengelola akun pengguna di bandara mereka.
 
 **Halaman Utama setelah Login:** Dashboard
 
-#### 5.3.1 Tindakan Carpark Manager
+#### 5.2.1 Tindakan Carpark Manager
 
 Pada halaman detail BA, Carpark Manager memiliki panel tindakan berikut:
 
@@ -327,15 +372,15 @@ Pada halaman detail BA, Carpark Manager memiliki panel tindakan berikut:
 2. Pada panel **"Tindakan"**, klik tombol 🔵 **"Tandai Telah Diperiksa"**.
 3. Status BA akan berubah menjadi **"Diperiksa"** dan menunggu persetujuan Supervisor.
 
-#### 5.3.2 Perbedaan Status Awal BA
+#### 5.2.2 Perbedaan Status Awal BA
 
 Ketika Carpark Manager **membuat BA baru**, status awal BA akan otomatis menjadi **"Diperiksa"** (melewati tahap Menunggu Review), karena pembuatan oleh CM dianggap sudah melalui tahap pemeriksaan.
 
 ---
 
-### 5.4 Team Leader
+### 5.3 Team Leader
 
-> **Tingkatan:** Pemimpin tim lapangan — pengguna utama pembuat laporan BA
+> **Tingkatan:** Level Operasional Cabang (setara dengan Teknisi dan Admin Parkir) — pembuat laporan BA insiden lapangan
 
 | Akses | Keterangan |
 |-------|------------|
@@ -350,7 +395,7 @@ Ketika Carpark Manager **membuat BA baru**, status awal BA akan otomatis menjadi
 
 **Halaman Utama setelah Login:** Daftar Berita Acara
 
-#### 5.4.1 Membuat Berita Acara Baru
+#### 5.3.1 Membuat Berita Acara Baru
 
 Ini adalah tugas utama Team Leader — melaporkan insiden yang terjadi di lapangan.
 
@@ -383,10 +428,10 @@ Ini adalah tugas utama Team Leader — melaporkan insiden yang terjadi di lapang
 > BA yang dibuat oleh Team Leader akan otomatis mendapatkan status **"Menunggu Review"** dan menunggu pemeriksaan oleh Carpark Manager.
 
 > [!TIP]
-> **Nomor BA** akan di-generate otomatis dengan format: `BA/PARKIR/{KODE_BANDARA}/{TAHUN}/{BULAN}/{NOMOR_URUT}`
-> Contoh: `BA/PARKIR/BDJ/2026/09/0001`
+> **Nomor BA** akan di-generate otomatis dengan format: `BA/PARKIR/{KODE_BANDARA}/{TAHUN}/{BULAN}/{NOMOR_URUT}`  
+> Contoh: `BA/PARKIR/SUB/2026/09/0001` (menyesuaikan kode bandara masing-masing)
 
-#### 5.4.2 Menambah Foto pada BA yang Sudah Dibuat
+#### 5.3.2 Menambah Foto pada BA yang Sudah Dibuat
 
 1. Buka halaman detail BA yang Anda buat.
 2. Pada bagian **"Lampiran Foto"**, klik tombol **"Kelola Foto"**.
@@ -398,9 +443,9 @@ Ini adalah tugas utama Team Leader — melaporkan insiden yang terjadi di lapang
 
 ---
 
-### 5.5 Teknisi
+### 5.4 Teknisi
 
-> **Tingkatan:** Staf teknis lapangan — akses sama dengan Team Leader
+> **Tingkatan:** Level Operasional Cabang (setara dengan Team Leader dan Admin Parkir) — pelapor insiden teknis dan peralatan
 
 | Akses | Keterangan |
 |-------|------------|
@@ -415,7 +460,34 @@ Ini adalah tugas utama Team Leader — melaporkan insiden yang terjadi di lapang
 
 **Halaman Utama setelah Login:** Daftar Berita Acara
 
-Panduan penggunaan Teknisi **identik dengan Team Leader** (lihat [Bagian 5.4](#54-team-leader)). Perbedaan hanya pada label role yang ditampilkan di sidebar.
+Panduan penggunaan Teknisi **identik dengan Team Leader** (lihat [Bagian 5.3](#53-team-leader)). Fokus Teknisi umumnya pada kategori insiden *Gangguan Perangkat*, *Gangguan Sistem*, atau *Kerusakan Fasilitas*.
+
+---
+
+### 5.5 Admin Parkir Cabang
+
+> **Tingkatan:** Level Operasional Cabang (setara dengan Team Leader dan Teknisi) — staf administrasi dan pencatatan laporan BA cabang
+
+| Akses | Keterangan |
+|-------|------------|
+| Dashboard | ❌ Tidak tersedia |
+| Daftar BA | ✅ Melihat semua BA di bandara sendiri |
+| Buat BA Baru | ✅ BA berstatus **"Menunggu Review"** |
+| Edit BA | ❌ Tidak tersedia |
+| Hapus BA | ❌ Tidak tersedia |
+| Approval | ❌ Tidak tersedia |
+| Kelola Foto | ❌ Tidak tersedia |
+| Manajemen Pengguna | ❌ Tidak tersedia |
+
+**Halaman Utama setelah Login:** Daftar Berita Acara
+
+**Panduan Penggunaan Admin Parkir Cabang:**
+1. Membantu menginput dan merapikan Berita Acara insiden administratif di bandara cabang.
+2. Mencetak laporan Berita Acara resmi (format PDF) untuk keperluan arsip fisik atau lampiran rapat operasional cabang.
+3. Memantau progres status BA di bandara cabang apakah sudah diperiksa oleh Carpark Manager atau disetujui oleh Supervisor.
+
+> [!IMPORTANT]
+> **Ingat:** Akun **Admin Parkir Cabang** menggunakan email `admin@laporpark.{kode_bandara}.id` (contoh: `admin@laporpark.sub.id`) dan hanya memiliki akses pada bandara penugasannya, **berbeda dengan Superadmin (Officer HO)** yang memiliki email `xxxx@laporpark.id` dan mengawasi seluruh bandara.
 
 ---
 
