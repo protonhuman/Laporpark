@@ -593,7 +593,7 @@ export default function ManualBookPage() {
                   </div>
                   <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Team Leader</span>
                   <p className="text-xs text-slate-500 mt-0.5">Pemimpin Regu Lapangan</p>
-                  <code className="text-[10px] text-indigo-500 mt-1.5 font-mono">tl@laporpark.xxx.id</code>
+                  <code className="text-[10px] text-indigo-500 mt-1.5 font-mono">teamleader@laporpark.xxx.id</code>
                 </div>
 
                 {/* Teknisi */}
@@ -673,7 +673,9 @@ export default function ManualBookPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8 w-full">
           <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
-              <span className="w-6 h-6 rounded-lg bg-emerald-500/15 flex items-center justify-center text-xs font-bold text-emerald-600">1</span>
+              <div className="w-6 h-6 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                <LogIn className="w-3.5 h-3.5" />
+              </div>
               Langkah Login
             </h3>
             <ol className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
@@ -682,7 +684,7 @@ export default function ManualBookPage() {
                 <div>
                   <p>Masukkan <strong>Email</strong> resmi Anda:</p>
                   <p className="text-xs text-slate-500 mt-1">
-                    • <strong>Pengguna Cabang:</strong> format <code>xxxx@laporpark.xxx.id</code> (contoh: <code>admin@laporpark.sub.id</code>, <code>supervisor@laporpark.dps.id</code>, <code>tl@laporpark.bpn.id</code>, <code>teknisi@laporpark.yia.id</code>)
+                    • <strong>Pengguna Cabang:</strong> format <code>xxxx@laporpark.xxx.id</code> (contoh: <code>admin@laporpark.sub.id</code>, <code>supervisor@laporpark.dps.id</code>, <code>teamleader@laporpark.bpn.id</code>, <code>teknisi@laporpark.yia.id</code>)
                   </p>
                 </div>
               </li>
@@ -702,7 +704,9 @@ export default function ManualBookPage() {
           </div>
           <div className="neo-card p-5 print:shadow-none print:border print:border-slate-200">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2 print:text-black">
-              <span className="w-6 h-6 rounded-lg bg-amber-500/15 flex items-center justify-center text-xs font-bold text-amber-600">!</span>
+              <div className="w-6 h-6 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                <AlertCircle className="w-3.5 h-3.5" />
+              </div>
               Hal Penting
             </h3>
             <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
