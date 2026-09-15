@@ -477,17 +477,17 @@ export default function ManualBookPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-300/50 dark:border-white/[0.08] print:border-slate-300">
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Kode</th>
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Nama Bandara</th>
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Lokasi</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700 w-1/4">Kode</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700 w-1/2">Nama Bandara</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700 w-1/4">Lokasi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200/40 dark:divide-white/[0.04] print:divide-slate-200">
                 {BANDARA_LIST.map((b) => (
                   <tr key={b.kode} className="hover:bg-white/30 dark:hover:bg-white/[0.02] print:hover:bg-transparent">
-                    <td className="px-4 py-2.5 font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400 print:text-emerald-700">{b.kode}</td>
-                    <td className="px-4 py-2.5 text-slate-800 dark:text-white font-medium print:text-black">{b.nama}</td>
-                    <td className="px-4 py-2.5 text-slate-500 print:text-slate-600">{b.lokasi}</td>
+                    <td className="px-4 py-2.5 font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400 text-center print:text-emerald-700">{b.kode}</td>
+                    <td className="px-4 py-2.5 text-slate-800 dark:text-white font-medium text-center print:text-black">{b.nama}</td>
+                    <td className="px-4 py-2.5 text-slate-500 text-center print:text-slate-600">{b.lokasi}</td>
                   </tr>
                 ))}
               </tbody>
@@ -913,16 +913,16 @@ export default function ManualBookPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-300/50 dark:border-white/[0.08] print:border-slate-300">
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Kolom</th>
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-left print:text-slate-700">Deskripsi</th>
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700">Wajib</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700 w-1/4">Kolom</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700 w-1/2">Deskripsi</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center print:text-slate-700 w-1/4">Wajib</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200/40 dark:divide-white/[0.04] print:divide-slate-200">
                 {FORM_FIELDS.map((f) => (
                   <tr key={f.label}>
-                    <td className="px-4 py-2.5 font-medium text-slate-800 dark:text-white whitespace-nowrap print:text-black">{f.label}</td>
-                    <td className="px-4 py-2.5 text-slate-500 print:text-slate-600">{f.desc}</td>
+                    <td className="px-4 py-2.5 font-medium text-slate-800 dark:text-white whitespace-nowrap text-center print:text-black">{f.label}</td>
+                    <td className="px-4 py-2.5 text-slate-500 text-center print:text-slate-600">{f.desc}</td>
                     <td className="px-4 py-2.5 text-center">
                       {f.required ? <CheckCircle className="w-4 h-4 text-emerald-500 mx-auto" /> : <span className="text-[10px] text-slate-400">Opsional</span>}
                     </td>
