@@ -5,7 +5,6 @@ import Link from "next/link";
 import LaporParkLogo from "@/components/lapor-park-logo";
 import {
   ArrowLeft,
-  Download,
   BookOpen,
   Shield,
   Crown,
@@ -364,10 +363,6 @@ export default function ManualBookPage() {
   const [activeRole, setActiveRole] = useState<string>("supervisor");
   const selectedRole = BRANCH_ROLES.find((r) => r.key === activeRole) || BRANCH_ROLES[0];
 
-  function handleDownloadPDF() {
-    window.print();
-  }
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* ═══ Top Header Bar ═══ */}
@@ -377,6 +372,7 @@ export default function ManualBookPage() {
             <Link
               href="/login"
               className="p-2 rounded-xl hover:bg-white/50 dark:hover:bg-white/[0.04] text-slate-500 hover:text-slate-800 dark:hover:text-white transition-all print:hidden"
+              title="Kembali ke Halaman Login"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
@@ -392,14 +388,6 @@ export default function ManualBookPage() {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 print:hidden">
-            <button
-              onClick={handleDownloadPDF}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-emerald-500/15 to-teal-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)] hover:shadow-[6px_6px_14px_var(--shadow-dark),-6px_-6px_14px_var(--shadow-light)] hover:border-emerald-500/50 active:scale-95 active:shadow-[inset_3px_3px_6px_var(--shadow-dark),inset_-3px_-3px_6px_var(--shadow-light)] transition-all duration-200 cursor-pointer select-none"
-            >
-              <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Download PDF</span>
-            </button>
           </div>
         </div>
 
