@@ -22,6 +22,9 @@ import {
   ChevronDown,
   X,
   Eye,
+  FileText,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -35,6 +38,22 @@ export default function CreateBAPage() {
   // Preview state
   const [showPreview, setShowPreview] = useState(false);
   const [previewData, setPreviewData] = useState<CreateBAPayload | null>(null);
+  const [previewZoom, setPreviewZoom] = useState<number>(100);
+
+  // Auto-adjust zoom when preview opens according to screen width
+  useEffect(() => {
+    if (showPreview && typeof window !== "undefined") {
+      if (window.innerWidth < 640) {
+        setPreviewZoom(45);
+      } else if (window.innerWidth < 880) {
+        setPreviewZoom(70);
+      } else if (window.innerWidth < 1120) {
+        setPreviewZoom(85);
+      } else {
+        setPreviewZoom(100);
+      }
+    }
+  }, [showPreview]);
 
   // Store original text for undo after AI cleanup
   const [originalTexts, setOriginalTexts] = useState<Record<string, string>>(
@@ -490,90 +509,157 @@ export default function CreateBAPage() {
               animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             }
           `}</style>
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6">
             <div
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-modal-backdrop"
+              className="absolute inset-0 bg-slate-900/75 backdrop-blur-sm animate-modal-backdrop"
               onClick={() => !loading && setShowPreview(false)}
             />
-            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 animate-modal-content">
-              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-              <h3 className="text-lg font-bold text-slate-800">Preview Berita Acara</h3>
-              <button
-                type="button"
-                onClick={() => !loading && setShowPreview(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-1"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="p-0 sm:p-6 overflow-y-auto bg-slate-50">
-              <PrintLayout 
-                previewMode={true} 
-                checker={null} 
-                approver={null} 
-                ba={{
-                  id: "draft",
-                  nomor_ba: `BA/PARKIR/${(previewData.kode_bandara || userKodeBandara || "BDJ").toUpperCase()}/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, "0")}/DRAFT`,
-                  tanggal_kejadian: previewData.tanggal_kejadian,
-                  waktu_kejadian: previewData.waktu_kejadian,
-                  kode_bandara: (previewData.kode_bandara || userKodeBandara || "BDJ").toUpperCase(),
-                  lokasi_zona: previewData.lokasi_zona,
-                  jenis_insiden: previewData.jenis_insiden,
-                  pihak_terlibat: previewData.pihak_terlibat || null,
-                  judul_masalah: previewData.judul_masalah,
-                  kronologi: previewData.kronologi,
-                  tindakan_dilakukan: previewData.tindakan_dilakukan,
-                  penyelesaian: previewData.penyelesaian || "",
-                  mitigasi: previewData.mitigasi || "",
-                  lampiran_foto: previewData.lampiran_foto || null,
-                  status: "menunggu_review",
-                  dibuat_oleh: "me",
-                  direview_oleh: null,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                  pembuat: {
-                    id: "me",
-                    email: "",
-                    kode_bandara: userKodeBandara,
-                    nama: userName,
-                    role: userRole as UserRole,
-                    signature_url: userSignature,
-                  }
-                }} 
-              />
-            </div>
-            
-            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50">
-              <button
-                type="button"
-                onClick={() => setShowPreview(false)}
-                disabled={loading}
-                className="px-4 py-2.5 rounded-xl font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-200/50 transition-colors"
-              >
-                Edit Kembali
-              </button>
-              <button
-                type="button"
-                onClick={handleConfirmSubmit}
-                disabled={loading}
-                className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-emerald-500/20 dark:from-emerald-500/30 dark:via-teal-500/20 dark:to-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-500/30 dark:border-emerald-400/30 shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)] hover:shadow-[6px_6px_14px_var(--shadow-dark),-6px_-6px_14px_var(--shadow-light)] hover:border-emerald-500/50 hover:from-emerald-500/30 hover:to-teal-500/25 active:scale-95 active:shadow-[inset_3px_3px_6px_var(--shadow-dark),inset_-3px_-3px_6px_var(--shadow-light)] disabled:opacity-50 transition-all duration-200 cursor-pointer select-none"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-emerald-600 dark:text-emerald-400" />
-                    <span>Menyimpan...</span>
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
-                    <span>Konfirmasi & Kirim</span>
-                  </>
-                )}
-              </button>
+            <div className="relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden border border-slate-300 animate-modal-content">
+              {/* Header Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-200 bg-slate-50 shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-600 flex items-center justify-center">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm sm:text-base font-bold text-slate-800">
+                        Pratinjau Berita Acara
+                      </h3>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
+                        Kertas A4 (210 × 297 mm)
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 hidden sm:block">
+                      Tampilan presisi sesuai ukuran dan margin cetak dokumen fisik / PDF
+                    </p>
+                  </div>
+                </div>
+
+                {/* Zoom Controls & Close */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center rounded-lg bg-white border border-slate-200 shadow-xs p-0.5 text-xs text-slate-600">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewZoom((z) => Math.max(40, z - 10))}
+                      className="p-1.5 hover:bg-slate-100 rounded-md text-slate-600 hover:text-slate-900 transition-colors"
+                      title="Perkecil Ukuran Tampilan (-10%)"
+                    >
+                      <ZoomOut className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewZoom(100)}
+                      className="px-2 py-1 font-mono font-medium hover:bg-slate-100 rounded-md text-slate-700 hover:text-slate-900 transition-colors"
+                      title="Reset Ukuran Kertas 100%"
+                    >
+                      {previewZoom}%
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewZoom((z) => Math.min(140, z + 10))}
+                      className="p-1.5 hover:bg-slate-100 rounded-md text-slate-600 hover:text-slate-900 transition-colors"
+                      title="Perbesar Ukuran Tampilan (+10%)"
+                    >
+                      <ZoomIn className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => !loading && setShowPreview(false)}
+                    className="text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors p-1.5 rounded-lg ml-1"
+                    title="Tutup Pratinjau"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Document Desk Viewer (Canvas) */}
+              <div className="flex-1 overflow-auto bg-slate-700/80 p-3 sm:p-6 md:p-8 flex justify-center min-h-0">
+                <div
+                  style={{
+                    transform: `scale(${previewZoom / 100})`,
+                    transformOrigin: "top center",
+                    transition: "transform 0.15s ease-out",
+                    marginBottom: previewZoom > 100 ? `${(previewZoom - 100) * 12}px` : 0,
+                  }}
+                  className="shrink-0 flex flex-col items-center"
+                >
+                  <PrintLayout
+                    previewMode={true}
+                    checker={null}
+                    approver={null}
+                    ba={{
+                      id: "draft",
+                      nomor_ba: `BA/PARKIR/${(previewData.kode_bandara || userKodeBandara || "BDJ").toUpperCase()}/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, "0")}/DRAFT`,
+                      tanggal_kejadian: previewData.tanggal_kejadian,
+                      waktu_kejadian: previewData.waktu_kejadian,
+                      kode_bandara: (previewData.kode_bandara || userKodeBandara || "BDJ").toUpperCase(),
+                      lokasi_zona: previewData.lokasi_zona,
+                      jenis_insiden: previewData.jenis_insiden,
+                      pihak_terlibat: previewData.pihak_terlibat || null,
+                      judul_masalah: previewData.judul_masalah,
+                      kronologi: previewData.kronologi,
+                      tindakan_dilakukan: previewData.tindakan_dilakukan,
+                      penyelesaian: previewData.penyelesaian || "",
+                      mitigasi: previewData.mitigasi || "",
+                      lampiran_foto: previewData.lampiran_foto || null,
+                      status: "menunggu_review",
+                      dibuat_oleh: "me",
+                      direview_oleh: null,
+                      created_at: new Date().toISOString(),
+                      updated_at: new Date().toISOString(),
+                      pembuat: {
+                        id: "me",
+                        email: "",
+                        kode_bandara: userKodeBandara,
+                        nama: userName,
+                        role: userRole as UserRole,
+                        signature_url: userSignature,
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Action Footer */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-6 py-3.5 border-t border-slate-200 bg-slate-50 shrink-0">
+                <p className="text-xs text-slate-500 hidden sm:block">
+                  💡 Pastikan rincian laporan dan lembar tanda tangan sudah sesuai sebelum disubmit.
+                </p>
+                <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setShowPreview(false)}
+                    disabled={loading}
+                    className="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
+                  >
+                    Edit Kembali
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleConfirmSubmit}
+                    disabled={loading}
+                    className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-emerald-500/20 dark:from-emerald-500/30 dark:via-teal-500/20 dark:to-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-500/30 dark:border-emerald-400/30 shadow-[4px_4px_10px_var(--shadow-dark),-4px_-4px_10px_var(--shadow-light)] hover:shadow-[6px_6px_14px_var(--shadow-dark),-6px_-6px_14px_var(--shadow-light)] hover:border-emerald-500/50 hover:from-emerald-500/30 hover:to-teal-500/25 active:scale-95 transition-all duration-200 cursor-pointer"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-emerald-600 dark:text-emerald-400" />
+                        <span>Menyimpan...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                        <span>Konfirmasi & Kirim</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
         </>
       )}
     </div>
