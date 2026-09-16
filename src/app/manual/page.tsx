@@ -264,7 +264,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Bagaimana cara menambah foto setelah BA dibuat?",
-    a: "Buka halaman detail BA → klik tombol \"Kelola Foto\" di bagian Lampiran Foto. Anda dapat menambah atau menghapus foto. Fitur ini tetap tersedia meskipun BA sudah berstatus Selesai (untuk pembuat BA, CM, atau Supervisor).",
+    a: "Buka halaman detail BA → klik tombol \"Kelola Foto\" di bagian Lampiran Foto. Anda dapat menambah atau menghapus foto. Fitur ini tetap tersedia meskipun BA sudah berstatus Selesai (untuk pembuat BA, CPM, atau Supervisor).",
   },
   {
     q: "Bagaimana format nomor Berita Acara dan apakah nomor yang tidak berurut itu normal?",
@@ -724,7 +724,7 @@ export default function ManualBookPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8 w-full">
           {[
-            { icon: LayoutDashboard, label: "Dashboard", desc: "Statistik & ringkasan", roles: "Supervisor, CM" },
+            { icon: LayoutDashboard, label: "Dashboard", desc: "Statistik & ringkasan", roles: "Supervisor dan CPM" },
             { icon: FileText, label: "Daftar BA", desc: "Semua Berita Acara", roles: "Semua Role" },
             { icon: FilePlus, label: "Buat BA Baru", desc: "Lapor insiden baru", roles: "Semua Role" },
             { icon: Users, label: "Manajemen Pengguna", desc: "CRUD akun tim", roles: "Supervisor" },
@@ -909,7 +909,7 @@ export default function ManualBookPage() {
           <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-4 text-center print:text-black">Alur Standar</h3>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-0 justify-center flex-wrap">
             {[
-              { label: "Dibuat TL/Teknisi/Admin", color: "bg-indigo-500", textColor: "text-white" },
+              { label: "Dibuat TL / Teknisi / Admin", color: "bg-indigo-500", textColor: "text-white" },
               { label: "Menunggu Review", color: "bg-amber-500", textColor: "text-white" },
               { label: "Diperiksa (CPM)", color: "bg-blue-500", textColor: "text-white" },
               { label: "Diketahui (SPV)", color: "bg-emerald-500", textColor: "text-white" },
@@ -1005,7 +1005,7 @@ export default function ManualBookPage() {
             <strong>LaporPark</strong> — Sistem Manajemen Berita Acara Parkir
           </p>
           <p className="text-xs text-slate-400 print:text-slate-500">
-            Angkasa Pura Supports × Centre Park
+            PT. Angkasa Pura Supports × PT. Centrepark Citra Corpora
           </p>
           <div className="flex items-center justify-center gap-4 mt-4 print:hidden">
             <Link

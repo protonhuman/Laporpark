@@ -94,19 +94,31 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative bg-background text-foreground py-4 sm:py-6 overflow-y-auto overflow-x-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center relative bg-background text-foreground px-4 py-4 sm:py-6 overflow-y-auto overflow-x-hidden">
       {/* Water Droplet & Ripple Loading Animation */}
       {isSuccess && <WaterDropLoader />}
 
+      {/* Top Header Action: Manual Book Button */}
+      <div className="absolute top-3.5 right-4 sm:top-5 sm:right-6 z-30">
+        <Link
+          href="/manual"
+          className="group inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-white/80 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-800 shadow-[2px_2px_6px_rgba(163,177,198,0.4),-2px_-2px_6px_rgba(255,255,255,0.9)] dark:shadow-none border border-emerald-500/20 hover:border-emerald-500/40 active:scale-95 transition-all duration-200 cursor-pointer"
+        >
+          <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
+          <span className="hidden xs:inline sm:inline">Panduan Penggunaan</span>
+          <span className="xs:hidden sm:hidden">Panduan</span>
+        </Link>
+      </div>
+
       {/* Login Card Container */}
       <div
-        className={`relative z-10 w-full max-w-md mx-4 transition-all duration-700 ease-out ${
+        className={`relative z-10 w-full max-w-md mx-auto transition-all duration-700 ease-out ${
           isSuccess ? "filter blur-[3px] scale-[0.97] opacity-30 pointer-events-none" : ""
         }`}
       >
         {/* Brand Title with Animated Emblem */}
-        <div className="flex flex-col items-center text-center mb-4 login-brand">
-          <div className="mb-2">
+        <div className="flex flex-col items-center text-center mb-3 sm:mb-3.5 login-brand">
+          <div className="mb-1.5">
             <LaporParkLogo size="md" interactive={true} />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight flex items-center gap-1.5">
@@ -119,29 +131,29 @@ export default function LoginPage() {
         </div>
 
         {/* Neumorphic card */}
-        <div className="neo-card p-6 sm:p-7 login-card">
+        <div className="neo-card p-5 sm:p-6 login-card">
           {/* Corporate Partner Logos inside card - Presisi Lockup */}
-          <div className="mb-4 p-2 rounded-xl bg-white/40 border border-white/60 shadow-[inset_1px_1px_3px_rgba(255,255,255,0.8),inset_-1px_-1px_3px_rgba(163,177,198,0.25)]">
-            <div className="grid grid-cols-2 items-center gap-2.5 px-2 py-0.5">
-              <div className="flex items-center justify-center h-9 px-2 rounded-lg bg-white/60 border border-white/80 shadow-sm transition-transform duration-200 hover:scale-105">
+          <div className="mb-3 p-1.5 rounded-xl bg-white/40 border border-white/60 shadow-[inset_1px_1px_3px_rgba(255,255,255,0.8),inset_-1px_-1px_3px_rgba(163,177,198,0.25)]">
+            <div className="grid grid-cols-2 items-center gap-2 px-2 py-0.5">
+              <div className="flex items-center justify-center h-8 sm:h-9 px-2 rounded-lg bg-white/60 border border-white/80 shadow-sm transition-transform duration-200 hover:scale-105">
                 <img
                   src="/logo-aps.png"
                   alt="Angkasa Pura Supports"
-                  className="h-6 max-h-6 w-auto max-w-full object-contain drop-shadow-sm"
+                  className="h-5 sm:h-6 max-h-6 w-auto max-w-full object-contain drop-shadow-sm"
                 />
               </div>
-              <div className="flex items-center justify-center h-9 px-2 rounded-lg bg-white/60 border border-white/80 shadow-sm transition-transform duration-200 hover:scale-105">
+              <div className="flex items-center justify-center h-8 sm:h-9 px-2 rounded-lg bg-white/60 border border-white/80 shadow-sm transition-transform duration-200 hover:scale-105">
                 <img
                   src="/logo-cp.png"
                   alt="Centre Park"
-                  className="h-5.5 max-h-6 w-auto max-w-full object-contain drop-shadow-sm"
+                  className="h-5 sm:h-5.5 max-h-6 w-auto max-w-full object-contain drop-shadow-sm"
                 />
               </div>
             </div>
           </div>
-          <h2 className="text-lg font-semibold text-foreground mb-4 text-center login-title">Masuk</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-3.5 text-center login-title">Masuk</h2>
 
-          <form action={handleSubmit} className="space-y-3.5">
+          <form action={handleSubmit} className="space-y-3">
             {/* Error banner */}
             {error && (
               <div className="flex items-center gap-2 rounded-xl bg-red-100 border border-red-200 px-3.5 py-2.5 text-red-600 text-xs sm:text-sm">
@@ -287,15 +299,6 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
-
-        {/* Manual Book Link */}
-        <Link
-          href="/manual"
-          className="relative z-20 group flex items-center justify-center gap-2 mx-auto mt-4 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 border border-emerald-500/25 hover:border-emerald-500/50 shadow-sm transition-all duration-200 cursor-pointer w-fit"
-        >
-          <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
-          <span>Panduan Penggunaan (Manual Book)</span>
-        </Link>
 
         {/* Footer */}
         <p className="text-center text-xs text-slate-500 font-medium mt-3">
